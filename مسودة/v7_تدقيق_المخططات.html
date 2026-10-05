@@ -1,0 +1,1772 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إدارة رخص البناء – قطاع غرب الرياض</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --primary: #1e3a5f;
+    --primary-dark: #12263f;
+    --primary-light: #2e5484;
+    --accent: #b08d57;
+    --accent-dark: #8b6a3d;
+    --bg: #f4f5f7;
+    --surface: #ffffff;
+    --surface-alt: #f9fafb;
+    --border: #d1d5db;
+    --border-strong: #9ca3af;
+    --text-primary: #1f2937;
+    --text-secondary: #4b5563;
+    --text-muted: #6b7280;
+    --success: #0f6e56;
+    --success-bg: #e6f4ef;
+    --warning: #92400e;
+    --warning-bg: #fef3e2;
+    --danger: #991b1b;
+    --danger-bg: #fef2f2;
+    --danger-border: #fecaca;
+    --info-bg: #eff6ff;
+    --info-border: #bfdbfe;
+    --info-text: #1e3a8a;
+    --shadow-sm: 0 1px 2px rgba(30, 58, 95, 0.05);
+    --shadow: 0 1px 3px rgba(30, 58, 95, 0.08), 0 1px 2px rgba(30, 58, 95, 0.04);
+  }
+  body {
+    font-family: 'Segoe UI', 'Tahoma', 'Cairo', Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    padding: 20px;
+    line-height: 1.7;
+    direction: rtl;
+    font-size: 14.5px;
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: #fff;
+    padding: 22px 28px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    box-shadow: var(--shadow);
+    border-top: 3px solid var(--accent);
+  }
+  .header h1 { font-size: 20px; font-weight: 600; color: #fff; }
+  .header p { color: #cbd5e1; font-size: 12.5px; margin-top: 4px; }
+  .header .btn-secondary { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.25); }
+  .header .btn-secondary:hover { background: rgba(255,255,255,0.18); }
+  .tabs {
+    display: flex;
+    gap: 2px;
+    background: var(--surface);
+    padding: 4px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-sm);
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 11px 16px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    transition: all 0.15s;
+  }
+  .tab-btn:hover { background: var(--surface-alt); color: var(--primary); }
+  .tab-btn.active { background: var(--primary); color: #fff; font-weight: 600; }
+  .admin-subtab { background: transparent; color: var(--text-secondary); border: 1px solid var(--border); padding: 8px 16px; font-size: 13px; cursor: pointer; border-radius: 4px; transition: all 0.15s; }
+  .admin-subtab:hover { background: var(--surface-alt); color: var(--primary); }
+  .admin-subtab.active { background: var(--primary); color: #fff; border-color: var(--primary); font-weight: 600; }
+  .admin-add-new-header { background: linear-gradient(90deg, #e8f5e9 0%, #f9f8f3 100%) !important; border-right: 3px solid #2e7d32 !important; }
+  .admin-add-new-header span:first-child { color: #2e7d32; font-weight: 700; }
+
+  /* Dropdown مخصّص يدعم زر × بجانب كل خيار */
+  .custom-dropdown { position: relative; width: 100%; }
+  .dd-button {
+    width: 100%; padding: 9px 12px; font-size: 14px; text-align: right;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 4px;
+    cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+    color: var(--text); font-family: inherit;
+  }
+  .dd-button:hover { border-color: var(--primary); }
+  .dd-button:disabled { background: #f5f5f5; color: #9e9e9e; cursor: not-allowed; opacity: 0.6; }
+  .dd-button:disabled:hover { border-color: var(--border); }
+  .dd-arrow { font-size: 10px; color: var(--text-secondary); margin-right: 6px; transition: transform 0.15s; }
+  .custom-dropdown.open .dd-arrow { transform: rotate(180deg); }
+  .dd-label { flex: 1; }
+  .dd-label.placeholder { color: var(--text-secondary); }
+  .dd-menu {
+    position: absolute; top: calc(100% + 2px); right: 0; left: 0;
+    background: #fff; border: 1px solid var(--border); border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08); z-index: 100;
+    max-height: 280px; overflow-y: auto; padding: 4px 0;
+  }
+  .dd-menu.hidden { display: none; }
+  .dd-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 12px; font-size: 13.5px; cursor: pointer; transition: background 0.1s;
+  }
+  .dd-item:hover { background: var(--surface-alt); }
+  .dd-item.selected { background: #e3f2fd; color: var(--primary); font-weight: 600; }
+  .dd-item .dd-text { flex: 1; }
+  .dd-item .dd-x {
+    background: transparent; border: none; cursor: pointer; padding: 2px 6px;
+    font-size: 14px; color: #c62828; opacity: 0.6; border-radius: 3px;
+    margin-right: 4px; line-height: 1;
+  }
+  .dd-item .dd-x:hover { opacity: 1; background: #ffebee; }
+  .dd-item-add {
+    display: flex; align-items: center; padding: 8px 12px; font-size: 13.5px;
+    cursor: pointer; color: #2e7d32; font-weight: 600;
+    background: linear-gradient(90deg, #e8f5e9 0%, #f9f8f3 100%);
+    border-top: 1px solid #e0e0e0;
+  }
+  .dd-item-add:hover { background: #c8e6c9; }
+  .dd-optgroup-label {
+    padding: 6px 12px; font-size: 11.5px; font-weight: 600;
+    color: var(--text-secondary); background: #fafafa;
+    border-bottom: 1px solid #eee;
+  }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+  .card {
+    background: var(--surface);
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    padding: 22px 24px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-sm);
+  }
+  .card h2 {
+    font-size: 15.5px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--primary);
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--accent);
+    display: inline-block;
+    padding-left: 40px;
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group label { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+  .form-group select, .form-group input, .form-group textarea {
+    padding: 9px 12px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 14px;
+    background: var(--surface);
+  }
+  .form-group select:focus, .form-group input:focus, .form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.1);
+  }
+  .form-group input[readonly] { background: var(--surface-alt); color: var(--text-secondary); }
+  .form-group select:disabled, .form-group input:disabled {
+    background: #f1f3f5;
+    color: var(--text-muted);
+    cursor: not-allowed;
+    border-color: #e5e7eb;
+    opacity: 0.7;
+  }
+  .form-group label .required-mark { color: var(--danger); margin-right: 3px; }
+  .checklist-section { margin-bottom: 20px; }
+  .checklist-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 10px;
+    padding: 10px 14px;
+    background: var(--success-bg);
+    border-right: 4px solid var(--success);
+    border-radius: 4px;
+  }
+  .checklist-title.optional { background: var(--warning-bg); border-right-color: var(--warning); color: var(--warning); }
+  .checkbox-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: 4px;
+    margin-bottom: 2px;
+  }
+  .checkbox-item:hover { background: var(--surface-alt); }
+  .checkbox-item input[type="checkbox"] { margin-top: 4px; width: 16px; height: 16px; accent-color: var(--primary); flex-shrink: 0; }
+  .checkbox-item label { flex: 1; cursor: pointer; font-size: 14px; line-height: 1.6; }
+  .requirement-category {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    margin-bottom: 8px;
+    overflow: hidden;
+  }
+  .requirement-header {
+    padding: 13px 16px;
+    background: var(--surface-alt);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--primary);
+    border-bottom: 1px solid var(--border);
+  }
+  .requirement-header:hover { background: #eef1f5; }
+  .requirement-header .arrow { transition: transform 0.2s; color: var(--accent); font-size: 10px; }
+  .requirement-header.collapsed .arrow { transform: rotate(-90deg); }
+  .requirement-header .count { font-size: 11.5px; color: var(--text-secondary); background: var(--surface); padding: 2px 10px; border-radius: 10px; border: 1px solid var(--border); }
+  .requirement-body { padding: 10px 14px; }
+  .requirement-body.hidden { display: none; }
+  .req-item {
+    padding: 11px 12px;
+    background: var(--surface);
+    border-radius: 4px;
+    margin-bottom: 6px;
+    border: 1px solid var(--border);
+  }
+  .req-item:hover { border-color: var(--border-strong); }
+  .req-item-top { display: flex; align-items: flex-start; gap: 10px; }
+  .req-item-top input[type="checkbox"] { margin-top: 4px; width: 16px; height: 16px; accent-color: var(--accent); flex-shrink: 0; }
+  .req-item-top label { flex: 1; font-size: 14px; line-height: 1.6; cursor: pointer; }
+  .req-extras {
+    display: none;
+    grid-template-columns: 140px 1fr;
+    gap: 10px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--border);
+  }
+  .req-extras.show { display: grid; }
+  .req-extras input, .req-extras textarea { padding: 7px 11px; border: 1px solid var(--border); border-radius: 4px; font-family: inherit; font-size: 13px; }
+  .btn {
+    padding: 9px 20px;
+    border: none;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-primary { background: var(--primary); color: #fff; border: 1px solid var(--primary); }
+  .btn-primary:hover { background: var(--primary-dark); }
+  .btn-accent { background: var(--accent); color: #fff; }
+  .btn-accent:hover { background: var(--accent-dark); }
+  .btn-secondary { background: var(--surface); color: var(--text-primary); border: 1px solid var(--border); }
+  .btn-secondary:hover { background: var(--surface-alt); border-color: var(--border-strong); }
+  .btn-danger { background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger-border); }
+  .btn-danger:hover { background: #fee2e2; }
+  .actions-bar { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .output-box { background: var(--surface-alt); border: 1px solid var(--border); border-right: 3px solid var(--accent); border-radius: 4px; padding: 24px 28px; font-size: 14px; line-height: 1.9; white-space: pre-wrap; max-height: 550px; overflow-y: auto; min-height: 200px; }
+  .history-item { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 14px 18px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .history-item:hover { border-color: var(--border-strong); }
+  .history-info h3 { font-size: 14px; font-weight: 600; margin-bottom: 4px; color: var(--primary); }
+  .history-info p { font-size: 12.5px; color: var(--text-muted); }
+  .history-actions { display: flex; gap: 6px; }
+  .admin-note { background: var(--info-bg); border: 1px solid var(--info-border); border-right: 3px solid var(--primary); color: var(--info-text); padding: 12px 16px; border-radius: 4px; font-size: 13px; margin-bottom: 14px; }
+  .muted { color: var(--text-muted); font-size: 13px; font-style: italic; text-align: center; padding: 24px; }
+  @media (max-width: 700px) { .form-row { grid-template-columns: 1fr; } .tabs { flex-wrap: wrap; } .tab-btn { flex: 1 1 45%; } .header { flex-direction: column; align-items: flex-start; } body { padding: 12px; } .card { padding: 16px; } }
+  @media print { body { background: #fff; padding: 0; } .tabs, .actions-bar, .header .btn-secondary { display: none; } .card { border: none; box-shadow: none; } }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div><h1>إدارة رخص البناء – قطاع غرب الرياض</h1><p>تدقيق حسب نوع الطلب + التصنيف + نوع الكود + نوع المشروع</p></div>
+    <div><button class="btn btn-secondary" onclick="backupData()">نسخة احتياطية</button><button class="btn btn-secondary" onclick="restoreData()">استعادة</button></div>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('new')">تدقيق جديد</button>
+    <button class="tab-btn" onclick="switchTab('history')">سجل التدقيقات</button>
+    <button class="tab-btn" onclick="switchTab('admin')">إدارة الاشتراطات</button>
+  </div>
+  <div id="tab-new" class="tab-content active">
+    <div class="card">
+      <h2>معلومات الطلب</h2>
+      <div class="form-row">
+        <div class="form-group"><label>رقم الطلب / اسم المشروع</label><input type="text" id="project-name" placeholder="مثال: طلب رقم 372261"></div>
+        <div class="form-group"><label>التاريخ (تلقائي)</label><input type="text" id="project-date" readonly></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>نوع الطلب</label><select id="request-type" onchange="refreshAll()"><option value="">— اختر —</option><option value="new">إصدار رخصة بناء</option><option value="renew">تجديد رخصة بناء</option><option value="modify">تعديل رخصة بناء</option><option value="correction">تصحيح وضع مبنى قائم</option></select></div>
+        <div class="form-group"><label>التصنيف</label><select id="classification" onchange="refreshAll()"><option value="">— اختر —</option><option value="residential">سكني</option><option value="commercial">تجاري</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>نوع الكود / اللائحة</label><select id="code-type" onchange="refreshAll()"><option value="">— اختر —</option><option value="wadi">كود وادي حنيفة</option><option value="saudi">اشتراطات الكود السعودي</option><option value="both">كود وادي حنيفة + الكود السعودي</option></select></div>
+        <div class="form-group"><label>نوع المشروع</label><select id="project-type" onchange="refreshAll()"><option value="">— اختر —</option></select></div>
+      </div>
+    </div>
+    <div class="card" id="attachments-card"><h2>المرفقات</h2><div id="attachments-container"><p class="muted">اختر نوع الطلب لعرض المرفقات المطلوبة</p></div></div>
+    <div class="card" id="requirements-card"><h2>بنود الاشتراطات — اختر الملاحظات الناقصة في المخطط</h2><div id="requirements-container"><p class="muted">اختر نوع الطلب ونوع المشروع لعرض الاشتراطات</p></div></div>
+    <div class="actions-bar"><button class="btn btn-secondary" onclick="clearForm()">مسح الكل</button><button class="btn btn-primary" onclick="generateOutput()">توليد تقرير التدقيق</button></div>
+    <div class="card" id="output-card" style="display:none;"><h2>تقرير التدقيق النهائي</h2><div id="output-box" class="output-box"></div><div class="actions-bar"><button class="btn btn-secondary" onclick="copyOutput()">نسخ النص</button><button class="btn btn-primary" onclick="saveReport()">حفظ التدقيق في السجل</button></div></div>
+  </div>
+  <div id="tab-history" class="tab-content"><div class="card"><h2>التدقيقات السابقة</h2><div id="history-container"><p class="muted">لا توجد تدقيقات محفوظة بعد</p></div></div></div>
+  <div id="tab-admin" class="tab-content">
+    <div class="card">
+      <h2>الإدارة</h2>
+      <div class="admin-note">اختر الفلاتر الأربعة بالكامل (نوع الطلب + التصنيف + الكود + المشروع). كل اشتراط/مرفق يُضاف يرتبط بالمشروع المختار <strong>فقط</strong>، ولن يظهر في أي مشروع آخر.</div>
+
+      <!-- شريط الفلاتر المتسلسلة الموحّد - باستخدام dropdowns مخصصة تدعم الحذف من داخل القائمة -->
+      <div class="form-row">
+        <div class="form-group"><label>١. نوع الطلب</label>
+          <div class="custom-dropdown" id="dd-request-type" data-filter="requestType">
+            <button type="button" class="dd-button" onclick="toggleDropdown('requestType')">
+              <span class="dd-label">— اختر —</span>
+              <span class="dd-arrow">▼</span>
+            </button>
+            <div class="dd-menu hidden"></div>
+          </div>
+          <input type="hidden" id="adm-request-type" value="">
+        </div>
+        <div class="form-group"><label>٢. التصنيف</label>
+          <div class="custom-dropdown" id="dd-classification" data-filter="classification">
+            <button type="button" class="dd-button" onclick="toggleDropdown('classification')">
+              <span class="dd-label">— اختر —</span>
+              <span class="dd-arrow">▼</span>
+            </button>
+            <div class="dd-menu hidden"></div>
+          </div>
+          <input type="hidden" id="adm-classification" value="">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>٣. نوع الكود / اللائحة</label>
+          <div class="custom-dropdown" id="dd-code-type" data-filter="codeType">
+            <button type="button" class="dd-button" onclick="toggleDropdown('codeType')">
+              <span class="dd-label">— اختر —</span>
+              <span class="dd-arrow">▼</span>
+            </button>
+            <div class="dd-menu hidden"></div>
+          </div>
+          <input type="hidden" id="adm-code-type" value="">
+        </div>
+        <div class="form-group"><label>٤. نوع المشروع</label>
+          <div class="custom-dropdown" id="dd-project-type" data-filter="projectType">
+            <button type="button" class="dd-button" onclick="toggleDropdown('projectType')">
+              <span class="dd-label">— اختر —</span>
+              <span class="dd-arrow">▼</span>
+            </button>
+            <div class="dd-menu hidden"></div>
+          </div>
+          <input type="hidden" id="adm-project-type" value="">
+        </div>
+      </div>
+
+      <!-- تبويبات الإدارة الفرعية -->
+      <div style="display:flex; gap:8px; margin:18px 0 12px; flex-wrap:wrap; border-bottom:2px solid #e5e3db; padding-bottom:10px;">
+        <button class="btn admin-subtab active" data-subtab="categories" onclick="switchAdminSubtab('categories')">📂 بنود التصنيف</button>
+        <button class="btn admin-subtab" data-subtab="requirements" onclick="switchAdminSubtab('requirements')">📋 الاشتراطات</button>
+        <button class="btn admin-subtab" data-subtab="attachments" onclick="switchAdminSubtab('attachments')">📎 المرفقات</button>
+      </div>
+
+      <div id="admin-container"></div>
+    </div>
+  </div></div>
+</div>
+<script>
+// ========== البيانات الكاملة للاشتراطات مع إضافة requestTypes ==========
+// أنواع الطلبات: new, renew, modify, correction
+// أنواع المشاريع:
+//  - codeAffinity: لأي نوع كود ينتمي (wadi/saudi)
+//  - group / groupByCode: التصنيف الافتراضي (سكني/تجاري) — groupByCode يُستخدم لو يختلف بحسب الكود
+// ========== قوائم الفلاتر القابلة للتخصيص ==========
+// كل عنصر له: id، name، isOriginal (للتمييز بين الافتراضي والمضاف يدوياً)
+// قوائم افتراضية - تُحفظ في appData وتصير قابلة للإضافة/الحذف من الواجهة
+const DEFAULT_REQUEST_TYPES_LIST = [
+  { id: 'new', name: 'إصدار رخصة بناء', isOriginal: true },
+  { id: 'renew', name: 'تجديد رخصة بناء', isOriginal: true },
+  { id: 'modify', name: 'تعديل رخصة بناء', isOriginal: true },
+  { id: 'correction', name: 'تصحيح وضع مبنى قائم', isOriginal: true }
+];
+const DEFAULT_CLASSIFICATIONS_LIST = [
+  { id: 'residential', name: 'سكني', isOriginal: true },
+  { id: 'commercial', name: 'تجاري', isOriginal: true }
+];
+const DEFAULT_CODE_TYPES_LIST = [
+  { id: 'wadi', name: 'كود وادي حنيفة', isOriginal: true },
+  { id: 'saudi', name: 'اشتراطات الكود السعودي', isOriginal: true },
+  { id: 'both', name: 'كود وادي حنيفة + الكود السعودي', isOriginal: true }
+];
+
+// أنواع المشاريع: قابلة للتعديل (عبر appData.projectTypes) + isOriginal
+const DEFAULT_PROJECT_TYPES_LIST = [
+  // === أنواع الكود السعودي (سكني) ===
+  { id: 'villa', name: 'فلل', group: 'residential', codeAffinity: 'saudi', isOriginal: true },
+  { id: 'villa_attached', name: 'فلل متلاصقة', group: 'residential', codeAffinity: 'saudi', isOriginal: true },
+  { id: 'villa_adjacent', name: 'فلل متجاورة', group: 'residential', codeAffinity: 'saudi', isOriginal: true },
+  { id: 'villa_mixed', name: 'فلل متلاصقة ومتجاورة', group: 'residential', codeAffinity: 'saudi', isOriginal: true },
+  // الشقق السكنية: في الكود السعودي تُصنّف تجاري (حسب طلب المستخدم)
+  { id: 'apartments', name: 'شقق سكنية', group: 'commercial', codeAffinity: 'saudi', isOriginal: true },
+  // === أنواع الكود السعودي (تجاري) ===
+  { id: 'hotel', name: 'فندق', group: 'commercial', codeAffinity: 'saudi', isOriginal: true },
+  { id: 'hotel_apt', name: 'شقق فندقية', group: 'commercial', codeAffinity: 'saudi', isOriginal: true },
+  { id: 'warehouse', name: 'مستودعات', group: 'commercial', codeAffinity: 'saudi', isOriginal: true },
+  { id: 'gas_station', name: 'محطة وقود', group: 'commercial', codeAffinity: 'saudi', isOriginal: true },
+  { id: 'workshop_prof', name: 'ورش مهنية', group: 'commercial', codeAffinity: 'saudi', isOriginal: true },
+  { id: 'workshop_vehicle', name: 'ورش وسائل النقل', group: 'commercial', codeAffinity: 'saudi', isOriginal: true },
+  // === أنواع كود وادي حنيفة (Tiers سكني) ===
+  { id: 'tier_T31', name: 'T3.1', group: 'residential', codeAffinity: 'wadi', isOriginal: true },
+  { id: 'tier_T32', name: 'T3.2', group: 'residential', codeAffinity: 'wadi', isOriginal: true },
+  { id: 'tier_T33', name: 'T3.3', group: 'residential', codeAffinity: 'wadi', isOriginal: true },
+  // === أنواع كود وادي حنيفة (Tiers تجاري) ===
+  { id: 'tier_T41', name: 'T4.1', group: 'commercial', codeAffinity: 'wadi', isOriginal: true },
+  { id: 'tier_T42', name: 'T4.2', group: 'commercial', codeAffinity: 'wadi', isOriginal: true },
+  { id: 'tier_T52', name: 'T5.2', group: 'commercial', codeAffinity: 'wadi', isOriginal: true }
+];
+
+// PROJECT_TYPES كـ Proxy للوصول لقائمة المشاريع الحالية في appData
+// (نحتفظ بها كاسم متغير لتقليل التغييرات في الكود الموجود)
+function getProjectTypes() { return (appData && appData.projectTypes) || DEFAULT_PROJECT_TYPES_LIST; }
+// shim للتوافق الرجعي - الكود القديم يستخدم PROJECT_TYPES كمتغير مباشر
+// لذا نُعرّفها كـ getter ديناميكي
+let PROJECT_TYPES = DEFAULT_PROJECT_TYPES_LIST.slice(); // قيمة أولية، تُحدّث في loadData
+
+// بنود التصنيف — فاضية، يضيفها المستخدم يدوياً
+const DEFAULT_CATEGORIES = [];
+
+// المرفقات (نفس السابق)
+const DEFAULT_ATTACHMENTS = {
+  required: {
+    new: ['صك الملكية / وثيقة التملك', 'الرفع المساحي', 'وثيقة التأمين', 'نموذج 9 و 10', 'نظام البناء المعتمد من الأمانة', 'المخططات المعمارية كاملة (المساقط، الواجهات، القطاعات)', 'صورة الواجهة 3D', 'الموقع العام', 'مخطط يوضح آلية التدعيم للموقع والمحافظة على أملاك المجاورين', 'تعهد إغلاق الفتحات (عند الحاجة)'],
+    renew: ['خطاب توجيه موقع ومختوم من المكتب الهندسي يوضح التعديل المطلوب', 'تقرير فني مصور يوضح حالة الأرض وعدد الأدوار بالمساحات في الطبيعة والرخصة', 'صورة الواجهة 3D مع تصغير الأبعاد', 'الموقع العام مع تصغير الأبعاد', 'نموذج 9 و 10', 'وثيقة التأمين', 'الرفع المساحي'],
+    modify: ['خطاب توجيه موقع ومختوم من المكتب الهندسي يوضح التعديل المطلوب', 'تقرير فني مصور يوضح حالة الأرض وعدد الأدوار', 'شهادة تحمل المبنى (مكتب هندسي معتمد) للمساحات المراد إضافتها', 'صورة الواجهة 3D مع تصغير الأبعاد', 'الموقع العام مع تصغير الأبعاد', 'شهادة مطابقة التصاميم لكود البناء (هيئة الدرعية) بعد التعديل', 'مخطط يوضح آلية التدعيم للموقع'],
+    correction: ['صك الملكية', 'الرفع المساحي', 'خطاب توجيه موقع ومختوم من المكتب الهندسي يوضح الملاحظات', 'تقرير فني مصور يوضح حالة الأرض وعدد الأدوار', 'شهادة سلامة المبنى', 'شهادة التحمل + خطاب بالسلامة الإنشائية', 'صورة الواجهة 3D مع تصغير الأبعاد', 'الموقع العام مع تصغير الأبعاد', 'المخططات حسب الاشتراطات النظامية']
+  },
+  optional: ['تعهد تخطي المهلة التصحيحية', 'تعهد صاحب العلاقة بفتح الموقع', 'خطاب الرد من شركة الكهرباء بتاريخ إطلاق التيار', 'المصغرات الفلمية', 'تعهد بإزالة المخالفات على الواجهة', 'خطاب تحمل المبنى للمساحات المضافة', 'شهادة مطابقة التصاميم لكود البناء (هيئة الدرعية)']
+};
+
+// الاشتراطات الكاملة (جميع البنود من الملف الأصلي) مع إضافة requestTypes افتراضي ['new']
+// سنقوم ببناء كائن ضخم يحوي كل الاشتراطات. نظراً للطول، سأضعها في دالة منفصلة.
+// بنود التصنيف فاضية + اشتراطات فاضية. المستخدم يضيف يدوياً من لوحة الإدارة.
+function getDefaultRequirements() {
+  return {};
+}
+
+// ========== إدارة التخزين المحلي ==========
+const STORAGE_KEY = 'audit_tool_v8';
+const ALL_CLASSIFICATIONS = ['residential','commercial'];
+const ALL_CODE_TYPES = ['wadi','saudi','both'];
+const ALL_REQUEST_TYPES = ['new','renew','modify','correction'];
+// نسخ ديناميكية تُحدّث من appData (للقوائم القابلة للتخصيص)
+let ALL_CLASSIFICATIONS_DYN = [...ALL_CLASSIFICATIONS];
+let ALL_CODE_TYPES_DYN = [...ALL_CODE_TYPES];
+let ALL_REQUEST_TYPES_DYN = [...ALL_REQUEST_TYPES];
+
+// ========== استنتاج نوع الكود من نص المرجع ==========
+// قاعدة الفرز:
+//  - المرجع يذكر "وادي حنيفة" صراحة → wadi (وادي حنيفة)
+//  - المرجع يبدأ بـ "كود T" مثل "كود T4.1" → wadi (T = Tier من نظام وادي حنيفة)
+//  - المرجع يذكر "وادي حنيفة" + مرجع سعودي معروف → both
+//  - غير ذلك (دليل/نظام/اشتراطات/صفحة/فارغ) → saudi
+function inferCodeTypeFromRef(ref) {
+  const r = (ref || '').trim();
+  const hasWadi = /وادي\s*حنيفة/.test(r);
+  const hasTierCode = /كود\s*T\d/.test(r); // كود T3.x / T4.x ترميز وادي حنيفة
+  // مراجع الكود السعودي المعروفة (دلائل ولوائح غير وادي حنيفة)
+  const saudiKeywords = /(دليل\s*المواقف|دليل\s*تصميم\s*المواقف|دليل\s*محطات\s*الوقود|دليل\s*أسطح\s*المباني|اشتراطات\s*محطات\s*الوقود|اشتراطات\s*ورش|نظام\s*البناء|الهيئة\s*الملكية|جدول\s*رقم|الشكل\s*\d|^صفحة\s*)/;
+  const hasSaudiRef = saudiKeywords.test(r);
+
+  if (hasWadi || hasTierCode) {
+    // هل يحتوي أيضاً على مرجع سعودي معروف بجانبه؟ → both
+    if (hasSaudiRef) return ['both'];
+    return ['wadi'];
+  }
+  // فارغ أو مرجع سعودي → saudi
+  return ['saudi'];
+}
+
+function migrateData(data) {
+  if (!data) return data;
+  // ترحيل: إضافة قوائم الفلاتر القابلة للتخصيص لو ما كانت موجودة
+  if (!data.requestTypesList || !Array.isArray(data.requestTypesList)) {
+    data.requestTypesList = JSON.parse(JSON.stringify(DEFAULT_REQUEST_TYPES_LIST));
+  }
+  if (!data.classificationsList || !Array.isArray(data.classificationsList)) {
+    data.classificationsList = JSON.parse(JSON.stringify(DEFAULT_CLASSIFICATIONS_LIST));
+  }
+  if (!data.codeTypesList || !Array.isArray(data.codeTypesList)) {
+    data.codeTypesList = JSON.parse(JSON.stringify(DEFAULT_CODE_TYPES_LIST));
+  }
+  if (!data.projectTypes || !Array.isArray(data.projectTypes)) {
+    data.projectTypes = JSON.parse(JSON.stringify(DEFAULT_PROJECT_TYPES_LIST));
+  }
+  // مزامنة المتغير العام PROJECT_TYPES مع الذي في appData
+  PROJECT_TYPES = data.projectTypes;
+  ALL_REQUEST_TYPES_DYN = data.requestTypesList.map(r => r.id);
+  ALL_CLASSIFICATIONS_DYN = data.classificationsList.map(c => c.id);
+  ALL_CODE_TYPES_DYN = data.codeTypesList.map(c => c.id);
+
+  if (!data.requirements) data.requirements = {};
+  const allProjects = PROJECT_TYPES.map(p => p.id);
+  Object.keys(data.requirements).forEach(catId => {
+    (data.requirements[catId] || []).forEach(it => {
+      if (!it.projects || !Array.isArray(it.projects)) it.projects = [...allProjects];
+      if (!it.requestTypes || !Array.isArray(it.requestTypes)) it.requestTypes = [...ALL_REQUEST_TYPES];
+      // توافق رجعي: لو ما فيه classifications، استنتجها من projects
+      if (!it.classifications || !Array.isArray(it.classifications)) {
+        const groups = new Set();
+        it.projects.forEach(pid => {
+          const p = PROJECT_TYPES.find(x => x.id === pid);
+          if (p) groups.add(p.group);
+        });
+        it.classifications = groups.size ? Array.from(groups) : [...ALL_CLASSIFICATIONS];
+      }
+      // التصنيف الذكي لنوع الكود (v5 → v6): استنتاج من نص المرجع
+      if (!it.codeTypes || !Array.isArray(it.codeTypes) || it.codeTypes.length === 3) {
+        // ملاحظة: codeTypes.length === 3 معناه (wadi+saudi+both) وهي القيمة الافتراضية القديمة
+        // التي كانت تسبب التداخل، فنعيد تصنيفها ذكياً
+        it.codeTypes = inferCodeTypeFromRef(it.ref);
+      }
+    });
+  });
+  // ترحيل المرفقات: إضافة هيكل classifications + codeTypes + projects للمرفقات
+  if (data.attachments && data.attachments.required) {
+    Object.keys(data.attachments.required).forEach(reqType => {
+      data.attachments.required[reqType] = (data.attachments.required[reqType] || []).map(att => {
+        if (typeof att === 'string') {
+          return { text: att, classifications: [...ALL_CLASSIFICATIONS], codeTypes: [...ALL_CODE_TYPES], projects: [...allProjects] };
+        }
+        if (!att.classifications) att.classifications = [...ALL_CLASSIFICATIONS];
+        if (!att.codeTypes) att.codeTypes = [...ALL_CODE_TYPES];
+        if (!att.projects) att.projects = [...allProjects];
+        return att;
+      });
+    });
+  }
+  if (data.attachments && Array.isArray(data.attachments.optional)) {
+    data.attachments.optional = data.attachments.optional.map(att => {
+      if (typeof att === 'string') {
+        return { text: att, classifications: [...ALL_CLASSIFICATIONS], codeTypes: [...ALL_CODE_TYPES], projects: [...allProjects], requestTypes: [...ALL_REQUEST_TYPES] };
+      }
+      if (!att.classifications) att.classifications = [...ALL_CLASSIFICATIONS];
+      if (!att.codeTypes) att.codeTypes = [...ALL_CODE_TYPES];
+      if (!att.projects) att.projects = [...allProjects];
+      if (!att.requestTypes) att.requestTypes = [...ALL_REQUEST_TYPES];
+      return att;
+    });
+  }
+  return data;
+}
+
+function loadData() {
+  try {
+    let raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return migrateData(JSON.parse(raw));
+  } catch(e) {}
+  // ابدأ من صفر: بنود فاضية + اشتراطات فاضية + مرفقات افتراضية
+  const fresh = {
+    categories: JSON.parse(JSON.stringify(DEFAULT_CATEGORIES)),
+    requirements: getDefaultRequirements(),
+    attachments: JSON.parse(JSON.stringify(DEFAULT_ATTACHMENTS)),
+    history: []
+  };
+  return migrateData(fresh);
+}
+let appData = loadData();
+function saveData() { localStorage.setItem(STORAGE_KEY, JSON.stringify(appData)); }
+
+// دوال عامة
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
+  if (name === 'history') renderHistory();
+  if (name === 'admin') renderAdmin();
+}
+function refreshAll() { cascadeFilters(); renderAttachments(); renderRequirements(); }
+
+// تصفية متسلسلة على القوائم المنسدلة:
+// نوع الطلب → التصنيف → نوع الكود → نوع المشروع (يُبنى ديناميكياً حسب الكود)
+function cascadeFilters() {
+  const requestType = document.getElementById('request-type').value;
+  const classification = document.getElementById('classification').value;
+  const codeType = document.getElementById('code-type').value;
+  const classSel = document.getElementById('classification');
+  const codeSel = document.getElementById('code-type');
+  const projSel = document.getElementById('project-type');
+
+  // 1) التصنيف معطّل لو ما تم اختيار نوع الطلب
+  classSel.disabled = !requestType;
+  if (!requestType) { classSel.value = ''; }
+
+  // 2) نوع الكود معطّل لو ما تم اختيار التصنيف
+  codeSel.disabled = !requestType || !classification;
+  if (!requestType || !classification) { codeSel.value = ''; }
+
+  // 3) نوع المشروع معطّل لو ما تم اختيار نوع الكود
+  projSel.disabled = !requestType || !classification || !codeType;
+  if (!requestType || !classification || !codeType) {
+    projSel.value = '';
+    rebuildProjectTypeList('', ''); // قائمة فاضية
+    return;
+  }
+
+  // 4) إعادة بناء قائمة المشاريع حسب نوع الكود + التصنيف
+  rebuildProjectTypeList(codeType, classification);
+}
+
+// إعادة بناء قائمة "نوع المشروع" ديناميكياً:
+//  - وادي حنيفة → Tiers فقط (T3.x للسكني، T4.x/T5.x للتجاري)
+//  - الكود السعودي → الأنواع السعودية فقط
+//  - both → دمج الاثنين في مجموعتين منفصلتين
+function rebuildProjectTypeList(codeType, classification) {
+  const projSel = document.getElementById('project-type');
+  const currentVal = projSel.value;
+  // فلترة المشاريع حسب الكود
+  let projects = [];
+  if (codeType === 'wadi') {
+    projects = PROJECT_TYPES.filter(p => p.codeAffinity === 'wadi');
+  } else if (codeType === 'saudi') {
+    projects = PROJECT_TYPES.filter(p => p.codeAffinity === 'saudi');
+  } else if (codeType === 'both') {
+    projects = PROJECT_TYPES.slice();
+  }
+  // فلترة إضافية حسب التصنيف (سكني/تجاري)
+  if (classification) {
+    projects = projects.filter(p => p.group === classification);
+  }
+  // بناء HTML
+  let html = '<option value="">— اختر —</option>';
+  if (codeType === 'both') {
+    // عرض المشاريع في مجموعتين: وادي + سعودي
+    const wadiProjects = projects.filter(p => p.codeAffinity === 'wadi');
+    const saudiProjects = projects.filter(p => p.codeAffinity === 'saudi');
+    if (wadiProjects.length) {
+      html += '<optgroup label="كود وادي حنيفة (Tiers)">';
+      wadiProjects.forEach(p => { html += `<option value="${p.id}">${escapeHtml(p.name)}</option>`; });
+      html += '</optgroup>';
+    }
+    if (saudiProjects.length) {
+      html += '<optgroup label="الكود السعودي">';
+      saudiProjects.forEach(p => { html += `<option value="${p.id}">${escapeHtml(p.name)}</option>`; });
+      html += '</optgroup>';
+    }
+  } else {
+    projects.forEach(p => { html += `<option value="${p.id}">${escapeHtml(p.name)}</option>`; });
+  }
+  projSel.innerHTML = html;
+  // محاولة استعادة القيمة السابقة لو لا تزال متاحة
+  if (currentVal && projSel.querySelector(`option[value="${currentVal}"]`)) {
+    projSel.value = currentVal;
+  } else {
+    projSel.value = '';
+  }
+}
+function escapeHtml(s) { return String(s).replace(/[&<>]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;' }[c])); }
+function escapeAttr(s) { return String(s).replace(/"/g, '&quot;'); }
+
+function getActiveFilters() {
+  return {
+    requestType: document.getElementById('request-type').value,
+    classification: document.getElementById('classification').value,
+    codeType: document.getElementById('code-type').value,
+    projectType: document.getElementById('project-type').value
+  };
+}
+
+// رسالة التحذير حسب الحقل الناقص في الترتيب
+function getMissingFilterMsg(f) {
+  if (!f.requestType) return 'الرجاء اختيار «نوع الطلب» أولاً';
+  if (!f.classification) return 'الرجاء اختيار «التصنيف» (سكني / تجاري)';
+  if (!f.codeType) return 'الرجاء اختيار «نوع الكود»';
+  if (!f.projectType) return 'الرجاء اختيار «نوع المشروع»';
+  return null;
+}
+
+function renderAttachments() {
+  const f = getActiveFilters();
+  const container = document.getElementById('attachments-container');
+  const card = document.getElementById('attachments-card');
+
+  const missing = getMissingFilterMsg(f);
+  if (missing) {
+    container.innerHTML = `<p class="muted">${missing} لعرض المرفقات</p>`;
+    return;
+  }
+
+  // دالة موحّدة لمطابقة codeType (تطبق العزل الكامل ومنطق both الاتحادي)
+  const codeTypeMatches = (itemCodeTypes) => {
+    if (!itemCodeTypes || !itemCodeTypes.length) return true; // لو ما فيه قيد، اعرض دائماً
+    if (f.codeType === 'wadi') return itemCodeTypes.includes('wadi') || itemCodeTypes.includes('both');
+    if (f.codeType === 'saudi') return itemCodeTypes.includes('saudi') || itemCodeTypes.includes('both');
+    if (f.codeType === 'both') return true; // اعرض الكل
+    return true;
+  };
+
+  // تصفية المرفقات حسب جميع الفلاتر
+  const allRequired = appData.attachments.required[f.requestType] || [];
+  const required = allRequired.filter(a => {
+    if (!a.classifications.includes(f.classification)) return false;
+    if (!codeTypeMatches(a.codeTypes)) return false;
+    if (!a.projects.includes(f.projectType)) return false;
+    return true;
+  });
+  const allOptional = appData.attachments.optional || [];
+  const optional = allOptional.filter(a => {
+    if (a.requestTypes && !a.requestTypes.includes(f.requestType)) return false;
+    if (!a.classifications.includes(f.classification)) return false;
+    if (!codeTypeMatches(a.codeTypes)) return false;
+    if (!a.projects.includes(f.projectType)) return false;
+    return true;
+  });
+
+  // عرض المرفقات بصيغة قائمة مطوية (نفس أسلوب الاشتراطات)
+  let html = '';
+
+  // المرفقات المطلوبة
+  html += `<div class="requirement-category"><div class="requirement-header collapsed" onclick="toggleCategory(this)"><span>المرفقات المطلوبة</span><span style="display:flex; align-items:center; gap:10px;"><span class="count">${required.length} بند</span><span class="arrow">▼</span></span></div><div class="requirement-body hidden">`;
+  if (!required.length) {
+    html += `<p class="muted" style="padding:10px;">لا توجد مرفقات مطلوبة مرتبطة بالاختيارات الحالية</p>`;
+  } else {
+    required.forEach((item,i) => {
+      html += `<div class="checkbox-item"><input type="checkbox" id="att_req_${i}" data-type="required" data-text="${escapeAttr(item.text)}"><label for="att_req_${i}">${escapeHtml(item.text)}</label></div>`;
+    });
+  }
+  html += `</div></div>`;
+
+  // المرفقات الاختيارية
+  html += `<div class="requirement-category"><div class="requirement-header collapsed" onclick="toggleCategory(this)"><span>المرفقات الاختيارية</span><span style="display:flex; align-items:center; gap:10px;"><span class="count">${optional.length} بند</span><span class="arrow">▼</span></span></div><div class="requirement-body hidden">`;
+  if (!optional.length) {
+    html += `<p class="muted" style="padding:10px;">لا توجد مرفقات اختيارية مرتبطة بالاختيارات الحالية</p>`;
+  } else {
+    optional.forEach((item,i) => {
+      html += `<div class="checkbox-item"><input type="checkbox" id="att_opt_${i}" data-type="optional" data-text="${escapeAttr(item.text)}"><label for="att_opt_${i}">${escapeHtml(item.text)}</label></div>`;
+    });
+  }
+  html += `</div></div>`;
+
+  container.innerHTML = html;
+}
+
+function renderRequirements() {
+  const container = document.getElementById('requirements-container');
+  const reqs = appData.requirements;
+  const cats = appData.categories;
+  const f = getActiveFilters();
+
+  const missing = getMissingFilterMsg(f);
+  if (missing) {
+    container.innerHTML = `<p class="muted">${missing} لعرض الاشتراطات</p>`;
+    return;
+  }
+
+  const filterFn = (it) => {
+    if (it.requestTypes && !it.requestTypes.includes(f.requestType)) return false;
+    if (it.classifications && !it.classifications.includes(f.classification)) return false;
+    // فلترة نوع الكود (عزل كامل):
+    //  - wadi   → اعرض اشتراطات وادي + المشتركة (both)
+    //  - saudi  → اعرض اشتراطات السعودي + المشتركة (both)
+    //  - both   → اعرض الكل (wadi + saudi + both)
+    if (it.codeTypes && it.codeTypes.length) {
+      if (f.codeType === 'wadi') {
+        if (!it.codeTypes.includes('wadi') && !it.codeTypes.includes('both')) return false;
+      } else if (f.codeType === 'saudi') {
+        if (!it.codeTypes.includes('saudi') && !it.codeTypes.includes('both')) return false;
+      } else if (f.codeType === 'both') {
+        // اعرض كل شيء (لا فلترة على codeType)
+      }
+    }
+    if (it.projects && it.projects.length && !it.projects.includes(f.projectType)) return false;
+    return true;
+  };
+
+  let html = '', totalShown = 0;
+  cats.forEach(cat => {
+    const allItems = reqs[cat.id] || [];
+    const items = allItems.filter(filterFn);
+    if (!items.length) return;
+    totalShown += items.length;
+    html += `<div class="requirement-category"><div class="requirement-header collapsed" onclick="toggleCategory(this)"><span>${escapeHtml(cat.name)}</span><span style="display:flex; align-items:center; gap:10px;"><span class="count">${items.length} بند</span><span class="arrow">▼</span></span></div><div class="requirement-body hidden">`;
+    items.forEach(it => {
+      const origIdx = allItems.indexOf(it);
+      const itemId = `req_${cat.id}_${origIdx}`;
+      html += `<div class="req-item"><div class="req-item-top"><input type="checkbox" id="${itemId}" data-cat="${cat.id}" data-text="${escapeAttr(it.text)}" data-ref="${escapeAttr(it.ref||'')}" onchange="toggleExtras('${itemId}')"><label for="${itemId}">${escapeHtml(it.text)}${it.ref ? ` <span style="color:#5f5e5a; font-size:12px;">(${escapeHtml(it.ref)})</span>` : ''}</label></div><div class="req-extras" id="extras_${itemId}"><input type="text" id="page_${itemId}" placeholder="رقم الصفحة"><textarea id="note_${itemId}" placeholder="ملاحظة إضافية (اختياري)"></textarea></div></div>`;
+    });
+    html += `</div></div>`;
+  });
+  // شريط معلومات أعلى الاشتراطات يوضح الكود المختار وعدد البنود الظاهرة
+  if (totalShown > 0) {
+    const codeLabels = { wadi:'كود وادي حنيفة فقط', saudi:'اشتراطات الكود السعودي فقط', both:'وادي حنيفة + الكود السعودي' };
+    const codeIcon = { wadi:'🌊', saudi:'🇸🇦', both:'🔗' };
+    const banner = `<div style="background:linear-gradient(90deg, #f9f8f3 0%, #fff 100%); border-right:4px solid var(--primary); padding:10px 14px; margin-bottom:14px; border-radius:6px; font-size:14px; display:flex; justify-content:space-between; align-items:center;">
+      <span><strong>${codeIcon[f.codeType]||''} ${codeLabels[f.codeType]||''}</strong></span>
+      <span style="color:var(--primary); font-weight:600;">${totalShown} بند مطابق</span>
+    </div>`;
+    html = banner + html;
+  }
+  if (totalShown === 0) html = '<p class="muted">لا توجد اشتراطات مرتبطة بالاختيارات الحالية. يمكنك إضافة اشتراطات جديدة من لوحة الإدارة.</p>';
+  container.innerHTML = html;
+}
+function toggleCategory(header) { header.classList.toggle('collapsed'); header.nextElementSibling.classList.toggle('hidden'); }
+function toggleExtras(itemId) { document.getElementById('extras_'+itemId).classList.toggle('show', document.getElementById(itemId).checked); }
+
+// ذاكرة مؤقتة لآخر تقرير ولّد - تحفظ النسخة المختصرة (للعرض) والكاملة (للسجل)
+let lastReport = { display: '', full: '' };
+
+function generateOutput() {
+  const projectName = document.getElementById('project-name').value.trim();
+  const projectDate = document.getElementById('project-date').value;
+  const requestType = document.getElementById('request-type').value;
+  const classification = document.getElementById('classification').value;
+  const codeType = document.getElementById('code-type').value;
+  const projectType = document.getElementById('project-type').value;
+  if (!requestType) { alert('يرجى اختيار نوع الطلب'); return; }
+  if (!classification) { alert('يرجى اختيار التصنيف'); return; }
+  if (!codeType) { alert('يرجى اختيار نوع الكود'); return; }
+  if (!projectType) { alert('يرجى اختيار نوع المشروع'); return; }
+
+  const reqTypeNames = { new:'إصدار رخصة بناء', renew:'تجديد رخصة بناء', modify:'تعديل رخصة بناء', correction:'تصحيح وضع مبنى قائم' };
+  const clsNames = { residential:'سكني', commercial:'تجاري' };
+  const codeNames = { wadi:'كود وادي حنيفة', saudi:'اشتراطات الكود السعودي', both:'كود وادي حنيفة + الكود السعودي' };
+  const projNames = { villa:'فلل', villa_attached:'فلل متلاصقة', villa_adjacent:'فلل متجاورة', villa_mixed:'فلل متلاصقة ومتجاورة', apartments:'شقق سكنية', hotel:'فندق', hotel_apt:'شقق فندقية', warehouse:'مستودعات', gas_station:'محطة وقود', workshop_prof:'ورش مهنية', workshop_vehicle:'ورش وسائل النقل' };
+
+  // تجميع الملاحظات المحددة
+  const allNotes = [];
+  document.querySelectorAll('#requirements-container input[type="checkbox"]:checked').forEach(cb => {
+    const itemId = cb.id;
+    const page = document.getElementById('page_'+itemId)?.value.trim() || '';
+    const note = document.getElementById('note_'+itemId)?.value.trim() || '';
+    allNotes.push({ text: cb.dataset.text, ref: cb.dataset.ref, page, note });
+  });
+  // المرفقات الناقصة (المطلوبة فقط)
+  const missing = Array.from(document.querySelectorAll('#attachments-container input[type="checkbox"]:not(:checked)[data-type="required"]')).map(cb => cb.dataset.text);
+
+  // ───── النسخة المختصرة المعروضة في output-box: الملاحظات + المرفقات فقط ─────
+  let display = '';
+  display += `الملاحظات:\n`;
+  if (!allNotes.length) display += `لا توجد ملاحظات.\n`;
+  else allNotes.forEach((n,i) => {
+    display += `${i+1}. ${n.text}\n`;
+    if (n.note) display += `   - ${n.note}\n`;
+  });
+  display += `\nالمرفقات المطلوبة:\n`;
+  if (!missing.length) display += `لا يوجد نقص في المرفقات.\n`;
+  else missing.forEach((t,i) => display += `${i+1}. ${t}\n`);
+
+  // ───── النسخة الكاملة (تحفظ في السجل) بكل تفاصيل التقرير + الرسالة النهائية ─────
+  let full = `تقرير تدقيق - إدارة رخص البناء – قطاع غرب الرياض\n━━━━━━━━━━━━━━━━━━━━━━\n`;
+  if (projectName) full += `المشروع: ${projectName}\n`;
+  if (projectDate) full += `التاريخ: ${projectDate}\n`;
+  full += `نوع الطلب: ${reqTypeNames[requestType] || '-'}\n`;
+  full += `التصنيف: ${clsNames[classification]}\n`;
+  full += `نوع الكود: ${codeNames[codeType]}\n`;
+  full += `نوع المشروع: ${projNames[projectType]}\n`;
+  full += `━━━━━━━━━━━━━━━━━━━━━━\n\nأولاً: الملاحظات\n──────────────────────\n`;
+  if (!allNotes.length) full += `لا توجد ملاحظات.\n`;
+  else allNotes.forEach((n,i) => {
+    full += `${i+1}. ${n.text}\n`;
+    let meta = [];
+    if (n.ref) meta.push(`المرجع: ${n.ref}`);
+    if (n.page) meta.push(`صفحة: ${n.page}`);
+    if (meta.length) full += `   ${meta.join(' — ')}\n`;
+    if (n.note) full += `   ملاحظة: ${n.note}\n`;
+  });
+  full += `\nثانياً: المرفقات الناقصة\n──────────────────────\n`;
+  if (!missing.length) full += `لا يوجد نقص في المرفقات.\n`;
+  else missing.forEach((t,i) => full += `${i+1}. ${t}\n`);
+  full += `\n━━━━━━━━━━━━━━━━━━━━━━\nالرسالة النهائية:\n──────────────────────\n${display}`;
+
+  lastReport = { display, full };
+
+  document.getElementById('output-card').style.display = 'block';
+  document.getElementById('output-box').textContent = display;
+  document.getElementById('output-card').scrollIntoView({ behavior: 'smooth' });
+}
+function copyOutput() { navigator.clipboard.writeText(document.getElementById('output-box').textContent).then(()=>alert('تم نسخ النص')); }
+function saveReport() {
+  // نحفظ النسخة الكاملة في السجل (بكل التفاصيل + الرسالة النهائية)
+  const text = lastReport.full || document.getElementById('output-box').textContent;
+  const name = document.getElementById('project-name').value.trim() || 'بدون اسم';
+  appData.history.unshift({ id: Date.now(), name, date: new Date().toLocaleString('ar-SA'), content: text });
+  saveData(); alert('تم حفظ التدقيق في السجل');
+}
+function clearForm() {
+  if(confirm('مسح الكل؟')){
+    document.querySelectorAll('input[type="checkbox"]').forEach(cb=>cb.checked=false);
+    document.querySelectorAll('.req-extras').forEach(e=>e.classList.remove('show'));
+    document.getElementById('project-name').value='';
+    document.getElementById('request-type').value='';
+    document.getElementById('classification').value='';
+    document.getElementById('code-type').value='';
+    document.getElementById('project-type').value='';
+    document.getElementById('output-card').style.display='none';
+    lastReport = { display: '', full: '' };
+    refreshAll();
+  }
+}
+function renderHistory() {
+  const container = document.getElementById('history-container');
+  if(!appData.history.length){ container.innerHTML='<p class="muted">لا توجد تدقيقات محفوظة بعد</p>'; return; }
+  let html='';
+  appData.history.forEach(item=>{ html+=`<div class="history-item"><div class="history-info"><h3>${escapeHtml(item.name)}</h3><p>${escapeHtml(item.date)}</p></div><div class="history-actions"><button class="btn btn-secondary" onclick="viewHistory(${item.id})">عرض</button><button class="btn btn-secondary" onclick="copyHistory(${item.id})">نسخ</button><button class="btn btn-danger" onclick="deleteHistory(${item.id})">حذف</button></div></div>`; });
+  container.innerHTML=html;
+}
+function viewHistory(id){ let item=appData.history.find(h=>h.id===id); if(item){ let w=window.open('','_blank'); w.document.write(`<!doctype html><html dir="rtl"><head><meta charset="utf-8"><title>${escapeHtml(item.name)}</title><style>body{font-family:Tahoma,Arial; padding:30px; white-space:pre-wrap;}</style></head><body>${escapeHtml(item.content)}</body></html>`); } }
+function copyHistory(id){ let item=appData.history.find(h=>h.id===id); if(item) navigator.clipboard.writeText(item.content).then(()=>alert('تم النسخ')); }
+function deleteHistory(id){ if(confirm('حذف؟')){ appData.history=appData.history.filter(h=>h.id!==id); saveData(); renderHistory(); } }
+// ================================================================
+// لوحة الإدارة الموحّدة: 3 تبويبات فرعية + فلاتر متسلسلة مشتركة
+// ================================================================
+
+let adminSubtab = 'categories'; // الافتراضي
+
+function renderAdmin() {
+  // عند فتح تبويب الإدارة، فعّل الفلاتر المتسلسلة وارسم التبويب الفرعي الحالي
+  adminCascadeFilters();
+}
+
+function switchAdminSubtab(name) {
+  adminSubtab = name;
+  document.querySelectorAll('.admin-subtab').forEach(b => {
+    b.classList.toggle('active', b.dataset.subtab === name);
+  });
+  renderAdminBody();
+}
+
+// تصفية متسلسلة: نوع الطلب → التصنيف → نوع الكود → نوع المشروع
+// نفس منطق cascadeFilters في تبويب التدقيق
+// ================================================================
+// Custom Dropdowns - تدعم زر × بجانب كل خيار للحذف من داخل القائمة
+// ================================================================
+
+// قيم الفلاتر الحالية المختارة (تعوّض الـ select.value)
+const adminFilterValues = { requestType: '', classification: '', codeType: '', projectType: '' };
+
+// تبديل ظهور القائمة (toggle)
+function toggleDropdown(filterName) {
+  const dd = document.getElementById('dd-' + ddIdFromFilter(filterName));
+  if (!dd) return;
+  // لو معطّل، تجاهل
+  const btn = dd.querySelector('.dd-button');
+  if (btn.disabled) return;
+  // أغلق كل القوائم الأخرى أولاً
+  document.querySelectorAll('.custom-dropdown.open').forEach(el => {
+    if (el !== dd) {
+      el.classList.remove('open');
+      el.querySelector('.dd-menu').classList.add('hidden');
+    }
+  });
+  // بدّل
+  const isOpen = dd.classList.contains('open');
+  if (isOpen) {
+    dd.classList.remove('open');
+    dd.querySelector('.dd-menu').classList.add('hidden');
+  } else {
+    rebuildDropdownMenu(filterName);
+    dd.classList.add('open');
+    dd.querySelector('.dd-menu').classList.remove('hidden');
+  }
+}
+
+// تحويل اسم الفلتر إلى id الـ dropdown
+function ddIdFromFilter(filterName) {
+  if (filterName === 'requestType') return 'request-type';
+  if (filterName === 'classification') return 'classification';
+  if (filterName === 'codeType') return 'code-type';
+  if (filterName === 'projectType') return 'project-type';
+  return '';
+}
+
+// إغلاق كل القوائم عند النقر خارجها
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.custom-dropdown')) {
+    document.querySelectorAll('.custom-dropdown.open').forEach(el => {
+      el.classList.remove('open');
+      el.querySelector('.dd-menu').classList.add('hidden');
+    });
+  }
+});
+
+// بناء عناصر القائمة المنسدلة (مع زر × بجانب كل خيار)
+function rebuildDropdownMenu(filterName) {
+  const dd = document.getElementById('dd-' + ddIdFromFilter(filterName));
+  if (!dd) return;
+  const menu = dd.querySelector('.dd-menu');
+  const currentVal = adminFilterValues[filterName];
+
+  let items = [];
+  let groupedItems = null; // للمشاريع في حالة both
+
+  if (filterName === 'requestType') {
+    items = appData.requestTypesList || [];
+  } else if (filterName === 'classification') {
+    items = appData.classificationsList || [];
+  } else if (filterName === 'codeType') {
+    items = appData.codeTypesList || [];
+  } else if (filterName === 'projectType') {
+    // المشاريع تتأثر بنوع الكود + التصنيف الحاليين
+    const ct = adminFilterValues.codeType;
+    const cl = adminFilterValues.classification;
+    let projects = [];
+    if (ct === 'wadi') projects = PROJECT_TYPES.filter(p => p.codeAffinity === 'wadi');
+    else if (ct === 'saudi') projects = PROJECT_TYPES.filter(p => p.codeAffinity === 'saudi');
+    else if (ct === 'both') projects = PROJECT_TYPES.slice();
+    else projects = [];
+    // دمج المشاريع المخصّصة (codeAffinity مختلف)
+    const customProjects = PROJECT_TYPES.filter(p => p.codeAffinity !== 'wadi' && p.codeAffinity !== 'saudi');
+    if (customProjects.length && ct !== 'both' && ct) {
+      customProjects.forEach(cp => { if (!projects.find(p => p.id === cp.id)) projects.push(cp); });
+    }
+    if (cl) projects = projects.filter(p => p.group === cl);
+
+    if (ct === 'both') {
+      const wadiP = projects.filter(p => p.codeAffinity === 'wadi');
+      const saudiP = projects.filter(p => p.codeAffinity === 'saudi');
+      groupedItems = [];
+      if (wadiP.length) groupedItems.push({ label: 'كود وادي حنيفة (Tiers)', items: wadiP });
+      if (saudiP.length) groupedItems.push({ label: 'الكود السعودي', items: saudiP });
+    } else {
+      items = projects;
+    }
+  }
+
+  // بناء HTML
+  let html = '';
+  if (groupedItems) {
+    groupedItems.forEach(g => {
+      html += `<div class="dd-optgroup-label">${escapeHtml(g.label)}</div>`;
+      g.items.forEach(it => { html += renderDropdownItem(it, currentVal, filterName); });
+    });
+  } else {
+    items.forEach(it => { html += renderDropdownItem(it, currentVal, filterName); });
+  }
+  // عنصر "إضافة جديد" دائماً في الأخير
+  const addLabels = {
+    requestType: '➕ إضافة نوع طلب جديد',
+    classification: '➕ إضافة تصنيف جديد',
+    codeType: '➕ إضافة نوع كود جديد',
+    projectType: '➕ إضافة نوع مشروع جديد'
+  };
+  html += `<div class="dd-item-add" onclick="event.stopPropagation(); showAddNewInput('${filterName}')">${addLabels[filterName]}</div>`;
+
+  menu.innerHTML = html;
+}
+
+// عنصر واحد في القائمة (مع × للحذف)
+function renderDropdownItem(it, currentVal, filterName) {
+  const isSelected = it.id === currentVal;
+  const star = it.isOriginal ? '' : ' <span style="color:#1976d2;">✦</span>';
+  return `<div class="dd-item ${isSelected ? 'selected' : ''}" onclick="selectDropdownItem('${filterName}', '${escapeAttr(it.id)}')">
+    <span class="dd-text">${escapeHtml(it.name)}${star}</span>
+    <button type="button" class="dd-x" onclick="event.stopPropagation(); deleteDropdownItem('${filterName}', '${escapeAttr(it.id)}')" title="حذف">×</button>
+  </div>`;
+}
+
+// اختيار عنصر من القائمة
+function selectDropdownItem(filterName, id) {
+  adminFilterValues[filterName] = id;
+  // إغلاق القائمة + تحديث النص في الزر
+  const dd = document.getElementById('dd-' + ddIdFromFilter(filterName));
+  if (dd) {
+    dd.classList.remove('open');
+    dd.querySelector('.dd-menu').classList.add('hidden');
+  }
+  // تحديث الـ hidden input للتوافق مع باقي الكود
+  const hiddenSelMap = {
+    requestType: 'adm-request-type', classification: 'adm-classification',
+    codeType: 'adm-code-type', projectType: 'adm-project-type'
+  };
+  document.getElementById(hiddenSelMap[filterName]).value = id;
+  adminCascadeFilters();
+}
+
+// عرض الاسم على زر الـ dropdown
+function updateDropdownButton(filterName) {
+  const dd = document.getElementById('dd-' + ddIdFromFilter(filterName));
+  if (!dd) return;
+  const labelEl = dd.querySelector('.dd-label');
+  const id = adminFilterValues[filterName];
+  if (!id) {
+    labelEl.textContent = '— اختر —';
+    labelEl.classList.add('placeholder');
+    return;
+  }
+  // إيجاد الاسم
+  let name = id;
+  let isCustom = false;
+  if (filterName === 'requestType') {
+    const it = (appData.requestTypesList || []).find(x => x.id === id);
+    if (it) { name = it.name; isCustom = !it.isOriginal; }
+  } else if (filterName === 'classification') {
+    const it = (appData.classificationsList || []).find(x => x.id === id);
+    if (it) { name = it.name; isCustom = !it.isOriginal; }
+  } else if (filterName === 'codeType') {
+    const it = (appData.codeTypesList || []).find(x => x.id === id);
+    if (it) { name = it.name; isCustom = !it.isOriginal; }
+  } else if (filterName === 'projectType') {
+    const it = PROJECT_TYPES.find(x => x.id === id);
+    if (it) { name = it.name; isCustom = !it.isOriginal; }
+  }
+  labelEl.innerHTML = escapeHtml(name) + (isCustom ? ' <span style="color:#1976d2;">✦</span>' : '');
+  labelEl.classList.remove('placeholder');
+}
+
+// تفعيل/تعطيل dropdown (للتسلسل: لا يمكن فتحه قبل الفلتر السابق)
+function setDropdownDisabled(filterName, disabled) {
+  const dd = document.getElementById('dd-' + ddIdFromFilter(filterName));
+  if (!dd) return;
+  const btn = dd.querySelector('.dd-button');
+  btn.disabled = disabled;
+  if (disabled) {
+    // صفّر القيمة
+    adminFilterValues[filterName] = '';
+    const hiddenMap = { requestType:'adm-request-type', classification:'adm-classification', codeType:'adm-code-type', projectType:'adm-project-type' };
+    document.getElementById(hiddenMap[filterName]).value = '';
+    updateDropdownButton(filterName);
+    // أغلق القائمة لو مفتوحة
+    dd.classList.remove('open');
+    dd.querySelector('.dd-menu').classList.add('hidden');
+  }
+}
+
+// التصفية المتسلسلة (نفس منطق السابق لكن بالـ dropdowns الجديدة)
+function adminCascadeFilters() {
+  const rt = adminFilterValues.requestType;
+  const cl = adminFilterValues.classification;
+  const ct = adminFilterValues.codeType;
+
+  setDropdownDisabled('classification', !rt);
+  setDropdownDisabled('codeType', !rt || !cl);
+  setDropdownDisabled('projectType', !rt || !cl || !ct);
+
+  // تحديث نصوص الأزرار
+  ['requestType','classification','codeType','projectType'].forEach(updateDropdownButton);
+
+  renderAdminBody();
+}
+
+// إظهار حقل إضافة قيمة جديدة (يستبدل القائمة المفتوحة)
+function showAddNewInput(filterName) {
+  // المشاريع تحتاج التصنيف + الكود
+  if (filterName === 'projectType') {
+    if (!adminFilterValues.classification || !adminFilterValues.codeType) {
+      alert('يجب اختيار "التصنيف" و"نوع الكود" أولاً قبل إضافة نوع مشروع جديد');
+      return;
+    }
+  }
+  const dd = document.getElementById('dd-' + ddIdFromFilter(filterName));
+  if (!dd) return;
+  const menu = dd.querySelector('.dd-menu');
+  const labels = {
+    requestType: { title: '➕ إضافة نوع طلب جديد', placeholder: 'مثال: إخلاء طرف' },
+    classification: { title: '➕ إضافة تصنيف جديد', placeholder: 'مثال: صناعي' },
+    codeType: { title: '➕ إضافة نوع كود جديد', placeholder: 'مثال: كود الدرعية' },
+    projectType: { title: '➕ إضافة نوع مشروع جديد', placeholder: 'مثال: T3.4' }
+  };
+  const cfg = labels[filterName];
+  menu.innerHTML = `
+    <div style="padding:10px; background:#f9f8f3;">
+      <div style="font-weight:600; margin-bottom:8px; color:#2e7d32;">${cfg.title}</div>
+      <input type="text" id="dd-add-input" placeholder="${cfg.placeholder}" style="width:100%; margin-bottom:8px;">
+      <div style="display:flex; gap:6px;">
+        <button class="btn btn-primary" style="flex:1; font-size:12px; padding:6px;" onclick="event.stopPropagation(); confirmAddDropdownValue('${filterName}')">إضافة</button>
+        <button class="btn btn-secondary" style="flex:1; font-size:12px; padding:6px;" onclick="event.stopPropagation(); rebuildDropdownMenu('${filterName}')">إلغاء</button>
+      </div>
+    </div>
+  `;
+  setTimeout(() => { const i = document.getElementById('dd-add-input'); if (i) i.focus(); }, 50);
+}
+
+// تأكيد الإضافة
+function confirmAddDropdownValue(filterName) {
+  const inp = document.getElementById('dd-add-input');
+  if (!inp) return;
+  const name = (inp.value || '').trim();
+  if (!name) { alert('أدخل الاسم'); return; }
+
+  const id = filterName.slice(0,3) + '_' + Date.now();
+  const newItem = { id, name, isOriginal: false };
+
+  if (filterName === 'requestType') {
+    if (!appData.requestTypesList) appData.requestTypesList = [];
+    appData.requestTypesList.push(newItem);
+  } else if (filterName === 'classification') {
+    if (!appData.classificationsList) appData.classificationsList = [];
+    appData.classificationsList.push(newItem);
+  } else if (filterName === 'codeType') {
+    if (!appData.codeTypesList) appData.codeTypesList = [];
+    appData.codeTypesList.push(newItem);
+  } else if (filterName === 'projectType') {
+    const cl = adminFilterValues.classification;
+    const ct = adminFilterValues.codeType;
+    const codeAffinity = ct === 'wadi' ? 'wadi' : (ct === 'saudi' ? 'saudi' : 'saudi');
+    newItem.group = cl;
+    newItem.codeAffinity = codeAffinity;
+    if (!appData.projectTypes) appData.projectTypes = [];
+    appData.projectTypes.push(newItem);
+    PROJECT_TYPES = appData.projectTypes;
+  }
+  saveData();
+  // اختر القيمة الجديدة تلقائياً
+  selectDropdownItem(filterName, id);
+  rebuildMainTabFilters();
+}
+
+// حذف قيمة من القائمة (مع تحذيرات)
+function deleteDropdownItem(filterName, id) {
+  const fieldMap = { requestType:'requestTypes', classification:'classifications', codeType:'codeTypes', projectType:'projects' };
+  const listMap = { requestType:'requestTypesList', classification:'classificationsList', codeType:'codeTypesList', projectType:'projectTypes' };
+  const fieldName = fieldMap[filterName];
+  const listKey = listMap[filterName];
+  const list = appData[listKey] || [];
+  const item = list.find(x => x.id === id);
+  if (!item) return;
+
+  // عدّ المرتبطات
+  let linkedCount = 0;
+  Object.keys(appData.requirements || {}).forEach(catId => {
+    (appData.requirements[catId] || []).forEach(req => {
+      const arr = req[fieldName] || [];
+      if (arr.includes(id)) linkedCount++;
+    });
+  });
+  if (appData.attachments && appData.attachments.required) {
+    if (filterName === 'requestType') {
+      linkedCount += (appData.attachments.required[id] || []).length;
+    } else {
+      Object.keys(appData.attachments.required).forEach(rt => {
+        (appData.attachments.required[rt] || []).forEach(att => {
+          const arr = att[fieldName] || [];
+          if (Array.isArray(arr) && arr.includes(id)) linkedCount++;
+        });
+      });
+    }
+  }
+  if (appData.attachments && Array.isArray(appData.attachments.optional)) {
+    appData.attachments.optional.forEach(att => {
+      const arr = att[fieldName] || [];
+      if (Array.isArray(arr) && arr.includes(id)) linkedCount++;
+    });
+  }
+
+  // بناء رسالة التأكيد
+  let msg = '';
+  if (item.isOriginal) {
+    msg += `⚠️ تحذير: "${item.name}" هو عنصر أصلي افتراضي.\n\n`;
+  }
+  msg += `سيتم حذف "${item.name}" من قائمة الفلاتر.\n\n`;
+  if (linkedCount > 0) {
+    msg += `📎 يوجد ${linkedCount} عنصر (اشتراط/مرفق) مرتبط بهذه القيمة.\n`;
+    msg += `سيُحتفظ بهذه العناصر في البيانات لكنها لن تظهر في الواجهة.\n\n`;
+  } else {
+    msg += `لا توجد اشتراطات أو مرفقات مرتبطة.\n\n`;
+  }
+  msg += 'هل تريد المتابعة؟';
+
+  if (!confirm(msg)) return;
+
+  // الحذف
+  appData[listKey] = list.filter(x => x.id !== id);
+  if (filterName === 'projectType') PROJECT_TYPES = appData.projectTypes;
+  if (filterName === 'requestType') ALL_REQUEST_TYPES_DYN = appData.requestTypesList.map(r => r.id);
+  if (filterName === 'classification') ALL_CLASSIFICATIONS_DYN = appData.classificationsList.map(c => c.id);
+  if (filterName === 'codeType') ALL_CODE_TYPES_DYN = appData.codeTypesList.map(c => c.id);
+
+  // لو المحذوف هو القيمة المختارة حالياً، صفّرها
+  if (adminFilterValues[filterName] === id) {
+    adminFilterValues[filterName] = '';
+    const hiddenMap = { requestType:'adm-request-type', classification:'adm-classification', codeType:'adm-code-type', projectType:'adm-project-type' };
+    document.getElementById(hiddenMap[filterName]).value = '';
+  }
+
+  saveData();
+  rebuildDropdownMenu(filterName); // تحديث القائمة المفتوحة
+  adminCascadeFilters();
+  rebuildMainTabFilters();
+}
+
+// إعادة بناء قوائم تبويب التدقيق الجديد (ما تتغيّر شكلياً، فقط الـ options)
+function rebuildMainTabFilters() {
+  const rtSel = document.getElementById('request-type');
+  if (rtSel) {
+    const cur = rtSel.value;
+    let html = '<option value="">— اختر —</option>';
+    (appData.requestTypesList || []).forEach(r => {
+      html += `<option value="${escapeAttr(r.id)}">${escapeHtml(r.name)}</option>`;
+    });
+    rtSel.innerHTML = html;
+    if (cur && rtSel.querySelector(`option[value="${cur}"]`)) rtSel.value = cur;
+  }
+  const clSel = document.getElementById('classification');
+  if (clSel) {
+    const cur = clSel.value;
+    let html = '<option value="">— اختر —</option>';
+    (appData.classificationsList || []).forEach(c => {
+      html += `<option value="${escapeAttr(c.id)}">${escapeHtml(c.name)}</option>`;
+    });
+    clSel.innerHTML = html;
+    if (cur && clSel.querySelector(`option[value="${cur}"]`)) clSel.value = cur;
+  }
+  const ctSel = document.getElementById('code-type');
+  if (ctSel) {
+    const cur = ctSel.value;
+    let html = '<option value="">— اختر —</option>';
+    (appData.codeTypesList || []).forEach(c => {
+      html += `<option value="${escapeAttr(c.id)}">${escapeHtml(c.name)}</option>`;
+    });
+    ctSel.innerHTML = html;
+    if (cur && ctSel.querySelector(`option[value="${cur}"]`)) ctSel.value = cur;
+  }
+  cascadeFilters();
+}
+
+// قراءة الفلاتر الحالية (تستخدم الـ hidden inputs للتوافق)
+function getAdminFilters() {
+  return {
+    requestType: adminFilterValues.requestType,
+    classification: adminFilterValues.classification,
+    codeType: adminFilterValues.codeType,
+    projectType: adminFilterValues.projectType
+  };
+}
+
+
+// دالة موحّدة لمطابقة الكود (نفس منطق التدقيق)
+function adminCodeTypeMatches(itemCodeTypes, filterCodeType) {
+  if (!itemCodeTypes || !itemCodeTypes.length) return true;
+  if (filterCodeType === 'wadi') return itemCodeTypes.includes('wadi') || itemCodeTypes.includes('both');
+  if (filterCodeType === 'saudi') return itemCodeTypes.includes('saudi') || itemCodeTypes.includes('both');
+  if (filterCodeType === 'both') return true;
+  return true;
+}
+
+// تطابق العنصر (اشتراط/مرفق) مع الفلاتر
+function adminItemMatches(it, f) {
+  if (it.requestTypes && !it.requestTypes.includes(f.requestType)) return false;
+  if (it.classifications && !it.classifications.includes(f.classification)) return false;
+  if (!adminCodeTypeMatches(it.codeTypes, f.codeType)) return false;
+  if (f.projectType && it.projects && it.projects.length && !it.projects.includes(f.projectType)) return false;
+  return true;
+}
+
+// شريط معلومات الفلاتر (مشترك بين التبويبات)
+function adminFiltersBanner(f, totalShown, totalLabel) {
+  const codeLabels = { wadi:'🌊 وادي حنيفة', saudi:'🇸🇦 الكود السعودي', both:'🔗 وادي + سعودي' };
+  const reqLabels = { new:'إصدار', renew:'تجديد', modify:'تعديل', correction:'تصحيح' };
+  const clsLabels = { residential:'سكني', commercial:'تجاري' };
+  const projName = (PROJECT_TYPES.find(p=>p.id===f.projectType)?.name || f.projectType);
+  return `<div style="background:linear-gradient(90deg, #f9f8f3 0%, #fff 100%); border-right:4px solid var(--primary); padding:10px 14px; margin:14px 0; border-radius:6px; font-size:13px; line-height:1.9;">
+    <div><strong>الفلاتر النشطة:</strong> ${reqLabels[f.requestType]} · ${clsLabels[f.classification]} · ${codeLabels[f.codeType]} · <span style="background:var(--primary); color:#fff; padding:2px 10px; border-radius:10px; font-weight:600;">📍 ${escapeHtml(projName)}</span></div>
+    <div style="color:var(--primary); font-weight:600; margin-top:4px;">${totalShown} ${totalLabel} مرتبط بـ ${escapeHtml(projName)} فقط</div>
+  </div>`;
+}
+
+// رسالة الفلاتر الناقصة (الكل إلزامي للعزل التام بحسب المشروع)
+function adminMissingFilterMsg(f) {
+  if (!f.requestType) return 'الرجاء اختيار «نوع الطلب» أولاً';
+  if (!f.classification) return 'الرجاء اختيار «التصنيف»';
+  if (!f.codeType) return 'الرجاء اختيار «نوع الكود»';
+  if (!f.projectType) return 'الرجاء اختيار «نوع المشروع» (إلزامي للعزل التام)';
+  return null;
+}
+
+// الموجّه الرئيسي للتبويبات الفرعية
+function renderAdminBody() {
+  const container = document.getElementById('admin-container');
+  if (!container) return;
+  if (adminSubtab === 'categories') renderAdminCategories(container);
+  else if (adminSubtab === 'requirements') renderAdminRequirements(container);
+  else if (adminSubtab === 'attachments') renderAdminAttachments(container);
+}
+
+// ================================================================
+// تبويب 1: بنود التصنيف (يظهر فقط البنود التي تحتوي اشتراطات مطابقة)
+// ================================================================
+function renderAdminCategories(container) {
+  const f = getAdminFilters();
+  const missing = adminMissingFilterMsg(f);
+
+  let html = '';
+  if (missing) {
+    html = `<p class="muted" style="margin:14px 0;">${missing} لعرض البنود الموجودة (الإضافة متاحة دائماً).</p>`;
+  } else {
+    // البنود التي تحتوي اشتراطات مطابقة
+    const visibleCategories = appData.categories.filter(cat => {
+      const items = appData.requirements[cat.id] || [];
+      return items.some(it => adminItemMatches(it, f));
+    });
+    html = adminFiltersBanner(f, visibleCategories.length, 'بند مطابق');
+    if (!visibleCategories.length) {
+      html += '<p class="muted" style="margin:10px 0;">لا توجد بنود تحتوي اشتراطات مطابقة للفلاتر الحالية. أضف بنداً جديداً أو غيّر الفلاتر.</p>';
+    } else {
+      visibleCategories.forEach(cat => {
+        const items = appData.requirements[cat.id] || [];
+        const matchedCount = items.filter(it => adminItemMatches(it, f)).length;
+        const totalCount = items.length;
+        html += `<div class="requirement-category">
+          <div class="requirement-header collapsed" onclick="toggleCategory(this)">
+            <span>${escapeHtml(cat.name)}</span>
+            <span style="display:flex; align-items:center; gap:10px;">
+              <span class="count">${matchedCount} / ${totalCount} اشتراط</span>
+              <span class="arrow">▼</span>
+            </span>
+          </div>
+          <div class="requirement-body hidden">
+            <div style="display:grid; grid-template-columns:1fr auto; gap:8px; padding:10px; align-items:center;">
+              <input type="text" value="${escapeAttr(cat.name)}" onchange="updateCat('${escapeAttr(cat.id)}', this.value)" placeholder="اسم البند">
+              <button class="btn btn-danger" onclick="deleteCat('${escapeAttr(cat.id)}')">حذف البند</button>
+            </div>
+            <div class="admin-note" style="margin:6px 10px;">يحتوي ${totalCount} اشتراط إجمالاً (${matchedCount} مطابق للفلاتر). للتعديل على الاشتراطات نفسها، انتقل إلى تبويب «الاشتراطات».</div>
+          </div>
+        </div>`;
+      });
+    }
+  }
+
+  // عنصر "إضافة بند جديد" (مطوي - دائماً في الأخير)
+  html += `<div class="requirement-category" style="margin-top:12px;">
+    <div class="requirement-header collapsed admin-add-new-header" onclick="toggleCategory(this)">
+      <span>➕ إضافة بند جديد</span>
+      <span style="display:flex; align-items:center; gap:10px;"><span class="arrow">▼</span></span>
+    </div>
+    <div class="requirement-body hidden">
+      <div style="padding:10px;">
+        <label style="font-size:13px; color:var(--text-secondary); display:block; margin-bottom:6px;">اسم البند الجديد (مثال: الأسوار، الارتدادات، الارتفاعات...)</label>
+        <div style="display:grid; grid-template-columns:1fr auto; gap:8px;">
+          <input type="text" id="new-cat-name" placeholder="اسم البند">
+          <button class="btn btn-primary" onclick="addCat()">إضافة</button>
+        </div>
+        <div class="admin-note" style="margin-top:10px; font-size:12px;">البند نفسه عام (مثل "الأسوار" أو "الارتدادات")، لكن الاشتراطات والمرفقات داخله تُربط بمشروع واحد محدد (مثل T3.2 فقط). البند يظهر هنا فقط لو يحتوي محتوى مرتبطاً بالفلاتر الحالية.</div>
+      </div>
+    </div>
+  </div>`;
+
+  container.innerHTML = html;
+}
+
+function updateCat(catId, name) {
+  const idx = appData.categories.findIndex(c => c.id === catId);
+  if (idx !== -1) { appData.categories[idx].name = name.trim() || appData.categories[idx].name; saveData(); }
+}
+function deleteCat(catId) {
+  const cat = appData.categories.find(c => c.id === catId);
+  if (!cat) return;
+  if (confirm(`حذف البند "${cat.name}" مع كل اشتراطاته؟`)) {
+    delete appData.requirements[catId];
+    appData.categories = appData.categories.filter(c => c.id !== catId);
+    saveData();
+    renderAdminBody();
+    refreshAll(); // تحديث شاشة التدقيق
+  }
+}
+function addCat() {
+  const inp = document.getElementById('new-cat-name');
+  const name = (inp.value || '').trim();
+  if (!name) { alert('أدخل اسم البند'); return; }
+  const id = 'cat_' + Date.now();
+  appData.categories.push({ id, name });
+  appData.requirements[id] = [];
+  saveData();
+  inp.value = '';
+  renderAdminBody();
+  refreshAll();
+}
+
+// ================================================================
+// تبويب 2: الاشتراطات (يعرض البنود وداخل كل بند: الاشتراطات المطابقة)
+// ================================================================
+function renderAdminRequirements(container) {
+  const f = getAdminFilters();
+  const missing = adminMissingFilterMsg(f);
+
+  let html = '';
+  if (missing) {
+    html = `<p class="muted" style="margin:14px 0;">${missing} لعرض الاشتراطات.</p>`;
+    container.innerHTML = html;
+    return;
+  }
+
+  // عدّ الاشتراطات المطابقة عبر كل البنود
+  let totalMatched = 0;
+  appData.categories.forEach(cat => {
+    const items = appData.requirements[cat.id] || [];
+    totalMatched += items.filter(it => adminItemMatches(it, f)).length;
+  });
+
+  html = adminFiltersBanner(f, totalMatched, 'اشتراط مطابق');
+
+  if (!appData.categories.length) {
+    html += '<p class="muted" style="margin:10px 0;">لا توجد بنود مُنشأة بعد. انتقل إلى تبويب «بنود التصنيف» لإضافة بنود.</p>';
+  } else {
+    // اعرض كل البنود (يمكن إضافة اشتراطات في أي بند فاضي)
+    appData.categories.forEach(cat => {
+      const allItems = appData.requirements[cat.id] || [];
+      const matched = [];
+      allItems.forEach((it, origIdx) => { if (adminItemMatches(it, f)) matched.push({ it, origIdx }); });
+
+      html += `<div class="requirement-category">
+        <div class="requirement-header collapsed" onclick="toggleCategory(this)">
+          <span>${escapeHtml(cat.name)}</span>
+          <span style="display:flex; align-items:center; gap:10px;">
+            <span class="count">${matched.length} اشتراط مطابق</span>
+            <span class="arrow">▼</span>
+          </span>
+        </div>
+        <div class="requirement-body hidden" style="padding:10px;">`;
+
+      if (!matched.length) {
+        html += `<p class="muted" style="margin:6px 0;">لا توجد اشتراطات مطابقة في هذا البند. أضف اشتراطاً جديداً أدناه.</p>`;
+      } else {
+        matched.forEach(({it, origIdx}) => {
+          html += `<div class="req-item" style="margin-bottom:8px;">
+            <div style="display:grid; grid-template-columns:1fr 1fr auto; gap:8px; align-items:center;">
+              <input type="text" value="${escapeAttr(it.text)}" onchange="updateReq('${escapeAttr(cat.id)}',${origIdx},'text',this.value)" placeholder="نص الاشتراط">
+              <input type="text" value="${escapeAttr(it.ref||'')}" onchange="updateReq('${escapeAttr(cat.id)}',${origIdx},'ref',this.value)" placeholder="المرجع">
+              <button class="btn btn-danger" onclick="deleteReq('${escapeAttr(cat.id)}',${origIdx})">حذف</button>
+            </div>
+          </div>`;
+        });
+      }
+
+      // نموذج إضافة اشتراط داخل البند
+      html += `<div style="margin-top:12px; padding:10px; background:#f9f8f3; border-radius:6px;">
+        <div style="font-weight:600; margin-bottom:6px; color:var(--primary); font-size:13px;">إضافة اشتراط جديد لبند «${escapeHtml(cat.name)}»</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr auto; gap:8px;">
+          <input type="text" id="new-req-text-${escapeAttr(cat.id)}" placeholder="نص الاشتراط">
+          <input type="text" id="new-req-ref-${escapeAttr(cat.id)}" placeholder="المرجع (اختياري)">
+          <button class="btn btn-primary" onclick="addReqToCat('${escapeAttr(cat.id)}')">إضافة</button>
+        </div>
+      </div>`;
+
+      html += `</div></div>`;
+    });
+  }
+
+  container.innerHTML = html;
+}
+
+function updateReq(catId, idx, field, value) {
+  if (!appData.requirements[catId] || !appData.requirements[catId][idx]) return;
+  appData.requirements[catId][idx][field] = value;
+  saveData();
+}
+function deleteReq(catId, idx) {
+  if (confirm('حذف الاشتراط؟')) {
+    appData.requirements[catId].splice(idx, 1);
+    saveData();
+    renderAdminBody();
+    refreshAll();
+  }
+}
+function addReqToCat(catId) {
+  const f = getAdminFilters();
+  const missing = adminMissingFilterMsg(f);
+  if (missing) { alert(missing); return; }
+  const text = (document.getElementById('new-req-text-' + catId).value || '').trim();
+  if (!text) { alert('أدخل نص الاشتراط'); return; }
+  const ref = (document.getElementById('new-req-ref-' + catId).value || '').trim();
+
+  // ربط الاشتراط الجديد بالفلاتر الحالية - المشروع واحد فقط (عزل تام)
+  const requestTypes = [f.requestType];
+  const classifications = [f.classification];
+  const codeTypes = [f.codeType];
+  const projects = [f.projectType]; // مشروع واحد فقط
+
+  if (!appData.requirements[catId]) appData.requirements[catId] = [];
+  appData.requirements[catId].push({ text, ref, projects, requestTypes, classifications, codeTypes });
+  saveData();
+  renderAdminBody();
+  refreshAll();
+}
+
+// ================================================================
+// تبويب 3: المرفقات (موحّدة بنفس الفلاتر)
+// ================================================================
+function renderAdminAttachments(container) {
+  const f = getAdminFilters();
+  const missing = adminMissingFilterMsg(f);
+
+  let html = '';
+  if (missing) {
+    html = `<p class="muted" style="margin:14px 0;">${missing} لعرض المرفقات.</p>`;
+    container.innerHTML = html;
+    return;
+  }
+
+  // المرفقات المطلوبة لنوع الطلب الحالي + المرفقات الاختيارية
+  const requiredList = (appData.attachments.required[f.requestType] || []);
+  const optionalList = (appData.attachments.optional || []);
+
+  const matchedRequired = [];
+  requiredList.forEach((a, idx) => { if (adminItemMatches({ ...a, requestTypes: [f.requestType] }, f)) matchedRequired.push({ a, idx }); });
+  const matchedOptional = [];
+  optionalList.forEach((a, idx) => { if (adminItemMatches(a, f)) matchedOptional.push({ a, idx }); });
+
+  html = adminFiltersBanner(f, matchedRequired.length + matchedOptional.length, 'مرفق مطابق');
+
+  // مجموعة المرفقات المطلوبة
+  html += `<div class="requirement-category">
+    <div class="requirement-header collapsed" onclick="toggleCategory(this)">
+      <span>📎 المرفقات المطلوبة</span>
+      <span style="display:flex; align-items:center; gap:10px;">
+        <span class="count">${matchedRequired.length} مرفق</span>
+        <span class="arrow">▼</span>
+      </span>
+    </div>
+    <div class="requirement-body hidden" style="padding:10px;">`;
+  if (!matchedRequired.length) {
+    html += '<p class="muted" style="margin:6px 0;">لا توجد مرفقات مطلوبة مطابقة للفلاتر. أضف مرفقاً جديداً أدناه.</p>';
+  } else {
+    matchedRequired.forEach(({a, idx}) => {
+      html += `<div class="req-item" style="margin-bottom:8px;">
+        <div style="display:grid; grid-template-columns:1fr auto; gap:8px; align-items:center;">
+          <input type="text" value="${escapeAttr(a.text||'')}" onchange="updateAttUnified('required','${f.requestType}',${idx},this.value)" placeholder="نص المرفق">
+          <button class="btn btn-danger" onclick="deleteAttUnified('required','${f.requestType}',${idx})">حذف</button>
+        </div>
+      </div>`;
+    });
+  }
+  html += `<div style="margin-top:12px; padding:10px; background:#f9f8f3; border-radius:6px;">
+    <div style="font-weight:600; margin-bottom:6px; color:var(--primary); font-size:13px;">إضافة مرفق مطلوب جديد</div>
+    <div style="display:grid; grid-template-columns:1fr auto; gap:8px;">
+      <input type="text" id="new-att-required" placeholder="نص المرفق">
+      <button class="btn btn-primary" onclick="addAttUnified('required')">إضافة</button>
+    </div>
+  </div></div></div>`;
+
+  // مجموعة المرفقات الاختيارية
+  html += `<div class="requirement-category">
+    <div class="requirement-header collapsed" onclick="toggleCategory(this)">
+      <span>📋 المرفقات الاختيارية</span>
+      <span style="display:flex; align-items:center; gap:10px;">
+        <span class="count">${matchedOptional.length} مرفق</span>
+        <span class="arrow">▼</span>
+      </span>
+    </div>
+    <div class="requirement-body hidden" style="padding:10px;">`;
+  if (!matchedOptional.length) {
+    html += '<p class="muted" style="margin:6px 0;">لا توجد مرفقات اختيارية مطابقة للفلاتر. أضف مرفقاً جديداً أدناه.</p>';
+  } else {
+    matchedOptional.forEach(({a, idx}) => {
+      html += `<div class="req-item" style="margin-bottom:8px;">
+        <div style="display:grid; grid-template-columns:1fr auto; gap:8px; align-items:center;">
+          <input type="text" value="${escapeAttr(a.text||'')}" onchange="updateAttUnified('optional','',${idx},this.value)" placeholder="نص المرفق">
+          <button class="btn btn-danger" onclick="deleteAttUnified('optional','',${idx})">حذف</button>
+        </div>
+      </div>`;
+    });
+  }
+  html += `<div style="margin-top:12px; padding:10px; background:#f9f8f3; border-radius:6px;">
+    <div style="font-weight:600; margin-bottom:6px; color:var(--primary); font-size:13px;">إضافة مرفق اختياري جديد</div>
+    <div style="display:grid; grid-template-columns:1fr auto; gap:8px;">
+      <input type="text" id="new-att-optional" placeholder="نص المرفق">
+      <button class="btn btn-primary" onclick="addAttUnified('optional')">إضافة</button>
+    </div>
+  </div></div></div>`;
+
+  container.innerHTML = html;
+}
+
+// أدوات موحّدة للمرفقات (تبسيط بنية المرفقات)
+function getAttListUnified(kind, requestType) {
+  if (kind === 'required') return appData.attachments.required[requestType] || [];
+  return appData.attachments.optional || [];
+}
+function updateAttUnified(kind, requestType, idx, value) {
+  const arr = getAttListUnified(kind, requestType);
+  if (!arr[idx]) return;
+  if (typeof arr[idx] === 'string') {
+    arr[idx] = { text: value, classifications: [...ALL_CLASSIFICATIONS], codeTypes: [...ALL_CODE_TYPES], projects: PROJECT_TYPES.map(p=>p.id) };
+    if (kind === 'optional') arr[idx].requestTypes = [...ALL_REQUEST_TYPES];
+  } else {
+    arr[idx].text = value;
+  }
+  saveData();
+}
+function deleteAttUnified(kind, requestType, idx) {
+  if (!confirm('حذف المرفق؟')) return;
+  const arr = getAttListUnified(kind, requestType);
+  arr.splice(idx, 1);
+  saveData();
+  renderAdminBody();
+  refreshAll();
+}
+function addAttUnified(kind) {
+  const f = getAdminFilters();
+  const missing = adminMissingFilterMsg(f);
+  if (missing) { alert(missing); return; }
+  const inpId = kind === 'required' ? 'new-att-required' : 'new-att-optional';
+  const inp = document.getElementById(inpId);
+  const text = (inp.value || '').trim();
+  if (!text) { alert('أدخل نص المرفق'); return; }
+
+  // ربط المرفق بالفلاتر الحالية - المشروع واحد فقط (عزل تام)
+  const classifications = [f.classification];
+  const codeTypes = [f.codeType];
+  const projects = [f.projectType]; // مشروع واحد فقط
+
+  if (kind === 'required') {
+    if (!appData.attachments.required[f.requestType]) appData.attachments.required[f.requestType] = [];
+    appData.attachments.required[f.requestType].push({ text, classifications, codeTypes, projects });
+  } else {
+    if (!appData.attachments.optional) appData.attachments.optional = [];
+    appData.attachments.optional.push({ text, classifications, codeTypes, projects, requestTypes: [f.requestType] });
+  }
+  saveData();
+  inp.value = '';
+  renderAdminBody();
+  refreshAll();
+}
+
+// ================================================================
+// النسخ الاحتياطي والاستعادة
+// ================================================================
+function backupData() {
+  const blob = new Blob([JSON.stringify(appData, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `audit_backup_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+function restoreData() {
+  const inp = document.createElement('input');
+  inp.type = 'file'; inp.accept = '.json';
+  inp.onchange = e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      try {
+        const data = JSON.parse(ev.target.result);
+        if (!data.categories || !data.requirements) throw new Error('ملف غير صالح');
+        if (confirm('استبدال البيانات الحالية؟')) {
+          appData = data; saveData();
+          refreshAll(); renderHistory(); renderAdminBody();
+          alert('تم الاستعادة');
+        }
+      } catch(err) { alert('خطأ: ' + err.message); }
+    };
+    reader.readAsText(file);
+  };
+  inp.click();
+}
+
+function backupData(){ let blob=new Blob([JSON.stringify(appData,null,2)],{type:'application/json'}); let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`audit_backup_${new Date().toISOString().slice(0,10)}.json`; a.click(); URL.revokeObjectURL(a.href); }
+function restoreData(){ let inp=document.createElement('input'); inp.type='file'; inp.accept='.json'; inp.onchange=e=>{ let file=e.target.files[0]; if(!file) return; let reader=new FileReader(); reader.onload=ev=>{ try{ let data=JSON.parse(ev.target.result); if(!data.categories||!data.requirements) throw new Error('ملف غير صالح'); if(confirm('استبدال البيانات الحالية؟')){ appData=data; saveData(); refreshAll(); renderHistory(); alert('تم الاستعادة'); } }catch(err){ alert('خطأ: '+err.message); } }; reader.readAsText(file); }; inp.click(); }
+function updateProjectDate(){ let d=new Date(); document.getElementById('project-date').value=`${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`; }
+updateProjectDate();
+setInterval(updateProjectDate,60000);
+// تطبيق التصفية المتسلسلة عند التحميل (تعطيل الحقول التي تأتي بعد الحقل الفارغ)
+// نبني قوائم التدقيق الجديد ديناميكياً من appData أولاً
+rebuildMainTabFilters();
+cascadeFilters();
+</script>
+</body>
+</html>

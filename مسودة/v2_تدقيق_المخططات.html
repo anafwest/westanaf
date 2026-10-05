@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إدارة رخص البناء – قطاع غرب الرياض</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --primary: #1e3a5f;
+    --primary-dark: #12263f;
+    --primary-light: #2e5484;
+    --accent: #b08d57;
+    --accent-dark: #8b6a3d;
+    --bg: #f4f5f7;
+    --surface: #ffffff;
+    --surface-alt: #f9fafb;
+    --border: #d1d5db;
+    --border-strong: #9ca3af;
+    --text-primary: #1f2937;
+    --text-secondary: #4b5563;
+    --text-muted: #6b7280;
+    --success: #0f6e56;
+    --success-bg: #e6f4ef;
+    --warning: #92400e;
+    --warning-bg: #fef3e2;
+    --danger: #991b1b;
+    --danger-bg: #fef2f2;
+    --danger-border: #fecaca;
+    --info-bg: #eff6ff;
+    --info-border: #bfdbfe;
+    --info-text: #1e3a8a;
+    --shadow-sm: 0 1px 2px rgba(30, 58, 95, 0.05);
+    --shadow: 0 1px 3px rgba(30, 58, 95, 0.08), 0 1px 2px rgba(30, 58, 95, 0.04);
+  }
+  body {
+    font-family: 'Segoe UI', 'Tahoma', 'Cairo', Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    padding: 20px;
+    line-height: 1.7;
+    direction: rtl;
+    font-size: 14.5px;
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: #fff;
+    padding: 22px 28px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    box-shadow: var(--shadow);
+    border-top: 3px solid var(--accent);
+  }
+  .header h1 { font-size: 20px; font-weight: 600; color: #fff; }
+  .header p { color: #cbd5e1; font-size: 12.5px; margin-top: 4px; }
+  .header .btn-secondary { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.25); }
+  .header .btn-secondary:hover { background: rgba(255,255,255,0.18); }
+  .tabs {
+    display: flex;
+    gap: 2px;
+    background: var(--surface);
+    padding: 4px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-sm);
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 11px 16px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    transition: all 0.15s;
+  }
+  .tab-btn:hover { background: var(--surface-alt); color: var(--primary); }
+  .tab-btn.active { background: var(--primary); color: #fff; font-weight: 600; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+  .card {
+    background: var(--surface);
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    padding: 22px 24px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-sm);
+  }
+  .card h2 {
+    font-size: 15.5px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--primary);
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--accent);
+    display: inline-block;
+    padding-left: 40px;
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group label { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+  .form-group select, .form-group input, .form-group textarea {
+    padding: 9px 12px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 14px;
+    background: var(--surface);
+  }
+  .form-group select:focus, .form-group input:focus, .form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.1);
+  }
+  .form-group input[readonly] { background: var(--surface-alt); color: var(--text-secondary); }
+  .form-group select:disabled, .form-group input:disabled {
+    background: #f1f3f5;
+    color: var(--text-muted);
+    cursor: not-allowed;
+    border-color: #e5e7eb;
+    opacity: 0.7;
+  }
+  .form-group label .required-mark { color: var(--danger); margin-right: 3px; }
+  .checklist-section { margin-bottom: 20px; }
+  .checklist-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 10px;
+    padding: 10px 14px;
+    background: var(--success-bg);
+    border-right: 4px solid var(--success);
+    border-radius: 4px;
+  }
+  .checklist-title.optional { background: var(--warning-bg); border-right-color: var(--warning); color: var(--warning); }
+  .checkbox-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: 4px;
+    margin-bottom: 2px;
+  }
+  .checkbox-item:hover { background: var(--surface-alt); }
+  .checkbox-item input[type="checkbox"] { margin-top: 4px; width: 16px; height: 16px; accent-color: var(--primary); flex-shrink: 0; }
+  .checkbox-item label { flex: 1; cursor: pointer; font-size: 14px; line-height: 1.6; }
+  .requirement-category {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    margin-bottom: 8px;
+    overflow: hidden;
+  }
+  .requirement-header {
+    padding: 13px 16px;
+    background: var(--surface-alt);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--primary);
+    border-bottom: 1px solid var(--border);
+  }
+  .requirement-header:hover { background: #eef1f5; }
+  .requirement-header .arrow { transition: transform 0.2s; color: var(--accent); font-size: 10px; }
+  .requirement-header.collapsed .arrow { transform: rotate(-90deg); }
+  .requirement-header .count { font-size: 11.5px; color: var(--text-secondary); background: var(--surface); padding: 2px 10px; border-radius: 10px; border: 1px solid var(--border); }
+  .requirement-body { padding: 10px 14px; }
+  .requirement-body.hidden { display: none; }
+  .req-item {
+    padding: 11px 12px;
+    background: var(--surface);
+    border-radius: 4px;
+    margin-bottom: 6px;
+    border: 1px solid var(--border);
+  }
+  .req-item:hover { border-color: var(--border-strong); }
+  .req-item-top { display: flex; align-items: flex-start; gap: 10px; }
+  .req-item-top input[type="checkbox"] { margin-top: 4px; width: 16px; height: 16px; accent-color: var(--accent); flex-shrink: 0; }
+  .req-item-top label { flex: 1; font-size: 14px; line-height: 1.6; cursor: pointer; }
+  .req-extras {
+    display: none;
+    grid-template-columns: 140px 1fr;
+    gap: 10px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--border);
+  }
+  .req-extras.show { display: grid; }
+  .req-extras input, .req-extras textarea { padding: 7px 11px; border: 1px solid var(--border); border-radius: 4px; font-family: inherit; font-size: 13px; }
+  .btn {
+    padding: 9px 20px;
+    border: none;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-primary { background: var(--primary); color: #fff; border: 1px solid var(--primary); }
+  .btn-primary:hover { background: var(--primary-dark); }
+  .btn-accent { background: var(--accent); color: #fff; }
+  .btn-accent:hover { background: var(--accent-dark); }
+  .btn-secondary { background: var(--surface); color: var(--text-primary); border: 1px solid var(--border); }
+  .btn-secondary:hover { background: var(--surface-alt); border-color: var(--border-strong); }
+  .btn-danger { background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger-border); }
+  .btn-danger:hover { background: #fee2e2; }
+  .actions-bar { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .output-box { background: var(--surface-alt); border: 1px solid var(--border); border-right: 3px solid var(--accent); border-radius: 4px; padding: 24px 28px; font-size: 14px; line-height: 1.9; white-space: pre-wrap; max-height: 550px; overflow-y: auto; min-height: 200px; }
+  .history-item { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 14px 18px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .history-item:hover { border-color: var(--border-strong); }
+  .history-info h3 { font-size: 14px; font-weight: 600; margin-bottom: 4px; color: var(--primary); }
+  .history-info p { font-size: 12.5px; color: var(--text-muted); }
+  .history-actions { display: flex; gap: 6px; }
+  .admin-note { background: var(--info-bg); border: 1px solid var(--info-border); border-right: 3px solid var(--primary); color: var(--info-text); padding: 12px 16px; border-radius: 4px; font-size: 13px; margin-bottom: 14px; }
+  .muted { color: var(--text-muted); font-size: 13px; font-style: italic; text-align: center; padding: 24px; }
+  @media (max-width: 700px) { .form-row { grid-template-columns: 1fr; } .tabs { flex-wrap: wrap; } .tab-btn { flex: 1 1 45%; } .header { flex-direction: column; align-items: flex-start; } body { padding: 12px; } .card { padding: 16px; } }
+  @media print { body { background: #fff; padding: 0; } .tabs, .actions-bar, .header .btn-secondary { display: none; } .card { border: none; box-shadow: none; } }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div><h1>إدارة رخص البناء – قطاع غرب الرياض</h1><p>تدقيق حسب نوع الطلب + التصنيف + نوع الكود + نوع المشروع</p></div>
+    <div><button class="btn btn-secondary" onclick="backupData()">نسخة احتياطية</button><button class="btn btn-secondary" onclick="restoreData()">استعادة</button></div>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('new')">تدقيق جديد</button>
+    <button class="tab-btn" onclick="switchTab('history')">سجل التدقيقات</button>
+    <button class="tab-btn" onclick="switchTab('admin')">إدارة الاشتراطات</button>
+  </div>
+  <div id="tab-new" class="tab-content active">
+    <div class="card">
+      <h2>معلومات الطلب</h2>
+      <div class="form-row">
+        <div class="form-group"><label>رقم الطلب / اسم المشروع</label><input type="text" id="project-name" placeholder="مثال: طلب رقم 372261"></div>
+        <div class="form-group"><label>التاريخ (تلقائي)</label><input type="text" id="project-date" readonly></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>نوع الطلب</label><select id="request-type" onchange="refreshAll()"><option value="">— اختر —</option><option value="new">إصدار رخصة بناء</option><option value="renew">تجديد رخصة بناء</option><option value="modify">تعديل رخصة بناء</option><option value="correction">تصحيح وضع مبنى قائم</option></select></div>
+        <div class="form-group"><label>التصنيف</label><select id="classification" onchange="refreshAll()"><option value="">— اختر —</option><option value="residential">سكني</option><option value="commercial">تجاري</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>نوع الكود / اللائحة</label><select id="code-type" onchange="refreshAll()"><option value="">— اختر —</option><option value="wadi">كود وادي حنيفة</option><option value="saudi">اشتراطات الكود السعودي</option><option value="both">كود وادي حنيفة + الكود السعودي</option></select></div>
+        <div class="form-group"><label>نوع المشروع</label><select id="project-type" onchange="refreshAll()"><option value="">— اختر —</option><optgroup label="سكني"><option value="villa">فلل</option><option value="villa_attached">فلل متلاصقة</option><option value="villa_adjacent">فلل متجاورة</option><option value="villa_mixed">فلل متلاصقة ومتجاورة</option><option value="apartments">شقق سكنية</option></optgroup><optgroup label="تجاري"><option value="hotel">فندق</option><option value="hotel_apt">شقق فندقية</option><option value="warehouse">مستودعات</option><option value="gas_station">محطة وقود</option><option value="workshop_prof">ورش مهنية</option><option value="workshop_vehicle">ورش وسائل النقل</option></optgroup></select></div>
+      </div>
+    </div>
+    <div class="card" id="attachments-card"><h2>المرفقات</h2><div id="attachments-container"><p class="muted">اختر نوع الطلب لعرض المرفقات المطلوبة</p></div></div>
+    <div class="card" id="requirements-card"><h2>بنود الاشتراطات — اختر الملاحظات الناقصة في المخطط</h2><div id="requirements-container"><p class="muted">اختر نوع الطلب ونوع المشروع لعرض الاشتراطات</p></div></div>
+    <div class="actions-bar"><button class="btn btn-secondary" onclick="clearForm()">مسح الكل</button><button class="btn btn-primary" onclick="generateOutput()">توليد تقرير التدقيق</button></div>
+    <div class="card" id="output-card" style="display:none;"><h2>تقرير التدقيق النهائي</h2><div id="output-box" class="output-box"></div><div class="actions-bar"><button class="btn btn-secondary" onclick="copyOutput()">نسخ النص</button><button class="btn btn-primary" onclick="saveReport()">حفظ التدقيق في السجل</button></div></div>
+  </div>
+  <div id="tab-history" class="tab-content"><div class="card"><h2>التدقيقات السابقة</h2><div id="history-container"><p class="muted">لا توجد تدقيقات محفوظة بعد</p></div></div></div>
+  <div id="tab-admin" class="tab-content"><div class="card"><h2>إدارة الاشتراطات والمرفقات</h2><div class="admin-note">من هنا تقدر تضيف أو تعدل أو تحذف أي اشتراط أو مرفق. التغييرات تنحفظ داخل المتصفح على جهازك.</div><div class="form-row"><div class="form-group"><label>نوع التعديل</label><select id="admin-mode" onchange="renderAdmin()"><option value="requirements">إدارة الاشتراطات</option><option value="attachments">إدارة المرفقات</option><option value="categories">إدارة بنود التصنيف</option></select></div></div><div id="admin-container"></div></div></div>
+</div>
+<script>
+// ========== البيانات الكاملة للاشتراطات مع إضافة requestTypes ==========
+// أنواع الطلبات: new, renew, modify, correction
+const PROJECT_TYPES = [
+  { id: 'villa', name: 'فلل', group: 'residential' }, { id: 'villa_attached', name: 'فلل متلاصقة', group: 'residential' },
+  { id: 'villa_adjacent', name: 'فلل متجاورة', group: 'residential' }, { id: 'villa_mixed', name: 'فلل متلاصقة ومتجاورة', group: 'residential' },
+  { id: 'apartments', name: 'شقق سكنية', group: 'residential' }, { id: 'hotel', name: 'فندق', group: 'commercial' },
+  { id: 'hotel_apt', name: 'شقق فندقية', group: 'commercial' }, { id: 'warehouse', name: 'مستودعات', group: 'commercial' },
+  { id: 'gas_station', name: 'محطة وقود', group: 'commercial' }, { id: 'workshop_prof', name: 'ورش مهنية', group: 'commercial' },
+  { id: 'workshop_vehicle', name: 'ورش وسائل النقل', group: 'commercial' }
+];
+
+// بنود التصنيف
+const DEFAULT_CATEGORIES = [
+  { id: 'attachments_required', name: 'المرفقات المطلوبة' }, { id: 'fences', name: 'الأسوار' }, { id: 'setbacks', name: 'الارتدادات' },
+  { id: 'heights', name: 'الارتفاعات' }, { id: 'technical', name: 'الاشتراطات الفنية' }, { id: 'architectural', name: 'الاشتراطات المعمارية' },
+  { id: 'shafts', name: 'المناور' }, { id: 'corridors', name: 'الممرات والأرصفة' }, { id: 'build_ratios', name: 'نسب البناء' },
+  { id: 'parking', name: 'المواقف' }, { id: 'facades', name: 'الواجهات والنوافذ' }, { id: 'upper_annex', name: 'الملحق العلوي' },
+  { id: 'roofs', name: 'الأسطح وخدماتها' }, { id: 'electric_room', name: 'غرفة الكهرباء' }, { id: 'views_3d', name: 'المناظير والواجهات 3D' },
+  { id: 'licensing', name: 'المساحات والرخصة' }, { id: 'units', name: 'الوحدات السكنية' }, { id: 'procedural', name: 'ملاحظات إجرائية' },
+  { id: 'gas_station_specific', name: 'اشتراطات محطات الوقود' }, { id: 'workshop_specific', name: 'اشتراطات الورش' }
+];
+
+// المرفقات (نفس السابق)
+const DEFAULT_ATTACHMENTS = {
+  required: {
+    new: ['صك الملكية / وثيقة التملك', 'الرفع المساحي', 'وثيقة التأمين', 'نموذج 9 و 10', 'نظام البناء المعتمد من الأمانة', 'المخططات المعمارية كاملة (المساقط، الواجهات، القطاعات)', 'صورة الواجهة 3D', 'الموقع العام', 'مخطط يوضح آلية التدعيم للموقع والمحافظة على أملاك المجاورين', 'تعهد إغلاق الفتحات (عند الحاجة)'],
+    renew: ['خطاب توجيه موقع ومختوم من المكتب الهندسي يوضح التعديل المطلوب', 'تقرير فني مصور يوضح حالة الأرض وعدد الأدوار بالمساحات في الطبيعة والرخصة', 'صورة الواجهة 3D مع تصغير الأبعاد', 'الموقع العام مع تصغير الأبعاد', 'نموذج 9 و 10', 'وثيقة التأمين', 'الرفع المساحي'],
+    modify: ['خطاب توجيه موقع ومختوم من المكتب الهندسي يوضح التعديل المطلوب', 'تقرير فني مصور يوضح حالة الأرض وعدد الأدوار', 'شهادة تحمل المبنى (مكتب هندسي معتمد) للمساحات المراد إضافتها', 'صورة الواجهة 3D مع تصغير الأبعاد', 'الموقع العام مع تصغير الأبعاد', 'شهادة مطابقة التصاميم لكود البناء (هيئة الدرعية) بعد التعديل', 'مخطط يوضح آلية التدعيم للموقع'],
+    correction: ['صك الملكية', 'الرفع المساحي', 'خطاب توجيه موقع ومختوم من المكتب الهندسي يوضح الملاحظات', 'تقرير فني مصور يوضح حالة الأرض وعدد الأدوار', 'شهادة سلامة المبنى', 'شهادة التحمل + خطاب بالسلامة الإنشائية', 'صورة الواجهة 3D مع تصغير الأبعاد', 'الموقع العام مع تصغير الأبعاد', 'المخططات حسب الاشتراطات النظامية']
+  },
+  optional: ['تعهد تخطي المهلة التصحيحية', 'تعهد صاحب العلاقة بفتح الموقع', 'خطاب الرد من شركة الكهرباء بتاريخ إطلاق التيار', 'المصغرات الفلمية', 'تعهد بإزالة المخالفات على الواجهة', 'خطاب تحمل المبنى للمساحات المضافة', 'شهادة مطابقة التصاميم لكود البناء (هيئة الدرعية)']
+};
+
+// الاشتراطات الكاملة (جميع البنود من الملف الأصلي) مع إضافة requestTypes افتراضي ['new']
+// سنقوم ببناء كائن ضخم يحوي كل الاشتراطات. نظراً للطول، سأضعها في دالة منفصلة.
+function getDefaultRequirements() {
+  return {
+    fences: [
+      { text: 'التقيد باشتراطات ارتفاعات الأسوار للواجهة المتراجعة والمتقدمة', ref: 'كود وادي حنيفة T3.2 صفحة 21-22', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'توضيح ارتفاع الأسوار في الواجهة الخلفية', ref: 'كود وادي حنيفة T4.2 صفحة 27 / كود وادي حنيفة T4.1 صفحة 19', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'إرفاق مخطط للأسوار يوضح الأبعاد مع التقيد باشتراطات الواجهة المتقدمة والمتراجعة', ref: 'كود وادي حنيفة T3.2 صفحة 20-22', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'إرفاق مخطط للأسوار مع الأبعاد والتقيد باشتراطات الكود لأسوار الواجهة المتقدمة والمتراجعة والجانبية', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'توضيح ارتفاع الأسوار للواجهة المتقدمة والمتراجعة', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'عدم وضع حواجز في الارتداد جهة المجاورين والتقيد بارتفاع الأسوار على الواجهات المتقدمة والمتراجعة', ref: 'كود وادي حنيفة', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'يلزم استمرارية رصيف المشاة في الارتداد الأمامي وعدم وضع أي عوائق مثل الأسوار', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+    ],
+    setbacks: [
+      { text: 'التقيد بالارتدادات النظامية للمجاورين (الجانبي والخلفي) 2 متر + تعديل الارتدادات في الرخصة', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new','renew','modify','correction'] },
+      { text: 'تعديل الارتداد الأمامي خمس عرض الشارع (4 متر) وفي الأدوار العلوية يسمح بالبروز 1.2 متر كحد أقصى (2.8 متر من أقرب نقطة لحد الملكية)', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'توضيح الارتداد جهة اليمين في الأدوار العلوية', ref: 'كود وادي حنيفة T3.2 صفحة 9', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'يجب الارتداد جهة اليمين والخلف في الأدوار العلوية 2 متر', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'توضيح الارتداد الأمامي للواجهة المتقدمة والمتراجعة', ref: 'كود وادي حنيفة T3.2 صفحة 9', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'توضيح الارتداد في الدور الأرضي وتحديد الواجهة المتقدمة والمتراجعة مع النسب', ref: 'كود وادي حنيفة T3.2 صفحة 9', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'توضيح الارتدادات جهة المجاورين من أقرب نقطة لحد الملكية في جميع الأدوار', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'توضيح الارتداد الأمامي في أقرب نقطة في جميع الأدوار', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'توضيح الارتداد الجانبي من حد الملكية على أن لا يقل عن 4 متر في المواقف العامودية', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'ارتداد الملحق العلوي عن الشوارع 2 متر (صافي)', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'تحديد حدود الأرض في جميع الأدوار مع توضيح الارتداد', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'يمنع البروز خارج حد الملكية', ref: 'كود وادي حنيفة T3.2 صفحة 26', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new','modify','correction'] },
+      { text: 'عدم البروز خارج حد الملكية (الدور الأول جهة الشارع)', ref: 'كود وادي حنيفة T3.2 صفحة 26', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'عدم البناء في الشطفة', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'توضيح بروز الدرج على الارتداد الجانبي وكحد أقصى 1 متر', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'تعديل بروز الدرج 1 متر كحد أقصى', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+    ],
+    heights: [
+      { text: 'ارتفاع الدور الأول أعلى من الحد المسموح به (4 متر)', ref: 'كود وادي حنيفة T3.2 صفحة 17', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse'], requestTypes: ['new'] },
+      { text: 'ارتفاع الدور لا يزيد عن 4 متر', ref: 'كود وادي حنيفة T4.1 صفحة 17', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse'], requestTypes: ['new'] },
+      { text: 'ارتفاع الدور 4 متر كحد أقصى', ref: 'كود وادي حنيفة T4.1 صفحة 17', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse'], requestTypes: ['new'] },
+      { text: 'توضيح ارتفاع الأدوار من البلاطة إلى البلاطة كحد أقصى 4 متر', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse'], requestTypes: ['new'] },
+      { text: 'ارتفاع المبنى كحد أقصى 12 متر', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse'], requestTypes: ['new'] },
+      { text: 'الالتزام بالارتفاعات النظامية للدور الأرضي، وفي الرغبة في إضافة الميزانين يجب توضيحها في المخططات والرخصة', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse'], requestTypes: ['new'] },
+      { text: 'توضيح ارتفاع دروة السطح والملحق العلوي', ref: 'كود وادي حنيفة T3.2 صفحة 17', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'توضيح ارتفاع دروة الملحق العلوي', ref: 'كود وادي حنيفة T4.1 صفحة 17', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'توضيح منسوب المبنى من حد الرصيف كحد أدنى 0.6 متر', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse'], requestTypes: ['new'] },
+    ],
+    technical: [
+      { text: 'تعديل أبعاد غرفة الكهرباء ويكون الضلع الأطول على الشارع كحد أدنى 4.50 متر', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','gas_station'], requestTypes: ['new'] },
+      { text: 'لا تقل أبعاد غرفة الكهرباء عن 4×5 داخل حدود المبنى', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','gas_station'], requestTypes: ['new'] },
+      { text: 'تعديل أبعاد غرفة الكهرباء 4×5 متر', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','gas_station'], requestTypes: ['new'] },
+      { text: 'يجب أن يبتعد الخزان عن المجاورين 2 متر', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','gas_station'], requestTypes: ['new'] },
+      { text: 'توضيح تهوية المطبخ', ref: '', projects: ['apartments','hotel','hotel_apt','villa','villa_attached','villa_adjacent','villa_mixed'], requestTypes: ['new'] },
+      { text: 'توضيح تهوية دورات المياه', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'توضيح النفاذية لسطح الخدمات (الباب)', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'ترقيم المواقف', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'توضيح الأعمدة الإنشائية في المسقط لمواقف الدور الأرضي والتأكد من عدم إعاقتها لحركة السيارات', ref: 'كود T4.2 صفحة 25', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+    ],
+    architectural: [
+      { text: 'تعديل جدول المساحات في المخططات', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new','modify','correction'] },
+      { text: 'توضيح مسميات الفراغات في الملحق العلوي + النوافذ', ref: 'كود وادي حنيفة T3.2 صفحة 28', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'يمنع فصل الأدوار (درج الخدمة)', ref: 'كود وادي حنيفة T3.2 صفحة 7', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'يمنع فصل الأدوار في الملحق العلوي', ref: 'كود وادي حنيفة T3.2 صفحة 7', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'يمنع فصل الأدوار (الدور الأول)', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'يمنع دمج الفناء مع موقف السيارة', ref: 'كود وادي حنيفة T3.2 صفحة 15', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'توضيح الوصولية إلى (الفناء / الأفنية) الفراغ لاستخدام سكان العمارة', ref: 'كود وادي حنيفة T4.2 صفحة 15', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'توضيح حدود وأبعاد الفناء وعمل لاند سكيب له', ref: 'كود وادي حنيفة T4.1 صفحة 15', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'توضيح أبعاد الفناء في الدور الأرضي على ألا يقل أقصر ضلع عن 5 متر', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'مطابقة منظور الواجهة الخلفية مع المساقط', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new','modify'] },
+      { text: 'مطابقة المناظير مع الواجهات وأبعادها', ref: 'كود وادي حنيفة T3.2 صفحة 17', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'مطابقة الرخصة مع المخططات', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new','renew','modify','correction'] },
+      { text: 'تعديل المساحات في الرخصة حسب المخططات المرفقة', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new','modify','correction'] },
+      { text: 'إرفاق المخططات المعمارية في ملف واحد', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'إرفاق المخطط مع ختم المكتب الهندسي للمخطط المعتمد', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new','modify','correction'] },
+      { text: 'توضيح الفرق والتعديل بين المخطط المقترح والمخطط المعتمد', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['modify','correction'] },
+      { text: 'إرفاق المخططات وموائمة كود وادي حنيفة للأدوار غير المستكملة والواجهات حسب كود الموائمة', ref: 'موقع الهيئة الملكية', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+    ],
+    shafts: [
+      { text: 'توضيح أبعاد المناور وفصل المناور الخدمية عن مناور الفراغات الأخرى', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'توضيح نفاذية المناور للسطح', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+    ],
+    corridors: [
+      { text: 'تعديل عرض الرصيف 2 متر', ref: 'كود وادي حنيفة T3.2 صفحة 31', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'توضيح تفاصيل الأرصفة', ref: 'كود وادي حنيفة T3.2 صفحة 31-32 / كود وادي حنيفة T4.2 صفحة 31-32', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'توضيح تفاصيل الأرصفة (عرض الرصيف، واحواض النباتات ونسبتها)', ref: 'كود وادي حنيفة T3.2 صفحة 31-32 / كود وادي حنيفة T3.3 صفحة 10', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'توضيح الأرصفة في المخططات', ref: 'كود وادي حنيفة T4.1 صفحة 92', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'توضيح تفاصيل رصيف المشاة (عرض الرصيف، نسبة أحواض النباتات)', ref: 'كود وادي حنيفة T4.1 صفحة 92', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'توضيح أبعاد جزيرة الرصيف (تقاطع الشوارع) والتقيد بالأبعاد', ref: 'دليل المواقف صفحة 14 شكل (8)', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'توضيح أبعاد جزيرة الرصيف (زاوية الأرض)', ref: 'دليل تصميم المواقف', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'توفير ممر وتوضيح المداخل والمخارج وحركة السير', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'توفير رصيف المشاة ورصيف المحلات التجارية', ref: '', projects: ['warehouse','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+    ],
+    build_ratios: [
+      { text: 'الالتزام بنسب البناء النظامية في المخططات والرخصة', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new','modify','correction'] },
+      { text: 'نسبة البناء أكبر من الحد المسموح به 70% شامل الملاحق الأرضية', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments'], requestTypes: ['new'] },
+      { text: 'الالتزام بالحد الأعلى للبناء حسب نظام البناء المعتمد', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'الواجهة المتقدمة أقل من 60%', ref: 'كود وادي حنيفة T3.2 صفحة 9', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'الواجهة المتقدمة الرئيسية والثانوية أقل من الحد المسموح به', ref: 'كود وادي حنيفة T3.2 صفحة 11 / كود وادي حنيفة T4.1 صفحة 27', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'توضيح الواجهة المتقدمة والمتراجعة مع الأبعاد للواجهات المطلة على الشارع في مخطط الدور الأرضي', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'يجب ألا يشغل الملاحق الأرضية أكثر من 30% من طول الواجهة الأمامية', ref: 'كود وادي حنيفة T3.2 صفحة 25', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments'], requestTypes: ['new'] },
+    ],
+    parking: [
+      { text: 'توفير موقف لكل وحدة سكنية مستقلة حسب اشتراطات الوحدات السكنية', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments'], requestTypes: ['new'] },
+      { text: 'إضافة موقف في المخططات ومطابقة لعدد الوحدات بالمواقف لكل وحدة سكنية موقف سيارة مستقل', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments'], requestTypes: ['new'] },
+      { text: 'توفير مواقف للشقق السكنية حسب مساحة الشقة', ref: 'كود وادي حنيفة T4.1 صفحة 26, 31', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'توفير موقف لذوي الاحتياجات الخاصة', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'توضيح أبعاد الكراج', ref: 'كود وادي حنيفة T3.2 صفحة 25', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments'], requestTypes: ['new'] },
+      { text: 'توضيح أبعاد المواقف 5.5×2.8 متر، وعرض ممر المواقف العامودية 7.5 متر', ref: 'دليل تصميم المواقف', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'توضيح أبعاد المواقف مع معالجة الأعمدة الإنشائية على ألا تعيق المواقف', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'توضيح أبعاد المواقف وباب الكراج حسب المواقف المتوفرة', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments'], requestTypes: ['new'] },
+      { text: 'لا تحتسب المواقف غير الممكن استخدامها والتي يصعب الدخول أو الخروج منها بسبب أعمدة أو غيرها', ref: 'كود وادي حنيفة T4.1 صفحة 25', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'توضيح مدخل السيارة وأبعاده وتفاصيل منحدر الكراج', ref: 'كود وادي حنيفة T3.2 صفحة 25', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments'], requestTypes: ['new'] },
+      { text: 'يجب أن يبتعد مدخل السيارة عن زاوية الأرض 3 متر', ref: 'كود وادي حنيفة T3.2 صفحة 25', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'معالجة مكان الكراج (ألا يكون في زاوية الأرض / الشطفة)', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments'], requestTypes: ['new'] },
+      { text: 'تعديل عرض الكراج 3 متر', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments'], requestTypes: ['new'] },
+      { text: 'تعديل أبواب الكراج في المخططات والمناظير حسب عدد المواقف', ref: 'دليل تصميم المواقف', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments'], requestTypes: ['new'] },
+      { text: 'توضيح عرض ممر السيارات في القبو', ref: 'دليل تصميم المواقف', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'بداية منحدر القبو من بداية حد المبنى (بعد الارتداد 6 متر)', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'لعمل مواقف سيارات داخل حد الملكية يجب أن تكون بعد الارتداد النظامي 8 متر (كحد أدنى 6 متر)', ref: 'نظام البناء المرفق', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'المواقف الأمامية تبدأ من حد الملكية الخاصة بالقطعة ولا يمكن تجاوز حد ملكية الجار', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'توضيح الأعمدة الإنشائية في القبو (لا تحتسب المواقف غير الممكن استخدامها)', ref: 'كود وادي حنيفة T4.1', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'الرجاء الاطلاع على دليل تصميم المواقف صفحة 10، جدول (1) الحد الأدنى لعرض أبعاد المواقف وممرات الحركة', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+    ],
+    facades: [
+      { text: 'نسبة النوافذ لكل دور في الواجهة الرئيسية أقل من 20%', ref: 'كود وادي حنيفة T3.2 صفحة 28', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'إرفاق نسبة النوافذ لكل دور على الواجهة المطلة على الشارع', ref: 'كود وادي حنيفة T3.2 صفحة 28 / كود وادي حنيفة T4.1 صفحة 24', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'إضافة نسبة النوافذ لكل دور', ref: 'كود وادي حنيفة T4.1 صفحة 24', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'إرفاق جميع الواجهات + نسبة النوافذ المطلة على الشارع', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'إرفاق جميع الواجهات', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'يمنع فتح النوافذ مباشرة على الشارع في الملحق العلوي، ويجب الارتداد 1.2 متر ورفع السترة 1.8 متر', ref: 'كود وادي حنيفة T3.2 صفحة 28', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'في حال فتح نوافذ في الجهة الخلفية للمبنى للأدوار العلوية يجب الارتداد 1.2 متر إضافية ورفع سترة 1.8 متر (ارتفاع صافي بعد البلاط) غير نافذة بصرياً', ref: 'كود T4.2 صفحة 88 / كود T4.1 صفحة 86', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'معالجة النوافذ جهة الجار الخلفي', ref: 'كود وادي حنيفة T3.2 صفحة 28', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'معالجة النوافذ المطلة على الجار الخلفي في الأدوار العلوية', ref: 'كود وادي حنيفة T3.2 صفحة 28', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'التقيد باشتراطات فتح النوافذ في الواجهة الخلفية للأدوار العلوية', ref: 'كود وادي حنيفة T4.2 صفحة 27 و 88', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'توضيح أبعاد ارتداد سترة النوافذ المطلة على الجار الخلفي في الأدوار العلوية (ارتداد صافي 1.2 متر، سترة ارتفاع 1.80 متر)', ref: 'كود وادي حنيفة T4.2 صفحة 88', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'ارتفاع جلسة النافذة (عتبة النافذة السفلية) من الرصيف 1.8 متر كحد أدنى للواجهات المطلة على الشارع في الدور الأرضي', ref: 'كود T4.1 صفحة 87', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'ارتفاع جلسة النوافذ في الدور الأرضي من حد رصيف المشاة 1.80 متر', ref: 'كود وادي حنيفة T4.2 صفحة 89', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'توضيح ارتفاع بسطة النوافذ المطلة على الشارع في الدور الأرضي', ref: 'كود وادي حنيفة T3.2 صفحة 26', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'توضيح كود الألوان للمواد المستخدمة على الشارع', ref: 'كود وادي حنيفة T4.1 صفحة 90 / كود وادي حنيفة T3.3 صفحة 9', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'توضيح كود الألوان والمواد المستخدمة', ref: 'كود وادي حنيفة T3.2 صفحة 29', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'إرفاق كود الألوان للمواد المستخدمة على الواجهة', ref: 'كود وادي حنيفة T3.2 صفحة 29', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'إرفاق صورة الواجهة 3D حسب اشتراطات العمارة المحلية', ref: '', projects: ['apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'إرفاق صورة الواجهة موائمة لكود وادي حنيفة T3.2', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'توضيح نوافذ غرف النوم', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'توضيح نافذة غرفة النوم في الدور الأرضي', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'توضيح نافذة الصالة في الملحق العلوي', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'توضيح أبعاد نوافذ غرف النوم الخلفية والتقيد بالاشتراطات لمساحة نوافذ الفراغات لتوفير التهوية والإضاءة الطبيعية', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+    ],
+    upper_annex: [
+      { text: 'مساحة الملحق العلوي أعلى من الحد المسموح به (50% من الدور الأرضي)', ref: 'كود وادي حنيفة T3.2 صفحة 9', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'مساحة الملحق العلوي مع المصعد والدرج (كامل) أعلى من 50% من الدور الأرضي', ref: 'كود وادي حنيفة T3.2 صفحة 9', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'الملحق العلوي أعلى من 50% من الدور الأول', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'إضافة الملحق العلوي (بيت الدرج) في المخططات والرخصة', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'إرفاق الملحق العلوي في الرخصة (بيت الدرج)', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'توضيح مداخل الأسطح في الملحق العلوي', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'معالجة النوافذ في الملحق العلوي المطلة على المجاورين', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+    ],
+    roofs: [
+      { text: 'توضيح مخطط سطح الخدمات', ref: 'دليل أسطح المباني', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse'], requestTypes: ['new'] },
+      { text: 'توضيح لوحة خدمات السطح - توضيح مخطط سطح الخدمات', ref: 'دليل أسطح المباني', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse'], requestTypes: ['new'] },
+      { text: 'توضيح عناصر خدمات الأسطح', ref: 'كود وادي حنيفة T3.3 صفحة 7', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse'], requestTypes: ['new'] },
+      { text: 'توضيح عناصر الخدمات على الأسطح', ref: 'كود وادي حنيفة T3.2 صفحة 27', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse'], requestTypes: ['new'] },
+      { text: 'التقيد بدليل أسطح المباني لعناصر خدمات السطح', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse'], requestTypes: ['new'] },
+      { text: 'إضافة قطاع آخر مع الأبعاد يوضح سترة السطح', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse'], requestTypes: ['new'] },
+      { text: 'توضيح أبعاد سترة نوافذ الدور الثاني المطلة على الجار الخلفي في القطاع', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse'], requestTypes: ['new'] },
+      { text: 'توضيح الأبعاد في القطاع (سترة السطح والملحق العلوي)', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse'], requestTypes: ['new'] },
+    ],
+    electric_room: [
+      { text: 'تعديل أبعاد غرفة الكهرباء ويكون الضلع الأطول على الشارع كحد أدنى 4.50 متر', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','gas_station','warehouse'], requestTypes: ['new'] },
+      { text: 'لا تقل أبعاد غرفة الكهرباء عن 4×5 داخل حدود المبنى', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','gas_station','warehouse'], requestTypes: ['new'] },
+      { text: 'توضيح غرفة الكهرباء في المخططات وإضافة مساحتها في الرخصة', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','gas_station','warehouse'], requestTypes: ['new'] },
+      { text: 'تكون غرفة الكهرباء بعد الارتداد وملاصقة للمبنى ويكون الضلع الأطول على الشارع (محطات الوقود)', ref: '', projects: ['gas_station'], requestTypes: ['new'] },
+    ],
+    views_3d: [
+      { text: 'إرفاق صورة الواجهة 3D مع تصغير الأبعاد لتظهر في الرخصة بشكل مناسب', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new','renew','modify','correction'] },
+      { text: 'إرفاق الموقع العام مع تصغير الأبعاد لتظهر في الرخصة بشكل مناسب', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new','renew','modify','correction'] },
+      { text: 'إرفاق مناظير 3D حسب الموجهات التصميمية للعمارة المحلية', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'إرفاق مناظير 3D حسب الطابع العمراني', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'إرفاق مناظير 3D حسب الهوية العمرانية لمدينة الرياض + مطابقة صورة الواجهة والمناظير للمخططات', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'إضافة مناظير 3D حسب دليل الطابع العمراني لمدينة الرياض', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'إرفاق صورة الواجهة 3D مع التقيد بالألوان والمواد حسب دليل الطابع العمراني', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+    ],
+    licensing: [
+      { text: 'تعديل المساحات في الرخصة حسب المخططات المرفقة', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new','modify','correction'] },
+      { text: 'تعديل جدول المساحات في المخططات', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new','modify','correction'] },
+      { text: 'إرفاق جدول مفصل لمساحة كل فلا', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed'], requestTypes: ['new'] },
+      { text: 'ترقيم الفلل وإرفاق جدول يوضح المساحات لكل فلا', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed'], requestTypes: ['new'] },
+      { text: 'مطابقة الرخصة مع المخططات', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new','renew','modify','correction'] },
+      { text: 'مطابقة عدد الوحدات في الرخصة والمخططات', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'إضافة مكونات الرخصة', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'الرفع المساحي (إرفاق مع معالجة الضلع المنكسر عند الحاجة)', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new','renew','modify','correction'] },
+      { text: 'إرفاق الرفع المساحي من التخطيط العمراني معتمد يوضح تداخل حمى الوادي مع الأرض', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt'], requestTypes: ['new'] },
+      { text: 'إرفاق وثيقة التملك', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new','correction'] },
+      { text: 'إرفاق نظام بناء معتمد من الأمانة (مع توضيح نطاق أنابيب الغاز)', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'إرفاق نظام بناء معتمد خاص بالقطعة المطلوب عليها إصدار رخصة البناء', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'ارفاق شهادة تحمل المبنى (مكتب هندسي معتمد) للمساحات/الأدوار المراد إضافتها', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['modify','correction'] },
+      { text: 'إرفاق شهادة مطابقة التصاميم لكود البناء (هيئة الدرعية) بعد التعديل المطلوب', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['modify','correction'] },
+      { text: 'أبعاد الأرض غير مطابقة للرخصة القديمة (أبعاد المحيط الخارجي)', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['renew','correction'] },
+    ],
+    units: [
+      { text: 'يمنع بناء أكثر من وحدة سكنية', ref: 'كود وادي حنيفة T3.2 صفحة 7', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel_apt'], requestTypes: ['new'] },
+      { text: 'يمنع البناء لأكثر من وحدة سكنية', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel_apt'], requestTypes: ['new'] },
+      { text: 'يمنع فصل الدور لأكثر من وحدة سكنية', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel_apt'], requestTypes: ['new'] },
+      { text: 'تعديل عدد الوحدات في الرخصة إلى وحدة واحدة', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel_apt'], requestTypes: ['new'] },
+      { text: 'إلغاء عدد الوحدات في الملحق العلوي في حال إضافة وحدة سكنية يلزم توفير موقف لكل وحدة مستقلة', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel_apt'], requestTypes: ['new'] },
+      { text: 'لا تقل مساحة الفلا السكنية الواحدة عن 200 متر مربع', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed'], requestTypes: ['new'] },
+      { text: 'لا تقل مساحة الشقة عن 100 متر مربع', ref: 'كود وادي حنيفة T4.1 صفحة 7', projects: ['apartments','hotel_apt'], requestTypes: ['new'] },
+      { text: 'تعديل التلاصق: في الفلل المتلاصقة يكون التلاصق من الدور الأرضي ويكون من جهتين فقط', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed'], requestTypes: ['new'] },
+      { text: 'تعديل الصامت المسموح جهتين فقط على الصامت', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed'], requestTypes: ['new'] },
+      { text: 'توضيح التلاصق في الموقع العام حسب الدور الأرضي', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed'], requestTypes: ['new'] },
+      { text: 'إضافة الملحق الأرضي في الرخصة والمخططات، وفي حال إلغائه يكون التلاصق من جهتين فقط في الدور الأرضي', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed'], requestTypes: ['new'] },
+    ],
+    procedural: [
+      { text: 'تم الاطلاع على المخططات المعمارية', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new','renew','modify','correction'] },
+      { text: 'تم الاطلاع حسب التقرير الفني لرقابة المباني لا يوجد ملاحظات', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new','renew','modify','correction'] },
+      { text: 'تم الاطلاع على التعديل المطلوب حسب خطاب التوجيه المرفق من المكتب الهندسي', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['modify','correction'] },
+      { text: 'تم الاطلاع على المخططات حسب شهادة مطابقة التصاميم لكود البناء (هيئة الدرعية)', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new','modify'] },
+      { text: 'الرجاء التقيد بالاشتراطات واللوائح الوزارية لأنظمة البناء', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new','renew','modify','correction'] },
+      { text: 'الرجاء التقيد باشتراطات أمانة الرياض وكود وادي حنيفة T3.2', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new','renew','modify','correction'] },
+      { text: 'الرجاء التقيد بالاشتراطات حسب الكود العمراني للقطعة T3.2', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new','renew','modify','correction'] },
+      { text: 'يرجى إرفاق جميع المرفقات المطلوبة مستقبلاً لضمان سرعة اعتماد الطلب', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new','renew','modify','correction'] },
+      { text: 'تعديل واستكمال المرفقات', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new','renew','modify','correction'] },
+      { text: 'تحال حسب الاختصاص للأمانة - أكبر من 5000 كود وادي حنيفة', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'تحال حسب الاختصاص (تم إرفاق تعهد تخطي المهلة التصحيحية)', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'تحال حسب الاختصاص (تصحيح وضع مبنى قائم)', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['correction'] },
+      { text: 'تحويل للرقابة العمرانية', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new','modify','correction'] },
+      { text: 'تحويل لرقابة المباني (بروز خارج حد الملكية)', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new','modify','correction'] },
+      { text: 'تحويل لرقابة المباني - مساحة الملحق العلوي أعلى من الحد المسموح به', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'إرفاق المستندات بملف PDF آخر لعدم فتح المرفق السابق', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new','renew','modify','correction'] },
+      { text: 'تم إعادة طلب آخر ملاحظات لعدم فتح المرفق في شاشة المهندس', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new','renew','modify','correction'] },
+      { text: 'تم اتخاذ الإجراءات النظامية بحق المكتب الهندسي وفي حال لم يتم تعديل المطلوب لأكثر من مرة سيتم إلغاء الطلب', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new','renew','modify','correction'] },
+      { text: 'لعدم تواصلكم مع القسم المختص بالرقابة الفنية وإعداد التقرير الفني اللازم، سيتم إحالة الطلب إليكم إلى حين أخذ موعد وإرفاق تعهد صاحب العلاقة بفتح الموقع', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['correction'] },
+      { text: 'إرفاق المخططات بعد التعديل حسب الاشتراطات النظامية', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['modify','correction'] },
+      { text: 'إرفاق مخطط مقترح حسب أنظمة واشتراطات البناء', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new','modify'] },
+      { text: 'تعهد بإزالة المخالفات على الواجهة', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new','modify','correction'] },
+      { text: 'إغلاق الأبواب الخلفية للمعارض', ref: '', projects: ['villa','villa_attached','villa_adjacent','villa_mixed','apartments','hotel','hotel_apt','warehouse','gas_station','workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+    ],
+    gas_station_specific: [
+      { text: 'تحديد فئة محطة الوقود (فئة ب) في المخططات والرخصة', ref: '', projects: ['gas_station'], requestTypes: ['new'] },
+      { text: 'الرجاء التقيد باشتراطات محطات الوقود فئة ب', ref: '', projects: ['gas_station'], requestTypes: ['new'] },
+      { text: 'في حال اختيار الفئة ج يلزم التقيد بمراكز الخدمة الأساسية والاختيارية', ref: 'اشتراطات محطات الوقود صفحة 18-21', projects: ['gas_station'], requestTypes: ['new'] },
+      { text: 'لكل 1500 متر مربع من مساحة الأرض كشك أو صراف', ref: '', projects: ['gas_station'], requestTypes: ['new'] },
+      { text: 'الالتزام بدليل الأكشاك وعمل مسار حركة مستقل لكل صراف أو كشك لا يقل عن 22م', ref: '', projects: ['gas_station'], requestTypes: ['new'] },
+      { text: 'عمل مسار حركة مستقل لكل صراف أو كشك لا يقل عن 22 متر', ref: '', projects: ['gas_station'], requestTypes: ['new'] },
+      { text: 'توفير الأنشطة الأساسية في المحطة', ref: '', projects: ['gas_station'], requestTypes: ['new'] },
+      { text: 'الالتزام بالنسبة النظامية للبناء 30%', ref: '', projects: ['gas_station'], requestTypes: ['new'] },
+      { text: 'نسبة البناء أعلى من الحد المسموح به', ref: 'اشتراطات محطات الوقود ومراكز الخدمة صفحة 33', projects: ['gas_station'], requestTypes: ['new'] },
+      { text: 'الالتزام بالمسميات حسب اللائحة الوزارية', ref: '', projects: ['gas_station'], requestTypes: ['new'] },
+      { text: 'تعديل مسمى مستودع إلى مخزن', ref: '', projects: ['gas_station'], requestTypes: ['new'] },
+      { text: 'عرض الممر خلف السيارات العامودية 7.5 متر', ref: '', projects: ['gas_station'], requestTypes: ['new'] },
+      { text: 'مراجعة الخزانات الموجودة وفي طرمبات (الديزل / بنزين 91, 95)', ref: '', projects: ['gas_station'], requestTypes: ['new'] },
+      { text: 'توفير مضخة ديزل وبنزين بأنواعه + توفير 3 خزانات منفصلة', ref: 'اشتراطات محطات الوقود صفحة 19, 61', projects: ['gas_station'], requestTypes: ['new'] },
+      { text: 'تعديل المساحة بين المضخات 3.5 متر', ref: 'اشتراطات محطات الوقود صفحة 65', projects: ['gas_station'], requestTypes: ['new'] },
+      { text: 'تعديل ممر حركة المركبات إلى 8 متر', ref: 'اشتراطات محطات الوقود صفحة 65', projects: ['gas_station'], requestTypes: ['new'] },
+      { text: 'توفير غرفة استراحة العمال', ref: '', projects: ['gas_station'], requestTypes: ['new'] },
+      { text: 'توفير 1 متر رصيف أمام التموينات', ref: '', projects: ['gas_station'], requestTypes: ['new'] },
+      { text: 'توضيح مكان لوحة الأسعار', ref: '', projects: ['gas_station'], requestTypes: ['new'] },
+      { text: 'توفير أجهزة الخدمات المجانية (ماء وهواء) مع توفير متطلباتها من مواقف', ref: 'اشتراطات محطات الوقود صفحة 20', projects: ['gas_station'], requestTypes: ['new'] },
+      { text: 'توفير مواقف للخدمات المجانية (ماء، هواء)', ref: '', projects: ['gas_station'], requestTypes: ['new'] },
+      { text: 'مساحة غرف الإدارة لا تقل عن 20 متر مربع', ref: 'اشتراطات محطات الوقود ومراكز الخدمة صفحة 34', projects: ['gas_station'], requestTypes: ['new'] },
+      { text: 'مساحة فراغ غسيل السيارات الآلي لا تقل عن 80 متر مربع', ref: 'اشتراطات محطات الوقود ومراكز الخدمة صفحة 34', projects: ['gas_station'], requestTypes: ['new'] },
+      { text: 'المواقف أقل من الحد المسموح (إضافة جدول لحساب المواقف)', ref: 'دليل محطات الوقود', projects: ['gas_station'], requestTypes: ['new'] },
+      { text: 'إضافة مكونات الرخصة (أرضي مباني محطة، أرضي مظلات، أسوار، كشك، صراف)', ref: '', projects: ['gas_station'], requestTypes: ['new'] },
+      { text: 'مراجعة اشتراطات الهيئة الملكية للدرايف ثرو (المطعم)', ref: '', projects: ['gas_station'], requestTypes: ['new'] },
+      { text: 'عدم توفر الشرط المكاني رقم 6: ألا تقل المسافة بين ركن موقع المحطة عند التقاطع الرئيسي إلى محور المدخل أو المخرج عن 35 متر', ref: 'الشكل 3-5 صفحة 29', projects: ['gas_station'], requestTypes: ['new'] },
+    ],
+    workshop_specific: [
+      { text: 'الالتزام بتصنيف اللائحة الوزارية واشتراطات ورش وإصلاح وسائل النقل والاستخدامات في فئة (هـ) لمراكز الصيانة المتخصص', ref: 'صفحة 10, 12', projects: ['workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'فئة (د) لا ينطبق على الشوارع التجارية', ref: 'اشتراطات ورش إصلاح وسائل النقل صفحة 14', projects: ['workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'توضيح تصنيف الورشة في الرخصة والمخططات (ورش مهنية / ورش إصلاح وسائل النقل) مع التقيد بالاشتراطات الخاصة بكل تصنيف', ref: '', projects: ['workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'مطابقة الرخصة مع المخططات (توضيح المكاتب في المخططات)', ref: '', projects: ['workshop_prof','workshop_vehicle'], requestTypes: ['new','modify','correction'] },
+      { text: 'يتم احتساب المواقف لكل 50م موقف والمكاتب لكل 70م موقف', ref: '', projects: ['workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'معالجة المواقف التي تعيق حركة السيارات (الدخول / الخروج) للورشة', ref: '', projects: ['workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'فحص واستبدال البطاريات والزينة تكون في مراكز منفصلة أو ملحقة بمباني تجارية', ref: 'جدول رقم (1) متطلبات الموقع صفحة 12', projects: ['workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+      { text: 'في حال عدم الالتزام بتصنيف اللائحة الوزارية واشتراطات ورش وسائل النقل ونظام البناء المعتمد سيتم إلغاء الطلب', ref: '', projects: ['workshop_prof','workshop_vehicle'], requestTypes: ['new'] },
+    ],
+  };
+}
+
+// ========== إدارة التخزين المحلي ==========
+const STORAGE_KEY = 'audit_tool_v6';
+const ALL_CLASSIFICATIONS = ['residential','commercial'];
+const ALL_CODE_TYPES = ['wadi','saudi','both'];
+const ALL_REQUEST_TYPES = ['new','renew','modify','correction'];
+
+// ========== استنتاج نوع الكود من نص المرجع ==========
+// قاعدة الفرز:
+//  - المرجع يذكر "وادي حنيفة" صراحة → wadi (وادي حنيفة)
+//  - المرجع يبدأ بـ "كود T" مثل "كود T4.1" → wadi (T = Tier من نظام وادي حنيفة)
+//  - المرجع يذكر "وادي حنيفة" + مرجع سعودي معروف → both
+//  - غير ذلك (دليل/نظام/اشتراطات/صفحة/فارغ) → saudi
+function inferCodeTypeFromRef(ref) {
+  const r = (ref || '').trim();
+  const hasWadi = /وادي\s*حنيفة/.test(r);
+  const hasTierCode = /كود\s*T\d/.test(r); // كود T3.x / T4.x ترميز وادي حنيفة
+  // مراجع الكود السعودي المعروفة (دلائل ولوائح غير وادي حنيفة)
+  const saudiKeywords = /(دليل\s*المواقف|دليل\s*تصميم\s*المواقف|دليل\s*محطات\s*الوقود|دليل\s*أسطح\s*المباني|اشتراطات\s*محطات\s*الوقود|اشتراطات\s*ورش|نظام\s*البناء|الهيئة\s*الملكية|جدول\s*رقم|الشكل\s*\d|^صفحة\s*)/;
+  const hasSaudiRef = saudiKeywords.test(r);
+
+  if (hasWadi || hasTierCode) {
+    // هل يحتوي أيضاً على مرجع سعودي معروف بجانبه؟ → both
+    if (hasSaudiRef) return ['both'];
+    return ['wadi'];
+  }
+  // فارغ أو مرجع سعودي → saudi
+  return ['saudi'];
+}
+
+function migrateData(data) {
+  if (!data || !data.requirements) return data;
+  const allProjects = PROJECT_TYPES.map(p => p.id);
+  Object.keys(data.requirements).forEach(catId => {
+    (data.requirements[catId] || []).forEach(it => {
+      if (!it.projects || !Array.isArray(it.projects)) it.projects = [...allProjects];
+      if (!it.requestTypes || !Array.isArray(it.requestTypes)) it.requestTypes = [...ALL_REQUEST_TYPES];
+      // توافق رجعي: لو ما فيه classifications، استنتجها من projects
+      if (!it.classifications || !Array.isArray(it.classifications)) {
+        const groups = new Set();
+        it.projects.forEach(pid => {
+          const p = PROJECT_TYPES.find(x => x.id === pid);
+          if (p) groups.add(p.group);
+        });
+        it.classifications = groups.size ? Array.from(groups) : [...ALL_CLASSIFICATIONS];
+      }
+      // التصنيف الذكي لنوع الكود (v5 → v6): استنتاج من نص المرجع
+      if (!it.codeTypes || !Array.isArray(it.codeTypes) || it.codeTypes.length === 3) {
+        // ملاحظة: codeTypes.length === 3 معناه (wadi+saudi+both) وهي القيمة الافتراضية القديمة
+        // التي كانت تسبب التداخل، فنعيد تصنيفها ذكياً
+        it.codeTypes = inferCodeTypeFromRef(it.ref);
+      }
+    });
+  });
+  // ترحيل المرفقات: إضافة هيكل classifications + codeTypes + projects للمرفقات
+  if (data.attachments && data.attachments.required) {
+    Object.keys(data.attachments.required).forEach(reqType => {
+      data.attachments.required[reqType] = (data.attachments.required[reqType] || []).map(att => {
+        if (typeof att === 'string') {
+          return { text: att, classifications: [...ALL_CLASSIFICATIONS], codeTypes: [...ALL_CODE_TYPES], projects: [...allProjects] };
+        }
+        if (!att.classifications) att.classifications = [...ALL_CLASSIFICATIONS];
+        if (!att.codeTypes) att.codeTypes = [...ALL_CODE_TYPES];
+        if (!att.projects) att.projects = [...allProjects];
+        return att;
+      });
+    });
+  }
+  if (data.attachments && Array.isArray(data.attachments.optional)) {
+    data.attachments.optional = data.attachments.optional.map(att => {
+      if (typeof att === 'string') {
+        return { text: att, classifications: [...ALL_CLASSIFICATIONS], codeTypes: [...ALL_CODE_TYPES], projects: [...allProjects], requestTypes: [...ALL_REQUEST_TYPES] };
+      }
+      if (!att.classifications) att.classifications = [...ALL_CLASSIFICATIONS];
+      if (!att.codeTypes) att.codeTypes = [...ALL_CODE_TYPES];
+      if (!att.projects) att.projects = [...allProjects];
+      if (!att.requestTypes) att.requestTypes = [...ALL_REQUEST_TYPES];
+      return att;
+    });
+  }
+  return data;
+}
+
+function loadData() {
+  try {
+    let raw = localStorage.getItem(STORAGE_KEY);
+    // لو ما فيه v6، نحاول قراءة v5 أو v4 ونرحّل البيانات (مع إعادة تصنيف نوع الكود ذكياً)
+    if (!raw) {
+      const v5Raw = localStorage.getItem('audit_tool_v5');
+      if (v5Raw) {
+        const v5Data = JSON.parse(v5Raw);
+        // إعادة تعيين codeTypes من v5 ليُعاد استنتاجها من المرجع في migrateData
+        if (v5Data.requirements) {
+          Object.keys(v5Data.requirements).forEach(catId => {
+            (v5Data.requirements[catId] || []).forEach(it => {
+              // أزل codeTypes القديمة (التي كانت [wadi,saudi,both]) ليُعاد استنتاجها
+              if (it.codeTypes && it.codeTypes.length === 3) delete it.codeTypes;
+            });
+          });
+        }
+        const migrated = migrateData(v5Data);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated));
+        return migrated;
+      }
+      const oldRaw = localStorage.getItem('audit_tool_v4');
+      if (oldRaw) {
+        const migrated = migrateData(JSON.parse(oldRaw));
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated));
+        return migrated;
+      }
+    } else {
+      return migrateData(JSON.parse(raw));
+    }
+  } catch(e) {}
+  // البيانات الافتراضية تمر عبر migrateData لإضافة classifications/codeTypes
+  const fresh = {
+    categories: JSON.parse(JSON.stringify(DEFAULT_CATEGORIES)),
+    requirements: getDefaultRequirements(),
+    attachments: JSON.parse(JSON.stringify(DEFAULT_ATTACHMENTS)),
+    history: []
+  };
+  return migrateData(fresh);
+}
+let appData = loadData();
+function saveData() { localStorage.setItem(STORAGE_KEY, JSON.stringify(appData)); }
+
+// دوال عامة
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
+  if (name === 'history') renderHistory();
+  if (name === 'admin') renderAdmin();
+}
+function refreshAll() { cascadeFilters(); renderAttachments(); renderRequirements(); }
+
+// تصفية متسلسلة على القوائم المنسدلة:
+// تعطيل/تصفية الحقول حسب الترتيب: نوع الطلب → التصنيف → نوع الكود → نوع المشروع
+function cascadeFilters() {
+  const requestType = document.getElementById('request-type').value;
+  const classification = document.getElementById('classification').value;
+  const codeType = document.getElementById('code-type').value;
+  const classSel = document.getElementById('classification');
+  const codeSel = document.getElementById('code-type');
+  const projSel = document.getElementById('project-type');
+
+  // 1) التصنيف معطّل لو ما تم اختيار نوع الطلب
+  classSel.disabled = !requestType;
+  if (!requestType) { classSel.value = ''; }
+
+  // 2) نوع الكود معطّل لو ما تم اختيار التصنيف
+  codeSel.disabled = !requestType || !classification;
+  if (!requestType || !classification) { codeSel.value = ''; }
+
+  // 3) نوع المشروع معطّل لو ما تم اختيار نوع الكود + يتم فلترته حسب التصنيف
+  projSel.disabled = !requestType || !classification || !codeType;
+  if (!requestType || !classification || !codeType) { projSel.value = ''; }
+
+  // فلترة خيارات نوع المشروع حسب التصنيف المختار
+  Array.from(projSel.querySelectorAll('option, optgroup')).forEach(el => {
+    if (el.tagName === 'OPTION' && el.value === '') return; // الخيار الافتراضي
+    if (el.tagName === 'OPTGROUP') {
+      const group = el.label === 'سكني' ? 'residential' : (el.label === 'تجاري' ? 'commercial' : '');
+      if (classification && group && classification !== group) {
+        el.style.display = 'none';
+        // إخفاء الـoptions داخلها أيضاً
+        el.querySelectorAll('option').forEach(o => o.style.display = 'none');
+      } else {
+        el.style.display = '';
+        el.querySelectorAll('option').forEach(o => o.style.display = '');
+      }
+    }
+  });
+  // لو القيمة الحالية ما تطابق التصنيف، صفّرها
+  if (classification && projSel.value) {
+    const opt = projSel.querySelector(`option[value="${projSel.value}"]`);
+    if (opt && opt.style.display === 'none') projSel.value = '';
+  }
+}
+function escapeHtml(s) { return String(s).replace(/[&<>]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;' }[c])); }
+function escapeAttr(s) { return String(s).replace(/"/g, '&quot;'); }
+
+function getActiveFilters() {
+  return {
+    requestType: document.getElementById('request-type').value,
+    classification: document.getElementById('classification').value,
+    codeType: document.getElementById('code-type').value,
+    projectType: document.getElementById('project-type').value
+  };
+}
+
+// رسالة التحذير حسب الحقل الناقص في الترتيب
+function getMissingFilterMsg(f) {
+  if (!f.requestType) return 'الرجاء اختيار «نوع الطلب» أولاً';
+  if (!f.classification) return 'الرجاء اختيار «التصنيف» (سكني / تجاري)';
+  if (!f.codeType) return 'الرجاء اختيار «نوع الكود»';
+  if (!f.projectType) return 'الرجاء اختيار «نوع المشروع»';
+  return null;
+}
+
+function renderAttachments() {
+  const f = getActiveFilters();
+  const container = document.getElementById('attachments-container');
+  const card = document.getElementById('attachments-card');
+
+  const missing = getMissingFilterMsg(f);
+  if (missing) {
+    container.innerHTML = `<p class="muted">${missing} لعرض المرفقات</p>`;
+    return;
+  }
+
+  // دالة موحّدة لمطابقة codeType (تطبق العزل الكامل ومنطق both الاتحادي)
+  const codeTypeMatches = (itemCodeTypes) => {
+    if (!itemCodeTypes || !itemCodeTypes.length) return true; // لو ما فيه قيد، اعرض دائماً
+    if (f.codeType === 'wadi') return itemCodeTypes.includes('wadi') || itemCodeTypes.includes('both');
+    if (f.codeType === 'saudi') return itemCodeTypes.includes('saudi') || itemCodeTypes.includes('both');
+    if (f.codeType === 'both') return true; // اعرض الكل
+    return true;
+  };
+
+  // تصفية المرفقات حسب جميع الفلاتر
+  const allRequired = appData.attachments.required[f.requestType] || [];
+  const required = allRequired.filter(a => {
+    if (!a.classifications.includes(f.classification)) return false;
+    if (!codeTypeMatches(a.codeTypes)) return false;
+    if (!a.projects.includes(f.projectType)) return false;
+    return true;
+  });
+  const allOptional = appData.attachments.optional || [];
+  const optional = allOptional.filter(a => {
+    if (a.requestTypes && !a.requestTypes.includes(f.requestType)) return false;
+    if (!a.classifications.includes(f.classification)) return false;
+    if (!codeTypeMatches(a.codeTypes)) return false;
+    if (!a.projects.includes(f.projectType)) return false;
+    return true;
+  });
+
+  // عرض المرفقات بصيغة قائمة مطوية (نفس أسلوب الاشتراطات)
+  let html = '';
+
+  // المرفقات المطلوبة
+  html += `<div class="requirement-category"><div class="requirement-header collapsed" onclick="toggleCategory(this)"><span>المرفقات المطلوبة</span><span style="display:flex; align-items:center; gap:10px;"><span class="count">${required.length} بند</span><span class="arrow">▼</span></span></div><div class="requirement-body hidden">`;
+  if (!required.length) {
+    html += `<p class="muted" style="padding:10px;">لا توجد مرفقات مطلوبة مرتبطة بالاختيارات الحالية</p>`;
+  } else {
+    required.forEach((item,i) => {
+      html += `<div class="checkbox-item"><input type="checkbox" id="att_req_${i}" data-type="required" data-text="${escapeAttr(item.text)}"><label for="att_req_${i}">${escapeHtml(item.text)}</label></div>`;
+    });
+  }
+  html += `</div></div>`;
+
+  // المرفقات الاختيارية
+  html += `<div class="requirement-category"><div class="requirement-header collapsed" onclick="toggleCategory(this)"><span>المرفقات الاختيارية</span><span style="display:flex; align-items:center; gap:10px;"><span class="count">${optional.length} بند</span><span class="arrow">▼</span></span></div><div class="requirement-body hidden">`;
+  if (!optional.length) {
+    html += `<p class="muted" style="padding:10px;">لا توجد مرفقات اختيارية مرتبطة بالاختيارات الحالية</p>`;
+  } else {
+    optional.forEach((item,i) => {
+      html += `<div class="checkbox-item"><input type="checkbox" id="att_opt_${i}" data-type="optional" data-text="${escapeAttr(item.text)}"><label for="att_opt_${i}">${escapeHtml(item.text)}</label></div>`;
+    });
+  }
+  html += `</div></div>`;
+
+  container.innerHTML = html;
+}
+
+function renderRequirements() {
+  const container = document.getElementById('requirements-container');
+  const reqs = appData.requirements;
+  const cats = appData.categories;
+  const f = getActiveFilters();
+
+  const missing = getMissingFilterMsg(f);
+  if (missing) {
+    container.innerHTML = `<p class="muted">${missing} لعرض الاشتراطات</p>`;
+    return;
+  }
+
+  const filterFn = (it) => {
+    if (it.requestTypes && !it.requestTypes.includes(f.requestType)) return false;
+    if (it.classifications && !it.classifications.includes(f.classification)) return false;
+    // فلترة نوع الكود (عزل كامل):
+    //  - wadi   → اعرض اشتراطات وادي + المشتركة (both)
+    //  - saudi  → اعرض اشتراطات السعودي + المشتركة (both)
+    //  - both   → اعرض الكل (wadi + saudi + both)
+    if (it.codeTypes && it.codeTypes.length) {
+      if (f.codeType === 'wadi') {
+        if (!it.codeTypes.includes('wadi') && !it.codeTypes.includes('both')) return false;
+      } else if (f.codeType === 'saudi') {
+        if (!it.codeTypes.includes('saudi') && !it.codeTypes.includes('both')) return false;
+      } else if (f.codeType === 'both') {
+        // اعرض كل شيء (لا فلترة على codeType)
+      }
+    }
+    if (it.projects && it.projects.length && !it.projects.includes(f.projectType)) return false;
+    return true;
+  };
+
+  let html = '', totalShown = 0;
+  cats.forEach(cat => {
+    const allItems = reqs[cat.id] || [];
+    const items = allItems.filter(filterFn);
+    if (!items.length) return;
+    totalShown += items.length;
+    html += `<div class="requirement-category"><div class="requirement-header collapsed" onclick="toggleCategory(this)"><span>${escapeHtml(cat.name)}</span><span style="display:flex; align-items:center; gap:10px;"><span class="count">${items.length} بند</span><span class="arrow">▼</span></span></div><div class="requirement-body hidden">`;
+    items.forEach(it => {
+      const origIdx = allItems.indexOf(it);
+      const itemId = `req_${cat.id}_${origIdx}`;
+      html += `<div class="req-item"><div class="req-item-top"><input type="checkbox" id="${itemId}" data-cat="${cat.id}" data-text="${escapeAttr(it.text)}" data-ref="${escapeAttr(it.ref||'')}" onchange="toggleExtras('${itemId}')"><label for="${itemId}">${escapeHtml(it.text)}${it.ref ? ` <span style="color:#5f5e5a; font-size:12px;">(${escapeHtml(it.ref)})</span>` : ''}</label></div><div class="req-extras" id="extras_${itemId}"><input type="text" id="page_${itemId}" placeholder="رقم الصفحة"><textarea id="note_${itemId}" placeholder="ملاحظة إضافية (اختياري)"></textarea></div></div>`;
+    });
+    html += `</div></div>`;
+  });
+  // شريط معلومات أعلى الاشتراطات يوضح الكود المختار وعدد البنود الظاهرة
+  if (totalShown > 0) {
+    const codeLabels = { wadi:'كود وادي حنيفة فقط', saudi:'اشتراطات الكود السعودي فقط', both:'وادي حنيفة + الكود السعودي' };
+    const codeIcon = { wadi:'🌊', saudi:'🇸🇦', both:'🔗' };
+    const banner = `<div style="background:linear-gradient(90deg, #f9f8f3 0%, #fff 100%); border-right:4px solid var(--primary); padding:10px 14px; margin-bottom:14px; border-radius:6px; font-size:14px; display:flex; justify-content:space-between; align-items:center;">
+      <span><strong>${codeIcon[f.codeType]||''} ${codeLabels[f.codeType]||''}</strong></span>
+      <span style="color:var(--primary); font-weight:600;">${totalShown} بند مطابق</span>
+    </div>`;
+    html = banner + html;
+  }
+  if (totalShown === 0) html = '<p class="muted">لا توجد اشتراطات مرتبطة بالاختيارات الحالية. يمكنك إضافة اشتراطات جديدة من لوحة الإدارة.</p>';
+  container.innerHTML = html;
+}
+function toggleCategory(header) { header.classList.toggle('collapsed'); header.nextElementSibling.classList.toggle('hidden'); }
+function toggleExtras(itemId) { document.getElementById('extras_'+itemId).classList.toggle('show', document.getElementById(itemId).checked); }
+
+// ذاكرة مؤقتة لآخر تقرير ولّد - تحفظ النسخة المختصرة (للعرض) والكاملة (للسجل)
+let lastReport = { display: '', full: '' };
+
+function generateOutput() {
+  const projectName = document.getElementById('project-name').value.trim();
+  const projectDate = document.getElementById('project-date').value;
+  const requestType = document.getElementById('request-type').value;
+  const classification = document.getElementById('classification').value;
+  const codeType = document.getElementById('code-type').value;
+  const projectType = document.getElementById('project-type').value;
+  if (!requestType) { alert('يرجى اختيار نوع الطلب'); return; }
+  if (!classification) { alert('يرجى اختيار التصنيف'); return; }
+  if (!codeType) { alert('يرجى اختيار نوع الكود'); return; }
+  if (!projectType) { alert('يرجى اختيار نوع المشروع'); return; }
+
+  const reqTypeNames = { new:'إصدار رخصة بناء', renew:'تجديد رخصة بناء', modify:'تعديل رخصة بناء', correction:'تصحيح وضع مبنى قائم' };
+  const clsNames = { residential:'سكني', commercial:'تجاري' };
+  const codeNames = { wadi:'كود وادي حنيفة', saudi:'اشتراطات الكود السعودي', both:'كود وادي حنيفة + الكود السعودي' };
+  const projNames = { villa:'فلل', villa_attached:'فلل متلاصقة', villa_adjacent:'فلل متجاورة', villa_mixed:'فلل متلاصقة ومتجاورة', apartments:'شقق سكنية', hotel:'فندق', hotel_apt:'شقق فندقية', warehouse:'مستودعات', gas_station:'محطة وقود', workshop_prof:'ورش مهنية', workshop_vehicle:'ورش وسائل النقل' };
+
+  // تجميع الملاحظات المحددة
+  const allNotes = [];
+  document.querySelectorAll('#requirements-container input[type="checkbox"]:checked').forEach(cb => {
+    const itemId = cb.id;
+    const page = document.getElementById('page_'+itemId)?.value.trim() || '';
+    const note = document.getElementById('note_'+itemId)?.value.trim() || '';
+    allNotes.push({ text: cb.dataset.text, ref: cb.dataset.ref, page, note });
+  });
+  // المرفقات الناقصة (المطلوبة فقط)
+  const missing = Array.from(document.querySelectorAll('#attachments-container input[type="checkbox"]:not(:checked)[data-type="required"]')).map(cb => cb.dataset.text);
+
+  // ───── النسخة المختصرة المعروضة في output-box: الملاحظات + المرفقات فقط ─────
+  let display = '';
+  display += `الملاحظات:\n`;
+  if (!allNotes.length) display += `لا توجد ملاحظات.\n`;
+  else allNotes.forEach((n,i) => {
+    display += `${i+1}. ${n.text}\n`;
+    if (n.note) display += `   - ${n.note}\n`;
+  });
+  display += `\nالمرفقات المطلوبة:\n`;
+  if (!missing.length) display += `لا يوجد نقص في المرفقات.\n`;
+  else missing.forEach((t,i) => display += `${i+1}. ${t}\n`);
+
+  // ───── النسخة الكاملة (تحفظ في السجل) بكل تفاصيل التقرير + الرسالة النهائية ─────
+  let full = `تقرير تدقيق - إدارة رخص البناء – قطاع غرب الرياض\n━━━━━━━━━━━━━━━━━━━━━━\n`;
+  if (projectName) full += `المشروع: ${projectName}\n`;
+  if (projectDate) full += `التاريخ: ${projectDate}\n`;
+  full += `نوع الطلب: ${reqTypeNames[requestType] || '-'}\n`;
+  full += `التصنيف: ${clsNames[classification]}\n`;
+  full += `نوع الكود: ${codeNames[codeType]}\n`;
+  full += `نوع المشروع: ${projNames[projectType]}\n`;
+  full += `━━━━━━━━━━━━━━━━━━━━━━\n\nأولاً: الملاحظات\n──────────────────────\n`;
+  if (!allNotes.length) full += `لا توجد ملاحظات.\n`;
+  else allNotes.forEach((n,i) => {
+    full += `${i+1}. ${n.text}\n`;
+    let meta = [];
+    if (n.ref) meta.push(`المرجع: ${n.ref}`);
+    if (n.page) meta.push(`صفحة: ${n.page}`);
+    if (meta.length) full += `   ${meta.join(' — ')}\n`;
+    if (n.note) full += `   ملاحظة: ${n.note}\n`;
+  });
+  full += `\nثانياً: المرفقات الناقصة\n──────────────────────\n`;
+  if (!missing.length) full += `لا يوجد نقص في المرفقات.\n`;
+  else missing.forEach((t,i) => full += `${i+1}. ${t}\n`);
+  full += `\n━━━━━━━━━━━━━━━━━━━━━━\nالرسالة النهائية:\n──────────────────────\n${display}`;
+
+  lastReport = { display, full };
+
+  document.getElementById('output-card').style.display = 'block';
+  document.getElementById('output-box').textContent = display;
+  document.getElementById('output-card').scrollIntoView({ behavior: 'smooth' });
+}
+function copyOutput() { navigator.clipboard.writeText(document.getElementById('output-box').textContent).then(()=>alert('تم نسخ النص')); }
+function saveReport() {
+  // نحفظ النسخة الكاملة في السجل (بكل التفاصيل + الرسالة النهائية)
+  const text = lastReport.full || document.getElementById('output-box').textContent;
+  const name = document.getElementById('project-name').value.trim() || 'بدون اسم';
+  appData.history.unshift({ id: Date.now(), name, date: new Date().toLocaleString('ar-SA'), content: text });
+  saveData(); alert('تم حفظ التدقيق في السجل');
+}
+function clearForm() {
+  if(confirm('مسح الكل؟')){
+    document.querySelectorAll('input[type="checkbox"]').forEach(cb=>cb.checked=false);
+    document.querySelectorAll('.req-extras').forEach(e=>e.classList.remove('show'));
+    document.getElementById('project-name').value='';
+    document.getElementById('request-type').value='';
+    document.getElementById('classification').value='';
+    document.getElementById('code-type').value='';
+    document.getElementById('project-type').value='';
+    document.getElementById('output-card').style.display='none';
+    lastReport = { display: '', full: '' };
+    refreshAll();
+  }
+}
+function renderHistory() {
+  const container = document.getElementById('history-container');
+  if(!appData.history.length){ container.innerHTML='<p class="muted">لا توجد تدقيقات محفوظة بعد</p>'; return; }
+  let html='';
+  appData.history.forEach(item=>{ html+=`<div class="history-item"><div class="history-info"><h3>${escapeHtml(item.name)}</h3><p>${escapeHtml(item.date)}</p></div><div class="history-actions"><button class="btn btn-secondary" onclick="viewHistory(${item.id})">عرض</button><button class="btn btn-secondary" onclick="copyHistory(${item.id})">نسخ</button><button class="btn btn-danger" onclick="deleteHistory(${item.id})">حذف</button></div></div>`; });
+  container.innerHTML=html;
+}
+function viewHistory(id){ let item=appData.history.find(h=>h.id===id); if(item){ let w=window.open('','_blank'); w.document.write(`<!doctype html><html dir="rtl"><head><meta charset="utf-8"><title>${escapeHtml(item.name)}</title><style>body{font-family:Tahoma,Arial; padding:30px; white-space:pre-wrap;}</style></head><body>${escapeHtml(item.content)}</body></html>`); } }
+function copyHistory(id){ let item=appData.history.find(h=>h.id===id); if(item) navigator.clipboard.writeText(item.content).then(()=>alert('تم النسخ')); }
+function deleteHistory(id){ if(confirm('حذف؟')){ appData.history=appData.history.filter(h=>h.id!==id); saveData(); renderHistory(); } }
+function renderAdmin() {
+  const mode = document.getElementById('admin-mode').value;
+  const container = document.getElementById('admin-container');
+  if(mode==='requirements') renderAdminRequirements(container);
+  else if(mode==='attachments') renderAdminAttachments(container);
+  else renderAdminCategories(container);
+}
+function renderAdminRequirements(container) {
+  let html=`<div class="form-group"><label>اختر بند التصنيف</label><select id="admin-cat-sel" onchange="renderAdminReqList()">${appData.categories.map(c=>`<option value="${c.id}">${escapeHtml(c.name)}</option>`).join('')}</select></div><div id="admin-req-list"></div>`;
+  container.innerHTML=html;
+  renderAdminReqList();
+}
+function renderAdminReqList() {
+  const catId = document.getElementById('admin-cat-sel').value;
+  const items = appData.requirements[catId] || [];
+  // إحصائية توزيع الاشتراطات على الأكواد (للمساعدة في المراجعة)
+  let wadiCount=0, saudiCount=0, bothCount=0;
+  items.forEach(it=>{
+    const ct = it.codeTypes || [];
+    if (ct.includes('both')) bothCount++;
+    else if (ct.includes('wadi') && ct.includes('saudi')) bothCount++;
+    else if (ct.includes('wadi')) wadiCount++;
+    else if (ct.includes('saudi')) saudiCount++;
+  });
+  let html = `<div style="background:#f9f8f3; border-right:3px solid var(--primary); padding:10px 14px; margin-bottom:14px; border-radius:6px; font-size:13px;">
+    <strong>توزيع البنود (${items.length} اشتراط):</strong>
+    <span style="margin-right:14px;">🌊 وادي حنيفة: <strong>${wadiCount}</strong></span>
+    <span style="margin-right:14px;">🇸🇦 الكود السعودي: <strong>${saudiCount}</strong></span>
+    <span style="margin-right:14px;">🔗 مشترك (both): <strong>${bothCount}</strong></span>
+  </div>`;
+  items.forEach((it,idx)=>{
+    const projectsBtnLabel = it.projects?.length===PROJECT_TYPES.length?'كل المشاريع':`${it.projects?.length||0} نوع مشروع`;
+    html+=`<div class="req-item" style="margin-bottom:12px;"><div style="display:grid; grid-template-columns:1fr 1fr auto auto; gap:8px; align-items:center;"><input type="text" value="${escapeAttr(it.text)}" onchange="updateReq('${catId}',${idx},'text',this.value)"><input type="text" value="${escapeAttr(it.ref||'')}" placeholder="المرجع" onchange="updateReq('${catId}',${idx},'ref',this.value)"><button class="btn btn-secondary" onclick="toggleProjectsEditor('${catId}',${idx})">${projectsBtnLabel}</button><button class="btn btn-danger" onclick="deleteReq('${catId}',${idx})">حذف</button></div><div id="pedit_${catId}_${idx}" style="display:none; margin-top:10px; padding:10px; background:#f9f8f3; border-radius:6px;">
+
+      <div style="font-weight:600; margin-bottom:8px; color:var(--primary);">١. نوع الطلب:</div>
+      <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:14px;">${ALL_REQUEST_TYPES.map(rt=>{ const checked=it.requestTypes?.includes(rt); const lbl = rt==='new'?'إصدار':rt==='renew'?'تجديد':rt==='modify'?'تعديل':'تصحيح'; return `<label style="display:flex; align-items:center; gap:4px;"><input type="checkbox" ${checked?'checked':''} onchange="toggleReqType('${catId}',${idx},'${rt}',this.checked)"> ${lbl}</label>`; }).join('')}</div>
+
+      <div style="font-weight:600; margin-bottom:8px; color:var(--primary);">٢. التصنيف:</div>
+      <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:14px;">${ALL_CLASSIFICATIONS.map(cl=>{ const checked=it.classifications?.includes(cl); const lbl = cl==='residential'?'سكني':'تجاري'; return `<label style="display:flex; align-items:center; gap:4px;"><input type="checkbox" ${checked?'checked':''} onchange="toggleReqClass('${catId}',${idx},'${cl}',this.checked)"> ${lbl}</label>`; }).join('')}</div>
+
+      <div style="font-weight:600; margin-bottom:8px; color:var(--primary);">٣. نوع الكود:</div>
+      <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:14px;">${ALL_CODE_TYPES.map(ct=>{ const checked=it.codeTypes?.includes(ct); const lbl = ct==='wadi'?'كود وادي حنيفة':ct==='saudi'?'الكود السعودي':'وادي حنيفة + السعودي'; return `<label style="display:flex; align-items:center; gap:4px;"><input type="checkbox" ${checked?'checked':''} onchange="toggleReqCode('${catId}',${idx},'${ct}',this.checked)"> ${lbl}</label>`; }).join('')}</div>
+
+      <div style="font-weight:600; margin-bottom:8px; color:var(--primary);">٤. نوع المشروع:</div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(150px,1fr)); gap:6px;">${PROJECT_TYPES.map(p=>`<label style="display:flex; align-items:center; gap:4px;"><input type="checkbox" ${it.projects?.includes(p.id)?'checked':''} onchange="toggleReqProject('${catId}',${idx},'${p.id}',this.checked)"> ${escapeHtml(p.name)}</label>`).join('')}</div>
+      <div style="margin-top:10px;"><button class="btn btn-secondary" style="padding:4px 8px; font-size:12px;" onclick="setAllProjects('${catId}',${idx},true)">تحديد الكل</button> <button class="btn btn-secondary" style="padding:4px 8px; font-size:12px;" onclick="setAllProjects('${catId}',${idx},false)">إلغاء الكل</button> <button class="btn btn-secondary" style="padding:4px 8px; font-size:12px;" onclick="setResidentialOnly('${catId}',${idx})">سكني فقط</button> <button class="btn btn-secondary" style="padding:4px 8px; font-size:12px;" onclick="setCommercialOnly('${catId}',${idx})">تجاري فقط</button></div>
+    </div></div>`;
+  });
+
+  // إضافة اشتراط جديد - مع تحديد ذكي حسب الفلاتر النشطة في شاشة التدقيق
+  const f = getActiveFilters();
+  const smartHint = (f.requestType || f.classification || f.codeType || f.projectType)
+    ? `<div class="admin-note" style="margin-top:14px; margin-bottom:8px;">سيتم ربط الاشتراط الجديد تلقائياً بالقيم النشطة في شاشة التدقيق: ${[
+        f.requestType ? 'نوع الطلب' : null,
+        f.classification ? 'التصنيف' : null,
+        f.codeType ? 'نوع الكود' : null,
+        f.projectType ? 'نوع المشروع' : null
+      ].filter(Boolean).join(' + ') || 'كل القيم'}</div>`
+    : '';
+  html+=`<div style="margin-top:16px;">${smartHint}<label>إضافة اشتراط جديد</label><div style="display:grid; grid-template-columns:1fr 1fr auto; gap:8px;"><input type="text" id="new-req-text" placeholder="نص الاشتراط"><input type="text" id="new-req-ref" placeholder="المرجع"><button class="btn btn-primary" onclick="addReq('${catId}')">إضافة</button></div></div>`;
+  document.getElementById('admin-req-list').innerHTML=html;
+}
+function toggleProjectsEditor(catId,idx){ const el=document.getElementById(`pedit_${catId}_${idx}`); el.style.display=el.style.display==='none'?'block':'none'; }
+function toggleReqType(catId,idx,type,checked){ let req=appData.requirements[catId][idx]; if(!req.requestTypes) req.requestTypes=[]; if(checked){ if(!req.requestTypes.includes(type)) req.requestTypes.push(type); } else req.requestTypes=req.requestTypes.filter(t=>t!==type); saveData(); }
+function toggleReqClass(catId,idx,cl,checked){ let req=appData.requirements[catId][idx]; if(!req.classifications) req.classifications=[]; if(checked){ if(!req.classifications.includes(cl)) req.classifications.push(cl); } else req.classifications=req.classifications.filter(c=>c!==cl); saveData(); }
+function toggleReqCode(catId,idx,ct,checked){ let req=appData.requirements[catId][idx]; if(!req.codeTypes) req.codeTypes=[]; if(checked){ if(!req.codeTypes.includes(ct)) req.codeTypes.push(ct); } else req.codeTypes=req.codeTypes.filter(c=>c!==ct); saveData(); }
+function toggleReqProject(catId,idx,projId,checked){ let req=appData.requirements[catId][idx]; if(!req.projects) req.projects=[]; if(checked){ if(!req.projects.includes(projId)) req.projects.push(projId); } else req.projects=req.projects.filter(p=>p!==projId); saveData(); updateProjectsBtn(catId,idx); }
+function updateProjectsBtn(catId,idx){ let btn=document.getElementById(`pbtn_${catId}_${idx}`); if(btn){ let count=appData.requirements[catId][idx].projects?.length||0; btn.textContent=count===PROJECT_TYPES.length?'كل المشاريع':`${count} نوع مشروع`; } }
+function setAllProjects(catId,idx,val){ appData.requirements[catId][idx].projects=val?PROJECT_TYPES.map(p=>p.id):[]; saveData(); renderAdminReqList(); }
+function setResidentialOnly(catId,idx){ appData.requirements[catId][idx].projects=PROJECT_TYPES.filter(p=>p.group==='residential').map(p=>p.id); saveData(); renderAdminReqList(); }
+function setCommercialOnly(catId,idx){ appData.requirements[catId][idx].projects=PROJECT_TYPES.filter(p=>p.group==='commercial').map(p=>p.id); saveData(); renderAdminReqList(); }
+function updateReq(catId,idx,field,value){ appData.requirements[catId][idx][field]=value; saveData(); }
+function deleteReq(catId,idx){ if(confirm('حذف الاشتراط؟')){ appData.requirements[catId].splice(idx,1); saveData(); renderAdminReqList(); } }
+function addReq(catId){
+  let text=document.getElementById('new-req-text').value.trim();
+  if(!text){ alert('أدخل نص الاشتراط'); return; }
+  let ref=document.getElementById('new-req-ref').value.trim();
+  // الإضافة الذكية: تستخدم الفلاتر النشطة من شاشة التدقيق
+  const f = getActiveFilters();
+  const requestTypes = f.requestType ? [f.requestType] : [...ALL_REQUEST_TYPES];
+  const classifications = f.classification ? [f.classification] : [...ALL_CLASSIFICATIONS];
+  const codeTypes = f.codeType ? [f.codeType] : [...ALL_CODE_TYPES];
+  const projects = f.projectType
+    ? [f.projectType]
+    : (f.classification
+        ? PROJECT_TYPES.filter(p=>p.group===f.classification).map(p=>p.id)
+        : PROJECT_TYPES.map(p=>p.id));
+  appData.requirements[catId].push({ text, ref, projects, requestTypes, classifications, codeTypes });
+  saveData(); renderAdminReqList();
+}
+function renderAdminAttachments(container){
+  let html=`<div class="form-group"><label>نوع المرفقات</label><select id="admin-att-sel" onchange="renderAdminAttList()"><option value="required_new">مطلوبة - إصدار</option><option value="required_renew">مطلوبة - تجديد</option><option value="required_modify">مطلوبة - تعديل</option><option value="required_correction">مطلوبة - تصحيح</option><option value="optional">اختيارية</option></select></div><div id="admin-att-list"></div>`;
+  container.innerHTML=html;
+  renderAdminAttList();
+}
+
+function getAttList(sel) {
+  return (sel === 'optional')
+    ? appData.attachments.optional
+    : appData.attachments.required[sel.replace('required_','')];
+}
+
+function renderAdminAttList(){
+  let sel=document.getElementById('admin-att-sel').value;
+  let items = getAttList(sel);
+  let html='';
+  items.forEach((it,i)=>{
+    // ضمان توافق رجعي
+    if (typeof it === 'string') {
+      const allProjects = PROJECT_TYPES.map(p => p.id);
+      const newObj = { text: it, classifications: [...ALL_CLASSIFICATIONS], codeTypes: [...ALL_CODE_TYPES], projects: allProjects };
+      if (sel === 'optional') newObj.requestTypes = [...ALL_REQUEST_TYPES];
+      items[i] = newObj;
+      it = items[i];
+    }
+    const projCount = it.projects?.length || 0;
+    const projLabel = projCount === PROJECT_TYPES.length ? 'كل المشاريع' : `${projCount} نوع مشروع`;
+    html+=`<div class="req-item" style="margin-bottom:12px;"><div style="display:grid; grid-template-columns:1fr auto auto; gap:8px; align-items:center;"><input type="text" value="${escapeAttr(it.text)}" onchange="updateAtt('${sel}',${i},this.value)"><button class="btn btn-secondary" onclick="toggleAttEditor('${sel}',${i})">${projLabel}</button><button class="btn btn-danger" onclick="deleteAtt('${sel}',${i})">حذف</button></div><div id="aedit_${sel}_${i}" style="display:none; margin-top:10px; padding:10px; background:#f9f8f3; border-radius:6px;">
+
+      ${sel === 'optional' ? `<div style="font-weight:600; margin-bottom:8px; color:var(--primary);">١. نوع الطلب:</div>
+      <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:14px;">${ALL_REQUEST_TYPES.map(rt=>{ const checked=it.requestTypes?.includes(rt); const lbl = rt==='new'?'إصدار':rt==='renew'?'تجديد':rt==='modify'?'تعديل':'تصحيح'; return `<label style="display:flex; align-items:center; gap:4px;"><input type="checkbox" ${checked?'checked':''} onchange="toggleAttType('${sel}',${i},'${rt}',this.checked)"> ${lbl}</label>`; }).join('')}</div>` : ''}
+
+      <div style="font-weight:600; margin-bottom:8px; color:var(--primary);">${sel === 'optional' ? '٢' : '١'}. التصنيف:</div>
+      <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:14px;">${ALL_CLASSIFICATIONS.map(cl=>{ const checked=it.classifications?.includes(cl); const lbl = cl==='residential'?'سكني':'تجاري'; return `<label style="display:flex; align-items:center; gap:4px;"><input type="checkbox" ${checked?'checked':''} onchange="toggleAttClass('${sel}',${i},'${cl}',this.checked)"> ${lbl}</label>`; }).join('')}</div>
+
+      <div style="font-weight:600; margin-bottom:8px; color:var(--primary);">${sel === 'optional' ? '٣' : '٢'}. نوع الكود:</div>
+      <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:14px;">${ALL_CODE_TYPES.map(ct=>{ const checked=it.codeTypes?.includes(ct); const lbl = ct==='wadi'?'كود وادي حنيفة':ct==='saudi'?'الكود السعودي':'وادي حنيفة + السعودي'; return `<label style="display:flex; align-items:center; gap:4px;"><input type="checkbox" ${checked?'checked':''} onchange="toggleAttCode('${sel}',${i},'${ct}',this.checked)"> ${lbl}</label>`; }).join('')}</div>
+
+      <div style="font-weight:600; margin-bottom:8px; color:var(--primary);">${sel === 'optional' ? '٤' : '٣'}. نوع المشروع:</div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(150px,1fr)); gap:6px;">${PROJECT_TYPES.map(p=>`<label style="display:flex; align-items:center; gap:4px;"><input type="checkbox" ${it.projects?.includes(p.id)?'checked':''} onchange="toggleAttProject('${sel}',${i},'${p.id}',this.checked)"> ${escapeHtml(p.name)}</label>`).join('')}</div>
+      <div style="margin-top:10px;"><button class="btn btn-secondary" style="padding:4px 8px; font-size:12px;" onclick="setAllAttProjects('${sel}',${i},true)">تحديد الكل</button> <button class="btn btn-secondary" style="padding:4px 8px; font-size:12px;" onclick="setAllAttProjects('${sel}',${i},false)">إلغاء الكل</button> <button class="btn btn-secondary" style="padding:4px 8px; font-size:12px;" onclick="setAttResidentialOnly('${sel}',${i})">سكني فقط</button> <button class="btn btn-secondary" style="padding:4px 8px; font-size:12px;" onclick="setAttCommercialOnly('${sel}',${i})">تجاري فقط</button></div>
+    </div></div>`;
+  });
+
+  // إضافة مرفق جديد - مع تحديد ذكي
+  const f = getActiveFilters();
+  const smartHint = (f.requestType || f.classification || f.codeType || f.projectType)
+    ? `<div class="admin-note" style="margin-top:14px; margin-bottom:8px;">سيتم ربط المرفق الجديد تلقائياً بالقيم النشطة في شاشة التدقيق</div>`
+    : '';
+  html+=`${smartHint}<div><label>إضافة مرفق</label><div style="display:flex; gap:8px;"><input type="text" id="new-att-text" placeholder="نص المرفق"><button class="btn btn-primary" onclick="addAtt('${sel}')">إضافة</button></div></div>`;
+  document.getElementById('admin-att-list').innerHTML=html;
+  saveData();
+}
+function toggleAttEditor(sel,i){ const el=document.getElementById(`aedit_${sel}_${i}`); el.style.display=el.style.display==='none'?'block':'none'; }
+function toggleAttClass(sel,i,cl,checked){ let arr=getAttList(sel); if(!arr[i].classifications) arr[i].classifications=[]; if(checked){ if(!arr[i].classifications.includes(cl)) arr[i].classifications.push(cl); } else arr[i].classifications=arr[i].classifications.filter(x=>x!==cl); saveData(); }
+function toggleAttCode(sel,i,ct,checked){ let arr=getAttList(sel); if(!arr[i].codeTypes) arr[i].codeTypes=[]; if(checked){ if(!arr[i].codeTypes.includes(ct)) arr[i].codeTypes.push(ct); } else arr[i].codeTypes=arr[i].codeTypes.filter(x=>x!==ct); saveData(); }
+function toggleAttProject(sel,i,projId,checked){ let arr=getAttList(sel); if(!arr[i].projects) arr[i].projects=[]; if(checked){ if(!arr[i].projects.includes(projId)) arr[i].projects.push(projId); } else arr[i].projects=arr[i].projects.filter(x=>x!==projId); saveData(); renderAdminAttList(); }
+function toggleAttType(sel,i,rt,checked){ let arr=getAttList(sel); if(!arr[i].requestTypes) arr[i].requestTypes=[]; if(checked){ if(!arr[i].requestTypes.includes(rt)) arr[i].requestTypes.push(rt); } else arr[i].requestTypes=arr[i].requestTypes.filter(x=>x!==rt); saveData(); }
+function setAllAttProjects(sel,i,val){ let arr=getAttList(sel); arr[i].projects=val?PROJECT_TYPES.map(p=>p.id):[]; saveData(); renderAdminAttList(); }
+function setAttResidentialOnly(sel,i){ let arr=getAttList(sel); arr[i].projects=PROJECT_TYPES.filter(p=>p.group==='residential').map(p=>p.id); saveData(); renderAdminAttList(); }
+function setAttCommercialOnly(sel,i){ let arr=getAttList(sel); arr[i].projects=PROJECT_TYPES.filter(p=>p.group==='commercial').map(p=>p.id); saveData(); renderAdminAttList(); }
+function updateAtt(sel,idx,val){ let arr=getAttList(sel); if(typeof arr[idx]==='string') arr[idx]={text:val, classifications:[...ALL_CLASSIFICATIONS], codeTypes:[...ALL_CODE_TYPES], projects:PROJECT_TYPES.map(p=>p.id)}; else arr[idx].text=val; saveData(); }
+function deleteAtt(sel,idx){ if(confirm('حذف؟')){ let arr=getAttList(sel); arr.splice(idx,1); saveData(); renderAdminAttList(); } }
+function addAtt(sel){
+  let text=document.getElementById('new-att-text').value.trim();
+  if(!text) return;
+  let arr=getAttList(sel);
+  // الإضافة الذكية
+  const f = getActiveFilters();
+  const classifications = f.classification ? [f.classification] : [...ALL_CLASSIFICATIONS];
+  const codeTypes = f.codeType ? [f.codeType] : [...ALL_CODE_TYPES];
+  const projects = f.projectType
+    ? [f.projectType]
+    : (f.classification
+        ? PROJECT_TYPES.filter(p=>p.group===f.classification).map(p=>p.id)
+        : PROJECT_TYPES.map(p=>p.id));
+  const newAtt = { text, classifications, codeTypes, projects };
+  if (sel === 'optional') {
+    newAtt.requestTypes = f.requestType ? [f.requestType] : [...ALL_REQUEST_TYPES];
+  }
+  arr.push(newAtt);
+  saveData(); renderAdminAttList();
+}
+function renderAdminCategories(container){ let html=''; appData.categories.forEach((cat,i)=>{ html+=`<div class="req-item" style="display:grid; grid-template-columns:1fr auto auto; gap:8px;"><input type="text" value="${escapeAttr(cat.name)}" onchange="updateCat(${i},this.value)"><span>${(appData.requirements[cat.id]||[]).length} بند</span><button class="btn btn-danger" onclick="deleteCat(${i})">حذف</button></div>`; }); html+=`<div><label>إضافة بند جديد</label><div style="display:flex; gap:8px;"><input type="text" id="new-cat-name"><button class="btn btn-primary" onclick="addCat()">إضافة</button></div></div>`; container.innerHTML=html; }
+function updateCat(idx,name){ appData.categories[idx].name=name; saveData(); }
+function deleteCat(idx){ let cat=appData.categories[idx]; if(confirm(`حذف البند "${cat.name}" مع كل اشتراطاته؟`)){ delete appData.requirements[cat.id]; appData.categories.splice(idx,1); saveData(); renderAdmin(); } }
+function addCat(){ let name=document.getElementById('new-cat-name').value.trim(); if(!name) return; let id='cat_'+Date.now(); appData.categories.push({id,name}); appData.requirements[id]=[]; saveData(); renderAdmin(); }
+function backupData(){ let blob=new Blob([JSON.stringify(appData,null,2)],{type:'application/json'}); let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`audit_backup_${new Date().toISOString().slice(0,10)}.json`; a.click(); URL.revokeObjectURL(a.href); }
+function restoreData(){ let inp=document.createElement('input'); inp.type='file'; inp.accept='.json'; inp.onchange=e=>{ let file=e.target.files[0]; if(!file) return; let reader=new FileReader(); reader.onload=ev=>{ try{ let data=JSON.parse(ev.target.result); if(!data.categories||!data.requirements) throw new Error('ملف غير صالح'); if(confirm('استبدال البيانات الحالية؟')){ appData=data; saveData(); refreshAll(); renderHistory(); alert('تم الاستعادة'); } }catch(err){ alert('خطأ: '+err.message); } }; reader.readAsText(file); }; inp.click(); }
+function updateProjectDate(){ let d=new Date(); document.getElementById('project-date').value=`${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`; }
+updateProjectDate();
+setInterval(updateProjectDate,60000);
+// تطبيق التصفية المتسلسلة عند التحميل (تعطيل الحقول التي تأتي بعد الحقل الفارغ)
+cascadeFilters();
+</script>
+</body>
+</html>
