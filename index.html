@@ -7,9 +7,9 @@
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --primary: #1e3a5f;
-    --primary-dark: #12263f;
-    --primary-light: #2e5484;
+    --primary: #046a38;
+    --primary-dark: #024a27;
+    --primary-light: #0a8550;
     --accent: #b08d57;
     --accent-dark: #8b6a3d;
     --bg: #f4f5f7;
@@ -20,8 +20,8 @@
     --text-primary: #1f2937;
     --text-secondary: #4b5563;
     --text-muted: #6b7280;
-    --success: #0f6e56;
-    --success-bg: #e6f4ef;
+    --success: #16a34a;
+    --success-bg: #dcfce7;
     --warning: #92400e;
     --warning-bg: #fef3e2;
     --danger: #991b1b;
@@ -30,12 +30,12 @@
     --info-bg: #eff6ff;
     --info-border: #bfdbfe;
     --info-text: #1e3a8a;
-    --shadow-sm: 0 1px 2px rgba(30, 58, 95, 0.05);
-    --shadow: 0 1px 3px rgba(30, 58, 95, 0.08), 0 1px 2px rgba(30, 58, 95, 0.04);
+    --shadow-sm: 0 1px 2px rgba(4, 106, 56, 0.05);
+    --shadow: 0 1px 3px rgba(4, 106, 56, 0.08), 0 1px 2px rgba(4, 106, 56, 0.04);
   }
   body {
     font-family: 'Segoe UI', 'Tahoma', 'Cairo', Arial, sans-serif;
-    background: var(--bg);
+    background: #f0f5f2;
     color: var(--text-primary);
     padding: 0;
     line-height: 1.7;
@@ -44,9 +44,9 @@
   }
   .container { max-width: 100%; width: 100%; margin: 0; padding: 16px; }
   .header {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-    color: #fff;
-    padding: 22px 28px;
+    background: #ffffff;
+    color: #111827;
+    padding: 16px 28px;
     border-radius: 6px;
     margin-bottom: 16px;
     display: flex;
@@ -55,8 +55,10 @@
     flex-wrap: wrap;
     gap: 12px;
     box-shadow: var(--shadow);
-    border-top: 3px solid var(--accent);
+    border-bottom: 4px solid var(--primary);
   }
+  .header h1 { color: #046a38; font-weight: 800; letter-spacing: -0.3px; }
+  .header p { color: #6b7280; }
   .header h1 { font-size: 20px; font-weight: 600; color: #fff; }
   .header p { color: #cbd5e1; font-size: 12.5px; margin-top: 4px; }
   .header .btn-secondary { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.25); }
@@ -84,7 +86,7 @@
     transition: all 0.15s;
   }
   .tab-btn:hover { background: var(--surface-alt); color: var(--primary); }
-  .tab-btn.active { background: var(--primary); color: #fff; font-weight: 600; }
+  .tab-btn.active { background: #046a38; color: #fff; font-weight: 700; }
   .admin-subtab { background: transparent; color: var(--text-secondary); border: 1px solid var(--border); padding: 8px 16px; font-size: 13px; cursor: pointer; border-radius: 4px; transition: all 0.15s; }
   .admin-subtab:hover { background: var(--surface-alt); color: var(--primary); }
   .admin-subtab.active { background: var(--primary); color: #fff; border-color: var(--primary); font-weight: 600; }
@@ -165,13 +167,15 @@
   }
   .card h2 {
     font-size: 15.5px;
-    font-weight: 600;
-    margin-bottom: 16px;
-    color: var(--primary);
-    padding-bottom: 12px;
-    border-bottom: 2px solid var(--accent);
-    display: inline-block;
-    padding-left: 40px;
+    font-weight: 700;
+    margin: -22px -24px 16px;
+    color: #fff;
+    background: linear-gradient(90deg, #046a38 0%, #0a8550 100%);
+    padding: 11px 24px;
+    border-bottom: none;
+    display: block;
+    text-align: center;
+    border-radius: 6px 6px 0 0;
   }
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
   .form-group { display: flex; flex-direction: column; gap: 6px; }
@@ -187,7 +191,7 @@
   .form-group select:focus, .form-group input:focus, .form-group textarea:focus {
     outline: none;
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.1);
+    box-shadow: 0 0 0 3px rgba(4, 106, 56, 0.1);
   }
   .form-group input[readonly] { background: var(--surface-alt); color: var(--text-secondary); }
   .form-group select:disabled, .form-group input:disabled {
@@ -306,17 +310,17 @@
     display: grid;
     grid-template-columns: 220px 1fr;
     gap: 0;
-    background: #efedf7;
+    background: #ecf6f0;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 4px 20px rgba(91, 63, 184, 0.08);
+    box-shadow: 0 4px 20px rgba(4, 106, 56, 0.08);
     min-height: 700px;
     direction: rtl;
   }
 
   /* الشريط الجانبي البنفسجي */
   .kpi-sidebar {
-    background: linear-gradient(180deg, #2d1b69 0%, #3d2580 50%, #2d1b69 100%);
+    background: linear-gradient(180deg, #04542e 0%, #06653a 50%, #04542e 100%);
     padding: 20px 14px;
     color: #fff;
     display: flex;
@@ -380,7 +384,7 @@
     font-family: inherit;
     cursor: pointer;
   }
-  .kpi-filter-select option { background: #2d1b69; color: #fff; }
+  .kpi-filter-select option { background: #04542e; color: #fff; }
   .kpi-clear-filter-btn {
     background: rgba(255,255,255,0.12);
     border: 1px solid rgba(255,255,255,0.2);
@@ -398,7 +402,7 @@
   /* المحتوى الرئيسي */
   .kpi-main {
     padding: 18px 22px 22px;
-    background: #efedf7;
+    background: #ecf6f0;
     overflow: hidden;
   }
 
@@ -410,11 +414,11 @@
     margin-bottom: 18px;
   }
   .kpi-welcome-text { font-size: 12px; color: #5a4d8a; font-weight: 600; }
-  .kpi-welcome-sub { font-size: 11px; color: #8b7fb0; margin-top: 2px; }
+  .kpi-welcome-sub { font-size: 11px; color: #93c5a6; margin-top: 2px; }
   .kpi-avatar {
     width: 36px; height: 36px;
     background: #fff;
-    border: 1.5px solid #d4cef0;
+    border: 1.5px solid #b9dfc8;
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     font-size: 16px;
@@ -433,24 +437,24 @@
   .kpi-page-title {
     font-size: 22px;
     font-weight: 700;
-    color: #2d1b69;
+    color: #04542e;
     margin: 0 0 4px 0;
   }
-  .kpi-page-sub { font-size: 12px; color: #6b5e94; margin: 0; }
+  .kpi-page-sub { font-size: 12px; color: #4a8f68; margin: 0; }
   .kpi-header-meta { text-align: left; display: flex; flex-direction: column; gap: 3px; align-items: flex-end; }
-  .kpi-refresh { font-size: 10.5px; color: #6b5e94; }
-  .kpi-filter-state { font-size: 10.5px; color: #6b5e94; }
+  .kpi-refresh { font-size: 10.5px; color: #4a8f68; }
+  .kpi-filter-state { font-size: 10.5px; color: #4a8f68; }
   .kpi-header-actions { display: flex; gap: 5px; margin-top: 4px; }
   .kpi-action-btn {
     background: #fff;
-    border: 1px solid #d4cef0;
+    border: 1px solid #b9dfc8;
     border-radius: 5px;
     padding: 5px 8px;
     cursor: pointer;
     font-size: 13px;
     transition: all 0.15s;
   }
-  .kpi-action-btn:hover { background: #2d1b69; border-color: #2d1b69; }
+  .kpi-action-btn:hover { background: #04542e; border-color: #04542e; }
 
   /* بطاقات KPI الرئيسية */
   .kpi-cards-row {
@@ -473,19 +477,19 @@
     align-items: flex-start;
     margin-bottom: 8px;
   }
-  .kpi-main-card-label { font-size: 12px; color: #6b5e94; font-weight: 600; }
+  .kpi-main-card-label { font-size: 12px; color: #4a8f68; font-weight: 600; }
   .kpi-main-card-spark { width: 90px; height: 32px; flex-shrink: 0; }
   .kpi-main-card-value {
     font-size: 28px;
     font-weight: 700;
-    color: #2d1b69;
+    color: #04542e;
     line-height: 1.05;
     margin-bottom: 6px;
   }
-  .kpi-main-card-footer { font-size: 10.5px; color: #6b5e94; line-height: 1.5; }
+  .kpi-main-card-footer { font-size: 10.5px; color: #4a8f68; line-height: 1.5; }
   .kpi-yoy-up { color: #16a34a; font-weight: 700; }
   .kpi-yoy-down { color: #dc2626; font-weight: 700; }
-  .kpi-yoy-flat { color: #6b5e94; font-weight: 700; }
+  .kpi-yoy-flat { color: #4a8f68; font-weight: 700; }
 
   /* صفوف الـ panels */
   .kpi-row-2 {
@@ -510,10 +514,10 @@
   .kpi-panel-title {
     font-size: 14px;
     font-weight: 700;
-    color: #2d1b69;
+    color: #04542e;
     margin: 0 0 2px 0;
   }
-  .kpi-panel-sub { font-size: 10.5px; color: #6b5e94; margin: 0 0 10px 0; }
+  .kpi-panel-sub { font-size: 10.5px; color: #4a8f68; margin: 0 0 10px 0; }
   .kpi-panel-body { min-height: 60px; }
   .kpi-panel-legend {
     display: flex;
@@ -521,37 +525,37 @@
     justify-content: flex-end;
     margin-top: 6px;
     font-size: 10.5px;
-    color: #6b5e94;
+    color: #4a8f68;
   }
   .kpi-legend-item { display: flex; align-items: center; gap: 5px; }
   .kpi-legend-dot { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
 
   /* الرسم البياني الزمني (أعمدة) */
   .kpi-bar-chart { width: 100%; height: 220px; }
-  .kpi-bar-chart .grid { stroke: #ece9f5; stroke-width: 1; stroke-dasharray: 2,3; }
-  .kpi-bar-chart .axis-label { font-size: 9.5px; fill: #8b7fb0; }
-  .kpi-bar-chart .col-current { fill: #5b3fb8; }
-  .kpi-bar-chart .col-previous { fill: #d4cef0; }
-  .kpi-bar-chart .col-label { font-size: 9px; fill: #6b5e94; font-weight: 600; }
+  .kpi-bar-chart .grid { stroke: #e7f4ec; stroke-width: 1; stroke-dasharray: 2,3; }
+  .kpi-bar-chart .axis-label { font-size: 9.5px; fill: #93c5a6; }
+  .kpi-bar-chart .col-current { fill: #12a150; }
+  .kpi-bar-chart .col-previous { fill: #b9dfc8; }
+  .kpi-bar-chart .col-label { font-size: 9px; fill: #4a8f68; font-weight: 600; }
   .kpi-bar-chart .change-up { fill: #16a34a; font-size: 8.5px; font-weight: 700; }
   .kpi-bar-chart .change-down { fill: #dc2626; font-size: 8.5px; font-weight: 700; }
 
   /* أشرطة أفقية بستايل بنفسجي */
   .kpi-hbar-row {
     display: grid; grid-template-columns: 1fr; gap: 4px;
-    padding: 7px 0; border-bottom: 1px dashed #ece9f5;
+    padding: 7px 0; border-bottom: 1px dashed #e7f4ec;
   }
   .kpi-hbar-row:last-child { border-bottom: none; }
   .kpi-hbar-header {
     display: flex; justify-content: space-between; align-items: center;
     font-size: 11.5px; gap: 8px;
   }
-  .kpi-hbar-label { color: #3d2580; font-weight: 500; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .kpi-hbar-value { color: #2d1b69; font-weight: 700; font-size: 12px; flex-shrink: 0; }
-  .kpi-hbar-track { background: #ece9f5; border-radius: 3px; height: 7px; overflow: hidden; position: relative; }
+  .kpi-hbar-label { color: #06653a; font-weight: 500; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .kpi-hbar-value { color: #04542e; font-weight: 700; font-size: 12px; flex-shrink: 0; }
+  .kpi-hbar-track { background: #e7f4ec; border-radius: 3px; height: 7px; overflow: hidden; position: relative; }
   .kpi-hbar-fill {
     height: 100%;
-    background: linear-gradient(90deg, #5b3fb8, #8b6fd6);
+    background: linear-gradient(90deg, #12a150, #8b6fd6);
     border-radius: 3px;
     transition: width 0.5s ease;
     position: relative;
@@ -564,9 +568,9 @@
     background: #fff;
     border-radius: 2px;
   }
-  .kpi-hbar-fill.alt2 { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
-  .kpi-hbar-fill.alt3 { background: linear-gradient(90deg, #6366f1, #a5b4fc); }
-  .kpi-hbar-fill.alt4 { background: linear-gradient(90deg, #4338ca, #818cf8); }
+  .kpi-hbar-fill.alt2 { background: linear-gradient(90deg, #0a8550, #6ee7a8); }
+  .kpi-hbar-fill.alt3 { background: linear-gradient(90deg, #16a34a, #a5b4fc); }
+  .kpi-hbar-fill.alt4 { background: linear-gradient(90deg, #046a38, #818cf8); }
 
   /* Donut chart */
   .kpi-donut-wrap { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
@@ -574,35 +578,35 @@
   .kpi-donut-legend { flex: 1; min-width: 100px; display: flex; flex-direction: column; gap: 4px; font-size: 11px; }
   .kpi-donut-legend-item { display: flex; align-items: center; gap: 5px; }
   .kpi-donut-legend-color { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
-  .kpi-donut-legend-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #3d2580; }
-  .kpi-donut-legend-value { color: #2d1b69; font-weight: 700; flex-shrink: 0; font-size: 11px; }
+  .kpi-donut-legend-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #06653a; }
+  .kpi-donut-legend-value { color: #04542e; font-weight: 700; flex-shrink: 0; font-size: 11px; }
 
-  .kpi-empty-mini { color: #8b7fb0; font-size: 11.5px; text-align: center; padding: 24px 8px; font-style: italic; }
+  .kpi-empty-mini { color: #93c5a6; font-size: 11.5px; text-align: center; padding: 24px 8px; font-style: italic; }
 
   /* جداول التحليل والتقارير */
   .kpi-table { width: 100%; border-collapse: collapse; font-size: 11.5px; }
   .kpi-table thead th {
-    background: #f3effb;
-    color: #2d1b69;
+    background: #046a38;
+    color: #ffffff;
     font-weight: 700;
     text-align: right;
     padding: 9px 10px;
-    border-bottom: 2px solid #d4cef0;
+    border-bottom: 2px solid #024a27;
     font-size: 11px;
     position: sticky;
     top: 0;
   }
   .kpi-table tbody td {
     padding: 8px 10px;
-    border-bottom: 1px solid #ece9f5;
-    color: #3d2580;
+    border-bottom: 1px solid #e7f4ec;
+    color: #06653a;
   }
   .kpi-table tbody tr:hover { background: #faf9fd; }
-  .kpi-table .kpi-num { font-weight: 700; color: #2d1b69; text-align: center; }
+  .kpi-table .kpi-num { font-weight: 700; color: #04542e; text-align: center; }
   .kpi-table .kpi-rank {
     display: inline-block;
     width: 22px; height: 22px;
-    background: #5b3fb8; color: #fff;
+    background: #12a150; color: #fff;
     border-radius: 50%;
     text-align: center; line-height: 22px;
     font-size: 11px; font-weight: 700;
@@ -620,7 +624,7 @@
   .kpi-badge.good { background: #dcfce7; color: #166534; }
   .kpi-badge.warn { background: #fef3c7; color: #92400e; }
   .kpi-badge.bad { background: #fee2e2; color: #991b1b; }
-  .kpi-badge.neutral { background: #ede9fe; color: #4c1d95; }
+  .kpi-badge.neutral { background: #dcfce7; color: #4c1d95; }
 
   /* Heatmap */
   .kpi-heatmap-grid { display: grid; gap: 4px; }
@@ -640,9 +644,9 @@
   }
   .kpi-heatmap-cell:hover { transform: scale(1.04); }
   .kpi-heatmap-cell .kpi-heat-label { font-size: 9.5px; font-weight: 500; opacity: 0.9; }
-  .kpi-heatmap-cell.empty { background: #f3effb; color: #8b7fb0; }
+  .kpi-heatmap-cell.empty { background: #e7f5ec; color: #93c5a6; }
   .kpi-heatmap-label-cell {
-    background: #2d1b69;
+    background: #04542e;
     color: #fff;
     padding: 8px;
     border-radius: 5px;
@@ -653,7 +657,7 @@
     align-items: center;
     justify-content: center;
   }
-  .kpi-heatmap-label-cell.corner { background: transparent; color: #6b5e94; font-size: 10px; }
+  .kpi-heatmap-label-cell.corner { background: transparent; color: #4a8f68; font-size: 10px; }
 
   /* الملخص التنفيذي */
   .kpi-exec-grid {
@@ -662,14 +666,14 @@
     gap: 10px;
   }
   .kpi-exec-item {
-    background: linear-gradient(135deg, #f5f3fc 0%, #ede9fe 100%);
-    border-right: 3px solid #5b3fb8;
+    background: linear-gradient(135deg, #f5f3fc 0%, #dcfce7 100%);
+    border-right: 3px solid #12a150;
     padding: 10px 12px;
     border-radius: 6px;
   }
-  .kpi-exec-item .kpi-exec-label { font-size: 11px; color: #6b5e94; margin-bottom: 4px; font-weight: 500; }
-  .kpi-exec-item .kpi-exec-value { font-size: 18px; font-weight: 700; color: #2d1b69; }
-  .kpi-exec-item .kpi-exec-sub { font-size: 10.5px; color: #6b5e94; margin-top: 2px; }
+  .kpi-exec-item .kpi-exec-label { font-size: 11px; color: #4a8f68; margin-bottom: 4px; font-weight: 500; }
+  .kpi-exec-item .kpi-exec-value { font-size: 18px; font-weight: 700; color: #04542e; }
+  .kpi-exec-item .kpi-exec-sub { font-size: 10.5px; color: #4a8f68; margin-top: 2px; }
 
   /* التوصيات */
   .kpi-recommendation {
@@ -681,7 +685,7 @@
     font-size: 12px;
     line-height: 1.6;
   }
-  .kpi-recommendation.info { background: #ede9fe; color: #4c1d95; border-right: 3px solid #5b3fb8; }
+  .kpi-recommendation.info { background: #dcfce7; color: #4c1d95; border-right: 3px solid #12a150; }
   .kpi-recommendation.warn { background: #fef3c7; color: #92400e; border-right: 3px solid #f59e0b; }
   .kpi-recommendation.success { background: #dcfce7; color: #166534; border-right: 3px solid #16a34a; }
   .kpi-recommendation.danger { background: #fee2e2; color: #991b1b; border-right: 3px solid #dc2626; }
@@ -692,8 +696,8 @@
   @keyframes kpiFadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
   /* Sparklines */
-  .kpi-sparkline-line { fill: none; stroke: #5b3fb8; stroke-width: 1.8; }
-  .kpi-sparkline-area { fill: rgba(91, 63, 184, 0.12); }
+  .kpi-sparkline-line { fill: none; stroke: #12a150; stroke-width: 1.8; }
+  .kpi-sparkline-area { fill: rgba(4, 106, 56, 0.12); }
   .kpi-sparkline-dot-high { fill: #16a34a; }
   .kpi-sparkline-dot-low { fill: #dc2626; }
 
@@ -950,7 +954,7 @@
               <p class="kpi-panel-sub">الفترة الحالية مقابل السابقة</p>
               <div id="kpi-chart-timeline" class="kpi-panel-body"></div>
               <div class="kpi-panel-legend">
-                <span class="kpi-legend-item"><span class="kpi-legend-dot" style="background:#5b3fb8;"></span>الفترة الحالية</span>
+                <span class="kpi-legend-item"><span class="kpi-legend-dot" style="background:#12a150;"></span>الفترة الحالية</span>
                 <span class="kpi-legend-item"><span class="kpi-legend-dot" style="background:#bcb3e0;"></span>الفترة السابقة</span>
               </div>
             </div>
@@ -1060,7 +1064,7 @@
                 <p class="kpi-panel-sub">قائمة بكل التدقيقات في الفترة المختارة</p>
               </div>
               <div style="display:flex; gap:6px;">
-                <input type="text" id="kpi-report-search" placeholder="🔍 بحث..." oninput="renderKPIReport()" style="padding:6px 10px; font-size:12px; border:1.5px solid #d4cef0; border-radius:5px; font-family:inherit;">
+                <input type="text" id="kpi-report-search" placeholder="🔍 بحث..." oninput="renderKPIReport()" style="padding:6px 10px; font-size:12px; border:1.5px solid #b9dfc8; border-radius:5px; font-family:inherit;">
                 <button class="kpi-action-btn" onclick="exportReportCSV()" title="تصدير الجدول">⬇️ CSV</button>
               </div>
             </div>
@@ -2197,7 +2201,7 @@ function getActiveAuditor() {
 // نظام الصلاحيات
 // ================================================================
 const ROLES = {
-  admin:      { name: 'مدير',  color: '#1e3a5f', bg: '#e6f1fb', icon: '👑' },
+  admin:      { name: 'مدير',  color: '#046a38', bg: '#e6f1fb', icon: '👑' },
   supervisor: { name: 'مشرف',  color: '#92400e', bg: '#fef3e2', icon: '🛡️' },
   auditor:    { name: 'مدقق',  color: '#0f6e56', bg: '#e6f4ef', icon: '👤' }
 };
@@ -2736,22 +2740,22 @@ function buildPrintableReportHTML(item, s) {
   @page { size: A4; margin: 1.5cm; }
   * { box-sizing: border-box; }
   body { font-family: 'Tahoma','Cairo',Arial,sans-serif; color:#1f2937; padding:24px; line-height:1.6; background:#fff; font-size:13px; }
-  .doc-header { border-bottom:2px solid #1e3a5f; padding-bottom:12px; margin-bottom:18px; }
-  .doc-header h1 { font-size:20px; color:#1e3a5f; margin:0 0 4px; }
+  .doc-header { border-bottom:2px solid #046a38; padding-bottom:12px; margin-bottom:18px; }
+  .doc-header h1 { font-size:20px; color:#046a38; margin:0 0 4px; }
   .doc-header p { font-size:12px; color:#6b7280; margin:0; }
   .meta-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px 18px; background:#f9fafb; border:1px solid #e5e7eb; border-radius:4px; padding:12px 16px; margin-bottom:18px; font-size:12.5px; }
   .meta-grid div { display:flex; gap:6px; }
-  .meta-grid strong { color:#1e3a5f; min-width:90px; }
-  .section-title { font-size:14px; font-weight:700; color:#1e3a5f; margin:18px 0 8px; padding-bottom:5px; border-bottom:1.5px solid #b08d57; }
+  .meta-grid strong { color:#046a38; min-width:90px; }
+  .section-title { font-size:14px; font-weight:700; color:#046a38; margin:18px 0 8px; padding-bottom:5px; border-bottom:1.5px solid #b08d57; }
   table { width:100%; border-collapse:collapse; font-size:12.5px; margin-bottom:14px; }
-  th { background:#1e3a5f; color:#fff; padding:9px 10px; text-align:right; font-weight:600; font-size:12px; }
+  th { background:#046a38; color:#fff; padding:9px 10px; text-align:right; font-weight:600; font-size:12px; }
   td { padding:8px 10px; border:1px solid #d1d5db; vertical-align:top; }
   tbody tr:nth-child(even) td { background:#f9fafb; }
   .closing-msg { background:#f9fafb; border-right:3px solid #b08d57; padding:12px 14px; margin-top:14px; font-size:12.5px; line-height:1.7; white-space:pre-wrap; }
   .footer { margin-top:30px; padding-top:14px; border-top:1px solid #e5e7eb; display:flex; justify-content:space-between; font-size:11px; color:#6b7280; }
   .actions { position:fixed; top:14px; left:14px; display:flex; gap:8px; }
-  .actions button { padding:8px 14px; background:#1e3a5f; color:#fff; border:none; border-radius:4px; cursor:pointer; font-size:12px; font-family:inherit; }
-  .actions button:hover { background:#12263f; }
+  .actions button { padding:8px 14px; background:#046a38; color:#fff; border:none; border-radius:4px; cursor:pointer; font-size:12px; font-family:inherit; }
+  .actions button:hover { background:#024a27; }
   @media print { .actions { display:none; } body { padding:0; } }
 </style>
 </head><body>
@@ -2904,14 +2908,14 @@ function printHistoryTable() {
 <style>
   @page { size: A4 landscape; margin: 1.2cm; }
   body { font-family: Tahoma,Arial,sans-serif; padding:20px; color:#1f2937; }
-  h1 { color:#1e3a5f; font-size:18px; margin:0 0 4px; }
+  h1 { color:#046a38; font-size:18px; margin:0 0 4px; }
   .sub { color:#6b7280; font-size:12px; margin-bottom:14px; }
   table { width:100%; border-collapse:collapse; font-size:12px; }
-  th { background:#1e3a5f; color:#fff; padding:8px; text-align:right; }
+  th { background:#046a38; color:#fff; padding:8px; text-align:right; }
   td { padding:7px 8px; border:1px solid #d1d5db; }
   tbody tr:nth-child(even) td { background:#f9fafb; }
   .actions { position:fixed; top:10px; left:10px; }
-  .actions button { padding:7px 12px; background:#1e3a5f; color:#fff; border:none; border-radius:4px; cursor:pointer; }
+  .actions button { padding:7px 12px; background:#046a38; color:#fff; border:none; border-radius:4px; cursor:pointer; }
   @media print { .actions { display:none; } }
 </style></head><body>
 <div class="actions"><button onclick="window.print()">🖨️ طباعة</button></div>
@@ -4411,7 +4415,7 @@ function renderSparkline(values, color) {
     if (v > values[maxIdx]) maxIdx = i;
     if (v < values[minIdx]) minIdx = i;
   });
-  const c = color || '#5b3fb8';
+  const c = color || '#12a150';
   return `<svg class="kpi-main-card-spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
     <path class="kpi-sparkline-area" d="${areaPath}" fill="${c}" fill-opacity="0.12"/>
     <path d="${linePath}" fill="none" stroke="${c}" stroke-width="1.8"/>
@@ -4461,14 +4465,14 @@ function renderKPIMainCards(current, previous) {
     {
       label: 'إجمالي التدقيقات',
       value: cur.total,
-      spark: renderSparkline(dailyCounts, '#5b3fb8'),
+      spark: renderSparkline(dailyCounts, '#12a150'),
       yoy: formatYoY(cur.total, prev.total),
       prev: prev.total
     },
     {
       label: 'متوسط الملاحظات',
       value: cur.avgNotes.toFixed(1),
-      spark: renderSparkline(dailyNotes, '#7c3aed'),
+      spark: renderSparkline(dailyNotes, '#0a8550'),
       yoy: formatYoY(cur.avgNotes, prev.avgNotes),
       prev: prev.avgNotes.toFixed(1)
     },
@@ -4738,7 +4742,7 @@ function renderKPIDonut(elementId, filtered, field) {
 
   const total = arr.reduce((s, x) => s + x.count, 0);
   // ألوان بنفسجية متدرجة بستايل Power BI
-  const colors = ['#5b3fb8', '#7c3aed', '#a78bfa', '#c4b5fd', '#ddd6fe', '#312e81', '#4338ca', '#6366f1'];
+  const colors = ['#12a150', '#0a8550', '#6ee7a8', '#c4b5fd', '#bbf7d0', '#312e81', '#046a38', '#16a34a'];
 
   const cx = 70, cy = 70, r = 52, strokeW = 18;
   let cumAngle = -Math.PI / 2;
@@ -4776,8 +4780,8 @@ function renderKPIDonut(elementId, filtered, field) {
     <div class="kpi-donut-wrap">
       <svg class="kpi-donut-svg" width="140" height="140" viewBox="0 0 140 140">
         ${segments.join('')}
-        <text x="70" y="68" text-anchor="middle" font-size="22" font-weight="700" fill="#2d1b69">${total}</text>
-        <text x="70" y="86" text-anchor="middle" font-size="10" fill="#6b5e94">إجمالي</text>
+        <text x="70" y="68" text-anchor="middle" font-size="22" font-weight="700" fill="#04542e">${total}</text>
+        <text x="70" y="86" text-anchor="middle" font-size="10" fill="#4a8f68">إجمالي</text>
       </svg>
       <div class="kpi-donut-legend">${legend}</div>
     </div>
@@ -5141,7 +5145,7 @@ function renderKPIViolationsByType(current) {
     return `
       <div class="kpi-hbar-row">
         <div class="kpi-hbar-header">
-          <span class="kpi-hbar-label">${escapeHtml(item.name)} <span style="color:#8b7fb0; font-weight:400;">(${item.count} تدقيق)</span></span>
+          <span class="kpi-hbar-label">${escapeHtml(item.name)} <span style="color:#93c5a6; font-weight:400;">(${item.count} تدقيق)</span></span>
           <span class="kpi-hbar-value">${item.avg.toFixed(1)}</span>
         </div>
         <div class="kpi-hbar-track"><div class="kpi-hbar-fill alt3" style="width:${pct}%;"></div></div>
@@ -5189,7 +5193,7 @@ function renderKPIWeekdayChart(current) {
     const x = padL + i * stepX + (stepX - barW) / 2;
     const y = padT + innerH - h;
     const isTop = c === max && c > 0;
-    const fill = isTop ? '#5b3fb8' : '#a78bfa';
+    const fill = isTop ? '#12a150' : '#6ee7a8';
     let label = '';
     if (c > 0) {
       label = `<text class="col-label" x="${x + barW/2}" y="${y - 3}" text-anchor="middle">${c}</text>`;
@@ -5248,7 +5252,7 @@ function renderKPIVelocity(current, previous) {
   // شريط التقدم نحو الهدف
   const targetBar = `
     <div style="margin-top:12px; padding:10px; background:#f5f3fc; border-radius:6px;">
-      <div style="display:flex; justify-content:space-between; font-size:11.5px; color:#3d2580; margin-bottom:6px;">
+      <div style="display:flex; justify-content:space-between; font-size:11.5px; color:#06653a; margin-bottom:6px;">
         <span>📊 الإنجاز نحو الهدف (1 تدقيق/يوم)</span>
         <strong>${achievementPct.toFixed(0)}%</strong>
       </div>
@@ -5262,9 +5266,9 @@ function renderKPIVelocity(current, previous) {
     <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;">
       ${items.map(it => `
         <div style="background:#faf9fd; padding:10px; border-radius:5px; text-align:center;">
-          <div style="font-size:10.5px; color:#6b5e94; margin-bottom:3px;">${escapeHtml(it.label)}</div>
-          <div style="font-size:15px; font-weight:700; color:#2d1b69; line-height:1.2;">${escapeHtml(it.value)}</div>
-          <div style="font-size:10px; color:#8b7fb0; margin-top:3px;">${escapeHtml(it.sub)}</div>
+          <div style="font-size:10.5px; color:#4a8f68; margin-bottom:3px;">${escapeHtml(it.label)}</div>
+          <div style="font-size:15px; font-weight:700; color:#04542e; line-height:1.2;">${escapeHtml(it.value)}</div>
+          <div style="font-size:10px; color:#93c5a6; margin-top:3px;">${escapeHtml(it.sub)}</div>
         </div>
       `).join('')}
     </div>
@@ -5422,7 +5426,7 @@ function renderKPIReport() {
   }
 
   const html = `
-    <div style="font-size:11px; color:#6b5e94; margin-bottom:8px;">📊 عدد النتائج: ${rows.length}</div>
+    <div style="font-size:11px; color:#4a8f68; margin-bottom:8px;">📊 عدد النتائج: ${rows.length}</div>
     <table class="kpi-table">
       <thead>
         <tr>
@@ -5457,7 +5461,7 @@ function renderKPIReport() {
         `).join('')}
       </tbody>
     </table>
-    ${rows.length > 100 ? `<div style="font-size:11px; color:#8b7fb0; text-align:center; padding:10px;">يُعرض أول 100 نتيجة. استخدم البحث لتضييق النطاق.</div>` : ''}
+    ${rows.length > 100 ? `<div style="font-size:11px; color:#93c5a6; text-align:center; padding:10px;">يُعرض أول 100 نتيجة. استخدم البحث لتضييق النطاق.</div>` : ''}
   `;
   container.innerHTML = html;
 }
