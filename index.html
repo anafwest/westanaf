@@ -729,7 +729,7 @@
 <div class="container">
   <div class="header">
     <div><h1>إدارة رخص البناء – قطاع غرب الرياض</h1><p>تدقيق حسب نوع الطلب + التصنيف + نوع الكود + نوع المشروع</p></div>
-    <div><button class="btn btn-secondary" onclick="backupData()">نسخة احتياطية</button><button class="btn btn-secondary" onclick="restoreData()">استعادة</button></div>
+    <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;"><span id="header-user" style="display:none; font-size:12.5px; font-weight:700; color:#046a38; background:#e7f5ec; border:1px solid #b9dfc8; border-radius:14px; padding:5px 12px;"></span><button class="btn btn-secondary" onclick="openUserSwitcher()" title="تبديل المستخدم">🔄 تبديل المستخدم</button><button class="btn btn-secondary" id="btn-backup" onclick="backupData()">نسخة احتياطية</button><button class="btn btn-secondary" id="btn-restore" onclick="restoreData()">استعادة</button></div>
   </div>
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('new')">تدقيق جديد</button>
@@ -2203,7 +2203,8 @@ function getActiveAuditor() {
 const ROLES = {
   admin:      { name: 'مدير',  color: '#046a38', bg: '#e6f1fb', icon: '👑' },
   supervisor: { name: 'مشرف',  color: '#92400e', bg: '#fef3e2', icon: '🛡️' },
-  auditor:    { name: 'مدقق',  color: '#0f6e56', bg: '#e6f4ef', icon: '👤' }
+  auditor:    { name: 'مدقق',  color: '#0f6e56', bg: '#e6f4ef', icon: '👤' },
+  employee:   { name: 'موظف',  color: '#1d4ed8', bg: '#eff6ff', icon: '📝' }
 };
 
 function getRoleInfo(role) {
@@ -2218,13 +2219,85 @@ function can(action, scope) {
   return true;
 }
 
-// تحقّق ويُظهر تنبيهاً إذا غير مسموح — معطّل حالياً
+// تحقّق ويُظهر تنبيهاً إذا غير مسموح
 function requirePermission(action, scope) {
+  const me = getActiveAuditor();
+  if (me && me.role === 'employee') {
+    alert('🚫 صلاحياتك كموظف تسمح بالإدخال والاطلاع على تقاريرك المسجلة باسمك فقط.');
+    return false;
+  }
   return true;
+}
+
+// ===== وضع الموظف: تطبيق القيود على الواجهة =====
+function isEmployeeMode() {
+  const me = getActiveAuditor();
+  return !!(me && me.role === 'employee');
+}
+
+function applyRoleUI() {
+  const emp = isEmployeeMode();
+  const me = getActiveAuditor();
+  // إخفاء تبويبات الإدارة ومؤشرات الأداء عن الموظف
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    const oc = b.getAttribute('onclick') || '';
+    const restricted = oc.includes("'admin'") || oc.includes("'kpis'");
+    b.style.display = (emp && restricted) ? 'none' : '';
+  });
+  // إخفاء أزرار النسخ الاحتياطي والاستعادة عن الموظف
+  ['btn-backup', 'btn-restore'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = emp ? 'none' : '';
+  });
+  // عرض اسم المستخدم الحالي في الترويسة
+  const uh = document.getElementById('header-user');
+  if (uh) {
+    if (me) {
+      const ri = getRoleInfo(me.role);
+      uh.textContent = ri.icon + ' ' + me.name + ' — ' + ri.name;
+      uh.style.display = '';
+    } else { uh.style.display = 'none'; }
+  }
+  // إن كان الموظف داخل تبويب مقيد → ارجع للا陣خال
+  if (emp) {
+    const adminTab = document.getElementById('tab-admin');
+    const kpiTab = document.getElementById('tab-kpis');
+    if ((adminTab && adminTab.classList.contains('active')) || (kpiTab && kpiTab.classList.contains('active'))) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      document.getElementById('tab-new').classList.add('active');
+      const nb = document.querySelector('.tab-btn');
+      if (nb) nb.classList.add('active');
+    }
+  }
+}
+
+// تبديل المستخدم (يطلب رمز الإدارة إذا كنت موظفاً)
+function openUserSwitcher() {
+  const list = appData.auditors || [];
+  if (!list.length) { alert('لا يوجد مسجلون في النظام'); return; }
+  const me = getActiveAuditor();
+  if (isEmployeeMode()) {
+    const pin = prompt('🔒 وضع الموظف — أدخل رمز الإدارة للتبديل:');
+    if (pin === null) return;
+    if (pin !== (appData.adminPin || '1234')) { alert('رمز غير صحيح'); return; }
+  }
+  let msg = 'اكتب رقم المستخدم الذي تريد الدخول به:\n\n';
+  list.forEach(a => { msg += a.id + ' — ' + a.name + (a.id === (me && me.id) ? ' (حالي)' : '') + '\n'; });
+  const id = prompt(msg, me ? me.id : '');
+  if (!id) return;
+  const target = list.find(a => a.id === id.trim());
+  if (!target) { alert('رقم غير موجود'); return; }
+  setActiveAuditor(target.id);
+  applyRoleUI();
 }
 
 // دوال عامة
 function switchTab(name) {
+  if (isEmployeeMode() && name !== 'new' && name !== 'history') {
+    alert('🚫 كموظف يمكنك: إدخال التدقيق فقط والاطلاع على تقاريرك المسجلة باسمك فقط.');
+    return;
+  }
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
   event.target.classList.add('active');
@@ -2631,7 +2704,8 @@ function renderHistory() {
     if (auditor.id && auditor.name) {
       const total = (appData.auditors || []).length;
       const more = total > 1 ? ` <span style="color:var(--text-muted); font-size:12px;">(عدد المدققين المسجَّلين: ${total})</span>` : '';
-      auditorInfo.innerHTML = `<strong style="color:var(--primary);">المدقق النشط:</strong> ${escapeHtml(auditor.name)} <span style="color:var(--text-muted);">— رقم: ${escapeHtml(auditor.id)}</span>${more}`;
+      const empNote = isEmployeeMode() ? ' <span style="color:#1d4ed8; font-size:12px; background:#eff6ff; border:1px solid #bfdbfe; border-radius:10px; padding:2px 8px;">📝 وضع موظف — تقاريرك المسجلة باسمك فقط</span>' : '';
+      auditorInfo.innerHTML = `<strong style="color:var(--primary);">المدقق النشط:</strong> ${escapeHtml(auditor.name)} <span style="color:var(--text-muted);">— رقم: ${escapeHtml(auditor.id)}</span>${more}${empNote}`;
     } else {
       auditorInfo.innerHTML = `<span style="color:var(--danger);">⚠ لم يُسجَّل أي مدقق بعد.</span> <a href="#" onclick="event.preventDefault(); switchTabDirect('auditor');">أضف مدققاً</a>`;
     }
@@ -2642,6 +2716,10 @@ function renderHistory() {
   const sort = document.getElementById('history-sort')?.value || 'newest';
 
   let items = (appData.history || []).slice();
+  // الموظف: تقاريره المسجلة باسمه فقط
+  if (isEmployeeMode() && auditor.id) {
+    items = items.filter(it => (it.auditorId || (it.structured && it.structured.auditorId)) === auditor.id);
+  }
   if (search) items = items.filter(it => (it.name || '').toLowerCase().includes(search));
   if (sort === 'oldest') items.sort((a,b) => (a.id||0) - (b.id||0));
   else if (sort === 'name') items.sort((a,b) => (a.name||'').localeCompare(b.name||'', 'ar'));
@@ -2682,7 +2760,7 @@ function renderHistory() {
     html += `<td style="padding:8px; text-align:center; white-space:nowrap;">`;
     html += `<button class="btn btn-secondary" style="padding:5px 10px; font-size:12px;" onclick="viewHistoryReport(${item.id})" title="عرض التقرير القابل للطباعة">📄 تقرير</button> `;
     html += `<button class="btn btn-secondary" style="padding:5px 10px; font-size:12px;" onclick="copyHistory(${item.id})" title="نسخ النص">📋</button> `;
-    html += `<button class="btn btn-danger" style="padding:5px 10px; font-size:12px;" onclick="deleteHistory(${item.id})" title="حذف">🗑️</button>`;
+    if (!isEmployeeMode()) html += `<button class="btn btn-danger" style="padding:5px 10px; font-size:12px;" onclick="deleteHistory(${item.id})" title="حذف">🗑️</button>`;
     html += `</td></tr>`;
   });
   html += '</tbody></table></div>';
@@ -2824,13 +2902,16 @@ function viewHistory(id){
   }
 }
 function copyHistory(id){ let item=appData.history.find(h=>h.id===id); if(item) navigator.clipboard.writeText(item.content).then(()=>alert('تم النسخ')); }
-function deleteHistory(id){ if(confirm('حذف؟')){ appData.history=appData.history.filter(h=>h.id!==id); saveData(); renderHistory(); } }
+function deleteHistory(id){ if(isEmployeeMode()){ alert('🚫 كموظف لا يمكنك الحذف — الاطلاع فقط.'); return; } if(confirm('حذف؟')){ appData.history=appData.history.filter(h=>h.id!==id); saveData(); renderHistory(); } }
 
 // تصدير سجل التدقيق كاملاً CSV (يفتح في Excel مباشرة)
 function exportHistoryCSV() {
-  const items = appData.history || [];
-  if (!items.length) { alert('لا توجد بيانات في السجل للتصدير'); return; }
   const auditor = getActiveAuditor() || { id: '', name: '' };
+  let items = appData.history || [];
+  if (isEmployeeMode() && auditor.id) {
+    items = items.filter(it => (it.auditorId || (it.structured && it.structured.auditorId)) === auditor.id);
+  }
+  if (!items.length) { alert('لا توجد بيانات في السجل للتصدير'); return; }
 
   // أعمدة الجدول
   const headers = [
@@ -2886,9 +2967,12 @@ function exportHistoryCSV() {
 
 // طباعة جدول السجل (نسخة قابلة للطباعة)
 function printHistoryTable() {
-  const items = appData.history || [];
-  if (!items.length) { alert('لا توجد بيانات للطباعة'); return; }
   const auditor = getActiveAuditor() || { id: '', name: '' };
+  let items = appData.history || [];
+  if (isEmployeeMode() && auditor.id) {
+    items = items.filter(it => (it.auditorId || (it.structured && it.structured.auditorId)) === auditor.id);
+  }
+  if (!items.length) { alert('لا توجد بيانات للطباعة'); return; }
   let rows = '';
   items.forEach((it, idx) => {
     const s = it.structured || {};
@@ -3017,6 +3101,7 @@ function renderAuditorsPanel() {
             <option value="auditor" ${currentRole==='auditor'?'selected':''}>👤 مدقق — استخدام فقط (تدقيق وحفظ)</option>
             <option value="supervisor" ${currentRole==='supervisor'?'selected':''}>🛡️ مشرف — تعديل فقط</option>
             <option value="admin" ${currentRole==='admin'?'selected':''}>👑 مدير — كل الصلاحيات</option>
+            <option value="employee" ${currentRole==='employee'?'selected':''}>📝 موظف — إدخال فقط واطلاع على تقاريره فقط</option>
           </select>
           ${roleSelectNote}
         </div>
@@ -3209,10 +3294,16 @@ function setActiveAuditor(id) {
   renderHistory();
   // إعادة رسم الإدارة لأن الصلاحيات تغيرت
   if (typeof renderAdmin === 'function') renderAdmin();
+  applyRoleUI();
 }
 
 // تبديل التبويب برمجياً (بدون event من النقر)
 function switchTabDirect(name) {
+  const tName = (name === 'auditor') ? 'admin' : name;
+  if (isEmployeeMode() && tName !== 'new' && tName !== 'history') {
+    alert('🚫 كموظف يمكنك: إدخال التدقيق فقط والاطلاع على تقاريرك المسجلة باسمك فقط.');
+    return;
+  }
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
 
@@ -4121,6 +4212,7 @@ function addAttUnified(kind) {
 // النسخ الاحتياطي والاستعادة
 // ================================================================
 function backupData() {
+  if (isEmployeeMode()) { alert('لا مسموح للموظف'); return; }
   const blob = new Blob([JSON.stringify(appData, null, 2)], { type: 'application/json' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
@@ -4129,6 +4221,7 @@ function backupData() {
   URL.revokeObjectURL(a.href);
 }
 function restoreData() {
+  if (isEmployeeMode()) { alert('لا مسموح للموظف'); return; }
   const inp = document.createElement('input');
   inp.type = 'file'; inp.accept = '.json';
   inp.onchange = e => {
@@ -5650,6 +5743,7 @@ setInterval(updateProjectDate,60000);
 // نبني قوائم التدقيق الجديد ديناميكياً من appData أولاً
 rebuildMainTabFilters();
 cascadeFilters();
+applyRoleUI();
 </script>
 
 <style>
